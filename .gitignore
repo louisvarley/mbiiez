@@ -3,4 +3,5 @@
 *.log
 updater
 *.pid
+*.db
 __pycache__
