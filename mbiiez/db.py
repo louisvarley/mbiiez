@@ -101,6 +101,7 @@ class db:
         rows = cur.fetchall()
         return rows       
         
+        
     def generate_schema(self):
         
         self.create_table("""

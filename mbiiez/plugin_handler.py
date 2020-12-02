@@ -8,18 +8,20 @@ import pkgutil
 
 from mbiiez import settings
 
- # Info:
- # cmd_folder = os.path.dirname(os.path.abspath(__file__)) # DO NOT USE __file__ !!!
- # __file__ fails if the script is called in different ways on Windows.
- # __file__ fails if someone does os.chdir() before.
- # sys.argv[0] also fails, because it doesn't not always contains the path.
-
 class plugin_handler:
 
     instance = None
-    
+
     def __init__(self, instance):
         self.instance = instance
+        plugins = []
+        
+        # No Plugins are enabled for instance 
+        if(not self.instance.plugins):
+            return
+            
+        for plugin in self.instance.plugins.keys():
+            plugins.append("plugin_" + plugin)
         
         sys.path.insert(0, settings.locations.plugins_path)
 
@@ -27,13 +29,14 @@ class plugin_handler:
             name: importlib.import_module(name)
             for finder, name, ispkg
             in pkgutil.iter_modules()
-            if name.startswith('plugin_')
+            if name in plugins
         }
         
         for p in discovered_plugins:
             plugin = discovered_plugins[p].plugin(self.instance)
-            if(hasattr(plugin, 'on_load')):
-                plugin.on_load()
+            if(hasattr(plugin, 'register_events')):
+                self.instance.plugins_registered.append(plugin.plugin_name)
+                plugin.register_events()
         
         #plugins.rtvrtm.rtvrtm.plugin.on_load()
     

@@ -76,6 +76,7 @@ pip3 install psutil
 pip3 install PTable
 pip3 install ConfigParser
 pip3 install sqlite3
+pip3 install flask
 
 clear
 

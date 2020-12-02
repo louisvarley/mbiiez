@@ -12,21 +12,17 @@ from mbiiez.bcolors import bcolors
 from mbiiez.helpers import helpers
 from mbiiez.testing import testing
 from mbiiez.conf import conf
-from mbiiez.process import process
 from mbiiez.console import console
 from mbiiez.db import db
 from mbiiez.launcher import launcher
 from mbiiez.log_handler import log_handler
 from mbiiez.exception_handler import exception_handler
 from mbiiez.process_handler import process_handler
-from mbiiez.models import chatter, log
-from mbiiez import settings
-
+from mbiiez.event_handler import event_handler
 from mbiiez.plugin_handler import plugin_handler
+from mbiiez.models import chatter, log
 
-from os.path import dirname, basename, isfile, join
-import glob
-
+from mbiiez import settings
 
 # An Instance of MBII                        
 class instance:
@@ -40,6 +36,7 @@ class instance:
     
     log_handler = None
     exception_handler = None
+    event_handler = None
     process_handler = None
     plugin_handler = None
     launcher = None
@@ -51,14 +48,17 @@ class instance:
         self.external_ip = urllib.request.urlopen('http://ip.42.pl/raw').read().decode()       
         self.conf = conf(self.name, settings.locations.script_path, settings.locations.mbii_path)
         self.config = self.conf.config
-        self.process = process()
-        self.plugin_hander = plugin_handler(self)
+        self.plugins = self.config['plugins']
+        self.plugins_registered = []
+
         self.log_handler = log_handler(self)
         self.exception_handler = exception_handler(self)
         self.process_handler = process_handler(self)
         self.launcher = launcher(self)
-        
+        self.event_handler = event_handler(self)        
         self.db = db()
+        
+        self.plugin_hander = plugin_handler(self)
 
         # Create a UDP / RCON Client
         self.console = console(self.config['security']['rcon_password'], str(self.config['server']['port']))
@@ -111,6 +111,10 @@ class instance:
     # Run an SVSAY command
     def say(self, message):
         self.console.say(message)
+       
+    # Run an SVTELL command
+    def tell(self, player_id, message):
+        self.console.tell(player_id, message)       
        
     # Get / Set current map
     def map(self, map_name = None):
@@ -247,10 +251,16 @@ class instance:
         self.conf.generate_rtvrtm_config()
         self.conf.generate_rtvrtm_map_lists()
         
+        if(self.server_running()):
+             print(bcolors.OK + "Instance is already running" + bcolors.ENDC)
+             return;
+        
         # Can Instance Can Start?
         if(os.path.exists(self.config['server']['server_config_path'])):
             print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching Dedicated Server")
-            self.launcher.launch_game()
+            
+            self.event_handler.run_event("before_launch_server")
+            self.launcher.launch_dedicated_server()
             
             print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching Log Watch Service")
             self.launcher.launch_log_watch()
@@ -288,9 +298,7 @@ class instance:
     # Instance Status Information
     def status(self):
 
-        dedicated_running = False
-
-        print("-------------------------------------------")
+        print("------------------------------------") 
         
         if(self.server_running()):
         
@@ -298,18 +306,22 @@ class instance:
  
             print(bcolors.CYAN + "Instance Name: " + bcolors.ENDC + self.name)   
             print(bcolors.CYAN + "Server Name: " + bcolors.ENDC + bcolors().color_convert(self.config['server']['host_name']))    
-            print(bcolors.CYAN + "Engine: " + bcolors.ENDC + settings.dedicated.engine)           
+            print(bcolors.CYAN + "Engine: " + bcolors.ENDC + self.config['server']['engine'])           
             print(bcolors.CYAN + "Port: " + bcolors.ENDC + str(self.config['server']['port']))                
             print(bcolors.CYAN + "Full Address: " + bcolors.ENDC + self.external_ip + ":" + str(self.config['server']['port']))
             print(bcolors.CYAN + "Mode: " + bcolors.ENDC + self.mode(None))   
-            print(bcolors.CYAN + "Map: " + bcolors.ENDC + self.map(None))              
+            print(bcolors.CYAN + "Map: " + bcolors.ENDC + self.map(None)) 
+            print(bcolors.CYAN + "Plugins: " + bcolors.ENDC + ",".join(self.plugins_registered))
+            
             print(bcolors.CYAN + "Uptime: " + bcolors.ENDC + self.uptime())
             if(len(players) > 0):
                 print(bcolors.CYAN + "Players: " + bcolors.ENDC + bcolors.GREEN + str(len(players)) + "/32" + bcolors.ENDC) 
             else:
                 print(bcolors.CYAN + "Players: " + bcolors.ENDC + bcolors.RED + str(len(players)) + "/32" + bcolors.ENDC)                   
-            print("-------------------------------------------")
+            
                 
+            
+        print("------------------------------------")    
         if(self.server_running()):
             print("[{}Yes{}] OpenJK Server Running".format(bcolors.GREEN, bcolors.ENDC))
         else:          

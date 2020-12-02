@@ -1,5 +1,6 @@
 import os
 import json
+import time
 
 class conf:
 
@@ -178,7 +179,8 @@ class conf:
                     
             f = open(self.config['server']['rtvrtm_config_path'], "w")
             f.write(data)
-            f.close()    
+            f.close()
+            time.sleep(0.3)
        
     # Generate RTV RTM Maps List from JSON config
     def generate_rtvrtm_map_lists(self):

@@ -61,99 +61,37 @@ class log_handler:
         try:
         
             self.log(last_line)
-                   
-            if('!hello' in last_line):
-                quotes = ['Hello There', 'You want to go home and rethink your life', 'These are ^1not^7 the droids you are looking for', 'So uncivilized', 'How did this happen? We\'re smarter than than', 'Another happy landing', 'If you strike me down, i shall become more powerful than you can possibly imagine', 'I have the high ground', '^1Don\'t^7 try it!', '^2Sith^7 lords are our speciality']
-                quote = random.choice(quotes)
-                self.instance.say(quote)
-                
-            if('!stats' in last_line):    
-                player = last_line.split(":")[3].lstrip()
-                response = frag().get_kd(player)
-                self.instance.say("{}, your NR Server KD is".format(player))
-                self.instance.say("^5Kills:^7" + str(response['kills']))
-                self.instance.say("^5Deaths:^7" + str(response['deaths']))
-                self.instance.say("^5Suicides:^7" + str(response['suicides']))
-
-            if('!playwithme' in last_line):
-                self.instance.say("We will announce your presense in our discord")
-
-            if('!help' in last_line):
-                self.instance.say("^5Available Commands^7")
-                self.instance.say("^5!hello^7 Random Obi Wan Quote")                
-                self.instance.say("^5!stats^7 Your global stats from our servers")     
-                self.instance.say("^5!lastonline^7 When was you last on our servers?")   
-                self.instance.say("^5!report <message>^7 Send a report to our mods") 
-                
+            
+            # Was a chat
             if('say:' in last_line):
-                player = last_line.split(":")[3].lstrip()
-                message = last_line.split(":")[4]
-                chatter().new(player, self.instance.name, "PUBLIC", message)
+                player = last_line.split(":")[3].strip()
+                message = last_line.split(":")[4].strip()[1:-1]
+                player_id = connection().get_player_id_from_name(player)
+
+                # Run command event
+                if(message.startswith("!")):                 
+                    self.instance.event_handler.run_event("player_chat_command",{"message": message, "player_id": player_id, "player": player})
+                     
+                else:     
+                     
+                    # Run chat event     
+                    self.instance.event_handler.run_event("player_chat",{"type": "PUBLIC", "message": message, "player_id": player_id, "player": player})  
+                    
+                    # Save to Database
+                    chatter().new(player, self.instance.name, "PUBLIC", message)
+            
 
             if('sayteam:' in last_line):
-                player = last_line.split(":")[3].lstrip()
-                message = last_line.split(":")[4]
-                chatter().new(player, self.instance.name, "TEAM", message)
+                player = last_line.split(":")[3].strip().lstrip()
+                message = last_line.split(":")[4].strip()[1:-1]
+                player_id = connection().get_player_id_from_name(player)
                 
-            if('!spin' in last_line):
-                if(not self.instance.config['server']['enable_spin']):
-                    self.instance.say("^5!" + player + "^7 Spin is not enabled on this server") 
-                else:
-                    player_id = None
-                    player = last_line.split(":")[3].lstrip()
-                    self.instance.say("^5!" + player + "^7 Requested a spin") 
-                    
-                    results = connection().get_player_id_from_name(player)
-                    for result in results:
-                    
-                        player_id = result['player_id']
-                     
-                    if(player_id == None):
-                        self.instance.say("^5!" + player + "^7 Something went wrong! Sorry :(") 
-                    else:
-                        # Random Number
-                        rand = random.randint(1,16)
-                        
-                        if(rand == 16):
-                            command = "wannabe {} give jetpack".format(player_id)
-                            self.instance.say("^5!" + player + "^7 Won a new shiny jetpack") 
-                        else:
-                            if(rand == 1):
-                                self.instance.say("^5!" + player + "^7 Won a ") 
-  
-                            if(rand == 2):
-                                self.instance.say("^5!" + player + "^7 Won a Light Saber") 
-                                
-                            if(rand == 3):
-                                self.instance.say("^5!" + player + "^7 Won a Pistol...") 
-                            if(rand == 4):
-                                self.instance.say("^5!" + player + "^7 Won a E11... Sorry it has no Ammo") 
-                            if(rand == 5):
-                                self.instance.say("^5!" + player + "^7 Won a Disruptor, go get em champ!") 
-                            if(rand == 6):
-                                self.instance.say("^5!" + player + "^7 Won a Projectile Rile, enjoy!") 
-                            if(rand == 7):
-                                self.instance.say("^5!" + player + "^7 Won a Bowcaster! Be a wookie!") 
-                            if(rand == 8):
-                                self.instance.say("^5!" + player + "^7 Won a DEMP Pistol, go be an ARC!") 
-                            if(rand == 9):
-                                self.instance.say("^5!" + player + "^7 Won a DC15.. pip pip")                                 
-                            if(rand == 10):
-                                self.instance.say("^5!" + player + "^7 Won a Rocket Launcher! Oowho Baby!") 
-                            if(rand == 11):
-                                self.instance.say("^5!" + player + "^7 Won 2 Frag Grenades, make em count") 
-                            if(rand == 12):
-                                self.instance.say("^5!" + player + "^7 Won 2 Pulse Grenades, go fry some droids ") 
-                            if(rand == 13):
-                                self.instance.say("^5!" + player + "^7 Won a T21, without alterntate fire enabled... have fun with that") 
-                            if(rand == 14):
-                                self.instance.say("^5!" + player + "^7 Won an arm blaster... loving stuck onto your arm ") 
-                            if(rand == 15):
-                                self.instance.say("^5!" + player + "^7 Won a Welstar pistol! no go be a mando!")   
-                                
-                            command = "wannabe {} give weapon {}".format(result['player_id'], str(rand))
-                        
-                        self.instance.rcon(command)
+                # Run chat event     
+                self.instance.event_handler.run_event("player_chat",{"type": "TEAM", "message": message, "player_id": player_id, "player": player})  
+
+                # Save to Database                
+                chatter().new(player, self.instance.name, "TEAM", message)            
+            
                 
             if('Kill:' in last_line):
                 frag_info = last_line.split(":")[3]
@@ -180,6 +118,11 @@ class log_handler:
                 ip = ""
                 type = "DISCONNECT"
                 connection().new(player, player_id, self.instance.name, ip, type)  
+                
+            if('ClientBegin:' in last_line):
+                player = ""
+                player_id = last_line.split(":")[2][1:]                
+                self.instance.event_handler.run_event("player_begin",{"player_id": player_id, "player": player})  
 
         except Exception as e:
             self.instance.exception_handler.log(e)

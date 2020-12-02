@@ -94,8 +94,13 @@ class console:
         finally:
             sock.close()   
 
+    # Send SAY as Server
     def say(self, message):
-        self.rcon("svsay " + message)
+        self.rcon("svsay {}".format(message))
+       
+    # Send TELL as server (To Player)   
+    def tell(self, player_id, message):
+        self.rcon("svtell {} {}".format(player_id,message))
         
     def cvar(self, key, value = None):
     

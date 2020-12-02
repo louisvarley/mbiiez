@@ -4,35 +4,28 @@ import os
 
 class event_handler:
 
-    running = False
-    threads = []
-    config = None
-    log_handler = None
-    process = None
+    instance = None
+
+    events = {}
+
+    def __init__(self, instance):
+        self.instance = instance
     
-    def __init__(self, config, log_handler):
-        self.config = config
-        self.log_handler = log_handler
-        self.process = process()
-    
-    def add_thread(self, thread):
-        self.threads.append(thread)
-    
-    def start(self):
-        self.running = True
+    def register_event(self, event_name, func):
+        if(not event_name in self.events):
+            self.events[event_name] = []
         
-    def stop(self):
-        self.running = False
-    
-    def is_running(self):
-        return self.running
+        self.events[event_name].append(func)
         
-    def shutdown(self, signal, frame):    
-        self.log_handler.log(bcolors.RED + "Gracefull shutdown requested...")
-        self.stop()  
-        
-        # Had trouble ending processes using threads so process brute forces by their config files
-        self.process.kill_process_by_name(self.config['server']['server_config_file'])
-        self.process.kill_process_by_name(self.config['server']['rtvrtm_config_file'])
-        os.system("reset")    
-        exit()
+    def run_event(self, event_name, args = None):
+        self.instance.log_handler.log("run run event")
+        if(event_name in self.events):
+            for event in self.events[event_name]:
+                try: 
+                    if(args == None):
+                        event()
+                    else:
+                        event(args)
+                except Exception as e:
+                    self.instance.log_handler.log("Plugin Exception: {}".format(str(e)))
+            

@@ -1,25 +1,13 @@
-import json
 import os
-import glob
 import shutil
-import psutil
 import subprocess
 import time
-import threading
-import watchgod
 import signal
-import six
-import sys
 import datetime
 import shlex
 
 from mbiiez.bcolors import bcolors
-from mbiiez.helpers import helpers
-from mbiiez.testing import testing
 from mbiiez.conf import conf
-from mbiiez.process import process
-from mbiiez.console import console
-from mbiiez.db import db
 from mbiiez import settings
 from mbiiez.log_handler import log_handler
 from mbiiez.process_handler import process_handler
@@ -32,25 +20,22 @@ class launcher:
     name_auto_message = "Auto Message"
     name_log_watcher = "Log Watcher"
 
-    # Class Globals
     event_handler = None
     log_handler = None
     config = None 
-    db = None
     instance_name = None 
     process_handler = None
+    instance = None
 
     def __init__(self, instance):
         self.config = instance.config      
         self.log_handler = instance.log_handler
         self.process_handler = instance.process_handler
-        self.db = db()
-        
-
         self.instance_name = self.config['server']['name']
+        self.instance = instance
 
     # Dedicated Server Thread
-    def launch_game_thread(self):   
+    def launch_dedicated_server_thread(self):   
         cmd = "nohup {} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);
             
         self.log_handler.log("Command: " + cmd + "&")
@@ -75,13 +60,12 @@ class launcher:
     def launch_auto_message_thread(self):             
 
         self.log_handler.log("Launching Auto Message Instance...")
-        client = console(self.config['security']['rcon_password'], self.config['server']['port'])
         x = 0        
         while(True):
             for message in self.config['messages']['auto_messages']:
                 time.sleep(60*int(self.config['messages']['auto_message_repeat_minutes']))                     
                 try:
-                    client.say(message)
+                    self.instance.say(message)
                 except Exception as e:
                     self.log_handler.log("Was unable to send auto message to server: {}".format(str(e)))
 
@@ -98,7 +82,7 @@ class launcher:
         return
                 
     # Dedicated Server Launcher    
-    def launch_game(self):
+    def launch_dedicated_server(self):
     
         # Reason to Bail
         if(not os.path.isfile(self.config['server']['server_config_path'])):
@@ -124,7 +108,7 @@ class launcher:
                 shutil.rmtree("/root/.ja")       
                 os.symlink(settings.locations.game_path, "/root/.ja")  
     
-        self.process_handler.add(self.launch_game_thread, self.name_dedicated, self.instance_name)
+        self.process_handler.add(self.launch_dedicated_server_thread, self.name_dedicated, self.instance_name)
 
     # RTV/RTM Launcher
     def launch_rtv(self): 

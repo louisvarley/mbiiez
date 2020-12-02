@@ -132,4 +132,10 @@ class connection:
         return db().insert("connections", d)
         
     def get_player_id_from_name(self, player):
-        return db().temp_get_player_id(player)
+ 
+        results = db().temp_get_player_id(player);
+        
+        if(len(results) > 0):
+            return results[0]['player_id']
+    
+        return None
