@@ -7,7 +7,9 @@ Requires: An Instance
 
 import datetime
 import tailer
+import time
 import re
+import os
 import random
 from mbiiez.helpers import helpers
 
@@ -22,10 +24,29 @@ class log_handler:
         self.instance = instance
         self.log_file = self.instance.config['server']['log_path']
 
+
+    def log_await(self):
+        x = 0
+        
+        SECONDS_TO_WAIT = 10
+        MAX = (SECONDS_TO_WAIT * 2)
+        
+        while(not os.path.exists(self.instance.config['server']['log_path']) or x >= MAX): 
+            time.sleep(0.5)
+            x = x + 1        
+        
+        if(x >= MAX):
+            raise Exception('Dedicated server did not create a log file within 10 seconds')
+        else:
+            return True
+
     """
     Watches the log file for this instance, and sends lines to be processed
     """
     def log_watcher(self):
+    
+        self.log_await()
+            
         for line in tailer.follow(open(self.instance.config['server']['log_path'])):
                 self.instance.log_handler.process(line)
 

@@ -26,6 +26,8 @@ class launcher:
     instance_name = None 
     process_handler = None
     instance = None
+    
+    services = []
 
     def __init__(self, instance):
         self.config = instance.config      
@@ -34,11 +36,21 @@ class launcher:
         self.instance_name = self.config['server']['name']
         self.instance = instance
 
+    # Register a service that needs launching
+    def register_service(self, name, func):
+        self.services.append({"name": name, "func": func})
+
+    # Launch all services
+    def launch_services(self):
+        
+        for service in self.services:
+            self.log_handler.log("Starting Service: " + service['name'])
+            self.process_handler.add(service['func'], service['name'], self.instance_name)
+            
     # Dedicated Server Thread
     def launch_dedicated_server_thread(self):   
         cmd = "nohup {} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);
             
-        self.log_handler.log("Command: " + cmd + "&")
         try:
             subprocess.check_call(shlex.split(cmd) ,stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         except Exception as e:
@@ -49,7 +61,13 @@ class launcher:
     # RTV/RTM Thread
     def launch_rtv_thread(self):
  
+        x = 0
+ 
         self.log_handler.log("Launching RTV/RTM Instance...")
+        
+        # Wait for the log file to become available
+        self.log_handler.log_await()
+        
         cmd = "python /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
 
         subprocess.check_call(shlex.split(cmd),stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
@@ -59,8 +77,7 @@ class launcher:
     # Auto Messaging Thread       
     def launch_auto_message_thread(self):             
 
-        self.log_handler.log("Launching Auto Message Instance...")
-        x = 0        
+        self.log_handler.log("Launching Auto Message Instance...")      
         while(True):
             for message in self.config['messages']['auto_messages']:
                 time.sleep(60*int(self.config['messages']['auto_message_repeat_minutes']))                     

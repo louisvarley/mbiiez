@@ -5,3 +5,4 @@ updater
 *.pid
 *.db
 __pycache__
+MBII.zip

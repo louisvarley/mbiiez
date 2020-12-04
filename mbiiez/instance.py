@@ -262,6 +262,9 @@ class instance:
             self.event_handler.run_event("before_launch_server")
             self.launcher.launch_dedicated_server()
             
+            
+            self.launcher.launch_services()
+            
             print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching Log Watch Service")
             self.launcher.launch_log_watch()
             
@@ -279,8 +282,6 @@ class instance:
             print(bcolors.FAIL + "[No] " + bcolors.ENDC + "Unable to Load a SERVER config at " + self.config['server']['server_config_path'])
             print(bcolors.FAIL + "Unable to proceed without a valid Server Config File" + bcolors.ENDC)
             
-
-
     def server_running(self):
     
         if(self.process_handler.process_status(self.launcher.name_dedicated)):
@@ -312,8 +313,9 @@ class instance:
             print(bcolors.CYAN + "Mode: " + bcolors.ENDC + self.mode(None))   
             print(bcolors.CYAN + "Map: " + bcolors.ENDC + self.map(None)) 
             print(bcolors.CYAN + "Plugins: " + bcolors.ENDC + ",".join(self.plugins_registered))
-            
             print(bcolors.CYAN + "Uptime: " + bcolors.ENDC + self.uptime())
+            
+   
             if(len(players) > 0):
                 print(bcolors.CYAN + "Players: " + bcolors.ENDC + bcolors.GREEN + str(len(players)) + "/32" + bcolors.ENDC) 
             else:
@@ -326,6 +328,13 @@ class instance:
             print("[{}Yes{}] OpenJK Server Running".format(bcolors.GREEN, bcolors.ENDC))
         else:          
             print("[{}No{}] OpenJK Server Running".format(bcolors.RED, bcolors.ENDC))    
+            
+            
+        for service in self.launcher.services:
+                if(self.process_handler.process_status(service['name'])):
+                    print("[{}Yes{}] {} Running".format(bcolors.GREEN, bcolors.ENDC, service['name']))
+                else:
+                    print("[{}No{}] {} Running".format(bcolors.RED, bcolors.ENDC, service['name']))
             
         if(self.process_handler.process_status(self.launcher.name_rtvrtm)):
             print("[{}Yes{}] RTV/RTM Service Running".format(bcolors.GREEN, bcolors.ENDC))  
@@ -359,6 +368,9 @@ class instance:
     # Stop the instance
     def stop(self):
         self.process_handler.stop_all()
+
+        if(os.path.exists(self.config['server']['log_path'])):
+            os.remove(self.config['server']['log_path'])        
     
     # Stop then start the instance
     def restart(self):     

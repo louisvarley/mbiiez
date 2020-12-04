@@ -1,72 +1,59 @@
 
-## Movie Battles II / OpenJK Easy Docker Service Manager
 
-Built for the **MBII New Republic Clan** 
-This is a docker image and a python management script which runs as a binary. Allowing simple `mbii` commands to be issues to control server instances
+## Movie Battles II EZ
 
-## Introduction
-This image is based on an older docker build by https://github.com/isair/jedi-academy-server
-Some of the components including the use of the OG Engine needed an update. 
+MBIIEZ is a python wrapper for running instances of Movie Battles II. 
+The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for managing instances. 
 
-Image Changes so far is
-- Ubuntu Based Image
-- Using the MBII Dedicated OpenJK Server (more stable for MBII)
+In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead. 
 
-This package comes with a management file to make managing servers easier and quicker without the need to touch docker itself. 
+## Features
+- Simple to use Web GUI 
+- Simple CLI for running automated commands
+- Plugin System for creating additional plugins 
+- Included plugins include 
+- - Auto Server Messages, Unlimited rotating service messages  
+- - RTV/RTM, intergrated as a plugin  
+- - Discord Bot, allow certain roles in your discord channel, to restart instances, change map, kick players, etc
 
-The Provided python script acts as a "Mangement client" for the images. So you need no knowledge of docker to quickly spin up and manage servers. 
+## Installing
 
-## Setup Requires
-- You must have docker installed. `sudo apt-get install docker.io`
-- Repo here is pulled `cd ~; git pull https://github.com/louisvarley/nr-mb2-docker-server.git`
+- Clone this repo into your home directory using `git clone` 
+- Run `chmod +x install.sh` on the installation bash script
+- Run `./install.sh` which will install all required depedencies 
+- Installation is a simple step by step process
+- Movie Battles II is downloaded automatically, as well as the most recent build of OpenJK For Linux
 
-## Using Install.sh
-- run `chmod +x install.sh` and `./install.sh`
+## Adding Base files
 
-## Manually
+The only manual work you will need to do is copy the base files into the directory `/opt/openjk/base` 
+These files include
+- asset0.pk3
+- asset1.pk3
+- asset2.pk3
+- asset3.pk3
 
-- Run `ln -s /root/mbii-eds/mbii.py /usr/bin/mbii` 
-- Pull the original docker image `docker pull bsencan/jedi-academy-server` 
-- Run `make` within the directory to build the new image and allow the server to use this altered build in place of the above older one
-
-## Game Files
-
-- MBII (Linux) should be downloaded and installed at /opt/openjk/MBII **(follow offical MBII instructions)**
-- OpenJK files "should" be installed at /opt/openjk/base Our image does come with the files needed but ensures we have every file we may need **(again follow official OpenJK Documention)**
-- Original JA Base files also in /opt/openjk/base
 
 ## Instances
-"Instances" are a single docker running a single MBII server. each instance has a instance name. This is normally one word refering to the server such as **open**
+"Instances" are a single game servers. Most modern visual servers or bare metal servers can support a number of instances running together. These instances will normally have a name. such as **open** or **duel**
 
 ## Creating an Instance
 
-All that is needed to create an instance is to create your own server.json file located in the `config` folder of this project. 
+All that is needed to create an instance is to create your own instance json file located in the `config` folder of the project. There is a template file already included in the config file.
 
-These config files are a cut down version of both the `server.cfg` and `rtvrtm.cfg` 
-not all configs in these files are in the json file. Should you wish to add more global settings, you can edit 
-`rtvrtm.template` and `server.template` 
-These templates are used to build the server by importing the settings from your config.
-
-There is an example json file called `default.json.example`
-Copy this file and name it `some-name.json` replacing `some-name` with a name you wish to give your instance, such as `open` or `clan-private`
+The format is very easy to understand. 
 
 Edit the file and make any changes to the config which you want. Should you make any mistakes in the formatting. The server will not start and will warn you about JSON errors. 
 
-Ensure the port you use is one you have not already assigned to another instance otherwise the program will have trouble monitoring and RTV/RTM will not work. 
+Ensure the port you use in the config file is one you have not already assigned to another instance otherwise the program will have trouble monitoring and RTV/RTM will not work as the game will automatically assign it a different port. 
 
-## Actions against an instance
-#### Usage
+You need to also ensure any ports you do use are forwarded correctly and no firewall is blocking them
 
-`-i [Name of your instance] ACTION`
+## Using the CLI
 
-Actions are run against an instance. 
-Some examples. Where "instances" are called Open, Dueling and Cheats
+the CLI Enables simple commands to be executed against an instance. Most actions are in this format
 
-`python3 ./MBII.py -i open start`
-
-`python3 ./MBII.py -i dueling restart`
-
-`python3 ./MBII.py -i cheats-on stop`
+`mbii -i [Name of your instance] ACTION`
 
 There a number of actions that can be used when specifying an "instance" 
 
@@ -78,41 +65,79 @@ stop an instance
 restart an instance
 #### status
 show stats such as players, the map, uptime, port, ip 
-#### ssh
-Open a interactive SSH into the instance
-#### exec
-Run a shell command on the instance
-#### log
-Returns the entire server log from the instance 
-*You can use > server.log to save this locally* 
 #### say [message] 
 executes svsay on the server
-`python3 ./MBII.py -i dueling say "Hello Everyone"` would say "Server: Hello Everyone"
+`mbii -i dueling say "Hello Everyone"` would say "Server: Hello Everyone"
 #### rcon [rcon_commands]
-`python3 ./MBII.py -i legends rcon "myrconcommand argument"` would send this rcon command to the server
+`mbii -i legends rcon "myrconcommand argument"` would send this rcon command to the server
 #### cvar key value
 You can change CVAR values or just see what the value is using cvar command, for example 
-`python3 ./MBII.py -i open cvar g_authenticity 1` would change the mode
-`python3 ./MBII.py -i open cvar g_authenticity` would print the current the mode
+`mbii -i open cvar g_authenticity 1` would change the mode
+`mbii -i open cvar g_authenticity` would print the current the mode
 
-### Vebose
+## Plugins
 
-When you run the start action if there was a problem, you may not know unless it was unable to find a given config file. You can view the output from the dedicated server directly by passing the `-v` arguement for Verbose mode. Pressing `Ctrl + c` will exit and the process will continue from then in non-verbose mode. 
+Plugins allow for new functionality for a server to be built as a seperate python script and added to the server. 
+
+A plugin has access to the instance that is running it and could be used to, for example. Do a certain action when a command is said by a user, or once every 2 minutes. 
+It can even be used to do actions on the server based on external factors, such as coming from discord.
+
+Plugins must be enabled in the config section, must have a number of additional config options need to be added to the config. Any plugin can request additional config information. The Example server json has the RTV plugin enabled by default. 
+
+leaving your plugin line in config as `"plugins":{},` will disable all plugins
+
+### Events
+
+Plugins can "register" actions against events. For example, the plugin will have a method called "register_events" and adding a line such as 
+
+`self.instance.event_handler.register_event("player_chat_command", self.say_hello)`
+
+Will, if the plugin is enabled on an instance, call the method within the plugin `say_hello` when a user in game does a chat starting with `!` 
+
+Some events come with additional arguements that you can use.  Here is a current list of events plugins can use, They come in a dictionary object as the first arguement
+
+|Name|Arguements  |Description |
+|--|--|--|
+|before_dedicated_server_launch| None |  Runs before dedicated server starts
+|after_dedicated_server_launch | None  |   Runs after dedicated server starts
+|new_log_line                  | log_line | Log File changed
+|player_chat_command           | message, player, player_id | ! prefix chat 
+|player_chat                   | type, message, player, player_id | any and all chats, type is either TEAM or PUBLIC 
+|player_connects               | player, player_id |  A new player connected
+|player_disconnects            | player, player_id |  A player disconnected
+|player_killed                 | fragger_id fragger, fragged_id, fragged, weapon | A player was killed
+|player_begin                  |  player,player_id | A player entered the map (once per round, not per life)
+|map_change                    |current_map, new_map|
+
+
+### Services
+
+You can also register services in your plugin. These are methods you want to start as a seperate process and for them to persist while the instance runs. Otherwise methods are only called when events happen. This allows you to potentially create your own events. 
+
+For example using 
+`self.instance.event_handler.run_event("my_custom_event",{"type": "NEW", "message": message, "player_id": player_id, "player": player}) `
+
+The process handler will automatically start your service, and shut it down when the instance is stopped by keeping track of its PID. 
+
+## Database
+
+A small SQLite database is used to store ALL log lines, all kills, keep track of services, and keep track of player connections in a way that persists. 
+
+For this reason the database can be used by external processes to query this information, or in a plugin, if for example, a discord bot wants to show when the last time a given player connected. 
+
+Usablity is limited as there is no way beyond a name, to track a player between connections. 
 
 ### Still to do
 
 Many things
 
-- [x] Docks will auto restart the dedicated server if for any reason it fails. 
-- [x] Use new JSON format files to setup the server
-- [x] Log can be read and is extracted by an action
-- [ ] Setup to handle auto server messages on the server
-- [x] Make Python Management tool work as binary
-- [ ] Create an install.sh file to setup all directories download OpenJK and MBII
-- [ ] Make management tool auto check for MBII updates and updates server
-- [ ] Wizard mode to create configs from scratch (maybe slightly gui)
-- [x] Status action to show connected players, their ping and IP
-- [ ] Docks to auto reboot after 24 hours and when no players? maybe better than timed
-- [x] Management tool to expose RCON
-
+- [ ] Make process handler auto restart a failed service unless instance is being stopped
+- [ ] Make process handler auto restart instances at a given time rather than using crontab
+- [ ] Create service checking for MBII updates, and doing update when all servers are empty. 
+- [ ] Create the Web GUI
+- [ ] Web to create, and edit server.json files
+- [ ] Web to show database logs
+- [ ] Web to handle bans
+- [ ] Web to handle plugins
+- [ ] Web to start / stop / restart instances
 
