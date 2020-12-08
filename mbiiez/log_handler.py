@@ -40,20 +40,21 @@ class log_handler:
         else:
             return True
 
-    """
-    Watches the log file for this instance, and sends lines to be processed
-    """
+
     def log_watcher(self):
-    
+        """
+        Watches the log file for this instance, and sends lines to be processed
+        """   
         self.log_await()
             
         for line in tailer.follow(open(self.instance.config['server']['log_path'])):
                 self.instance.log_handler.process(line)
 
-    """
-    Count the current # of lines in the instances log file
-    """
+
     def log_line_count(self):
+        """
+        Count the current # of lines in the instances log file
+        """    
         f = open(self.log_file, 'rb')
         lines = 0
         buf_size = 1024 * 1024
@@ -66,19 +67,19 @@ class log_handler:
 
         return lines
 
-    """
-    log to database
-    """
+
     def log(self, log_line):
+        """
+        log to database
+        """    
         log_line = log_line.lstrip().lstrip()
         log_line = helpers().ansi_strip(log_line)
         log().new(log_line, self.instance.name)
         
-    """
-    Processes a log line in the log file
-    """ 
     def process(self, last_line):
-  
+        """
+        Processes a log line in the log file
+        """   
         try:
         
             self.log(last_line)

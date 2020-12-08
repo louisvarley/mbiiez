@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys, getopt
 import argparse
+import os
 
 from mbiiez.bcolors import bcolors
 from mbiiez.instance import instance
@@ -13,7 +14,7 @@ class main:
         return instance(name)      
         
     def list(self):
-        config_file_path = globals.config_path
+        config_file_path = settings.locations.config_path
         for filename in os.listdir(config_file_path):
             if(filename.endswith(".json")):
                 print(filename.replace(".json",""))
@@ -33,14 +34,15 @@ class main:
         
         print("Instance Commands")
         print("Option             Description")
-        print("Start              Start Instance")
-        print("Stop               Stop Instance") 
-        print("Restart            Restart Instance") 
-        print("Status             Instance Status") 
+        print("------------------------------------")        
+        print("start              Start Instance")
+        print("stop               Stop Instance") 
+        print("restart            Restart Instance") 
+        print("status             Instance Status") 
         print("rcon               Issue RCON Command In Argument") 
-        print("smod               Issue SMOD Command In Argument")         
+        print("say                Issue a Server say to the Server")         
+        print("cvar               Allows you to set or get a cvar value")         
 
-        
         exit()
 
     # Main Function

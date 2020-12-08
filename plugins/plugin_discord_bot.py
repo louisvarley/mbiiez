@@ -63,9 +63,8 @@ class plugin:
         self.discord_bot.add_cog(server_bot(self.discord_bot, self.instance))
 
     ''' use register event to have your given method notified when the event occurs '''
-    def register_events(self):
-        #self.instance.event_handler.register_event("player_chat_command", self.spin_process)
-        self.instance.launcher.register_service("Discord Bot Service", self.start_bot)
+    def register(self):
+        self.instance.process_handler.register_service("Discord Bot Service", self.start_bot)
         
     def start_bot(self):
         self.discord_bot.run(self.config['token'])

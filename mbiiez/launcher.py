@@ -37,7 +37,7 @@ class launcher:
         self.instance = instance
 
     # Register a service that needs launching
-    def register_service(self, name, func):
+    def register_service(self, name, func, auto_restart = True):
         self.services.append({"name": name, "func": func})
 
     # Launch all services
@@ -45,20 +45,32 @@ class launcher:
         
         for service in self.services:
             self.log_handler.log("Starting Service: " + service['name'])
-            self.process_handler.add(service['func'], service['name'], self.instance_name)
+            self.process_handler.start(service['func'], service['name'], self.instance_name)
             
     # Dedicated Server Thread
-    def launch_dedicated_server_thread(self):   
-        cmd = "nohup {} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);
+    def openjk_launch(self):   
+      
+        while(True):
+            print("Checking OpenJK Dedicated...")
             
-        try:
-            subprocess.check_call(shlex.split(cmd) ,stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        except Exception as e:
-            self.log_handler.log("Dedicated Server process Crashed: {}".format(str(e)))       
-
+            if(self.process_handler.process_status("OpenJK")):
+                print("running")
+            else:
+                print("not running")
+            
+            while(not self.process_handler.process_status("OpenJK")): 
+                print("Starting OpenJK Dedicated...")
+                self.log_handler.log("Starting OpenJK Dedicated Server")
+                cmd = "nohup {} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);       
+                process = subprocess.Popen(shlex.split(cmd), shell=False)  # ,stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL   
+                pid = process.pid
+                self.process_handler.add_pid("OpenJK", pid, self.instance_name)
+                print(pid)
+                time.sleep(3)
+            time.sleep(3)
         return
         
-    # RTV/RTM Thread
+    # KILL THIS
     def launch_rtv_thread(self):
  
         x = 0
@@ -74,31 +86,9 @@ class launcher:
 
         return
        
-    # Auto Messaging Thread       
-    def launch_auto_message_thread(self):             
-
-        self.log_handler.log("Launching Auto Message Instance...")      
-        while(True):
-            for message in self.config['messages']['auto_messages']:
-                time.sleep(60*int(self.config['messages']['auto_message_repeat_minutes']))                     
-                try:
-                    self.instance.say(message)
-                except Exception as e:
-                    self.log_handler.log("Was unable to send auto message to server: {}".format(str(e)))
-
-        return
-       
     # Dedicated Server Thread
-    def launch_log_watch_thread(self):   
-      
-        try:
-            self.log_handler.log_watcher()
-        except Exception as e:
-            self.instance.exception_handler.log(e)   
-          
-        return
-                
-    # Dedicated Server Launcher    
+ 
+    # KILL THIS  
     def launch_dedicated_server(self):
     
         # Reason to Bail
@@ -125,9 +115,9 @@ class launcher:
                 shutil.rmtree("/root/.ja")       
                 os.symlink(settings.locations.game_path, "/root/.ja")  
     
-        self.process_handler.add(self.launch_dedicated_server_thread, self.name_dedicated, self.instance_name)
+        self.process_handler.start(self.launch_dedicated_server_thread, self.name_dedicated, self.instance_name)
 
-    # RTV/RTM Launcher
+    # KILL THIS
     def launch_rtv(self): 
 
         # RTV RTM
@@ -135,14 +125,4 @@ class launcher:
             if(not os.path.isfile("{}/{}".format(settings.locations.mbii_path, self.config['server']['rtvrtm_config_file']))):
                 self.log_handler.log(bcolors.RED + "Unable to find RTV/RTV config. RTV/RTM will not run")
                       
-        self.process_handler.add(self.launch_rtv_thread, self.name_rtvrtm, self.instance_name)
-
-    # Auto Messaging Launcher
-    def launch_auto_message(self):
-    
-        if(self.config['messages']['auto_message_enable']):                    
-            self.process_handler.add(self.launch_auto_message_thread, self.name_auto_message, self.instance_name)
-            
-    def launch_log_watch(self):             
-        self.process_handler.add(self.launch_log_watch_thread, self.name_log_watcher, self.instance_name)
-    
+        self.process_handler.start(self.launch_rtv_thread, self.name_rtvrtm, self.instance_name)

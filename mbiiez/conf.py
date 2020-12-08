@@ -63,7 +63,7 @@ class conf:
             data = data.replace("[log_name]",self.config['server']['log_file'])
             
             # Messages
-            data = data.replace("[message_of_the_day]",self.config['messages']['message_of_the_day'].replace("\n","\\n"))
+            data = data.replace("[message_of_the_day]",self.config['game']['message_of_the_day'].replace("\n","\\n"))
             
             # Game
             data = data.replace("[server_password]",self.config['security']['server_password'])

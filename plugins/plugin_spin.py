@@ -52,7 +52,7 @@ class plugin:
         self.config = self.instance.config['plugins']['spin']
     
     ''' use register event to have your given method notified when the event occurs '''
-    def register_events(self):
+    def register(self):
         self.instance.event_handler.register_event("player_chat_command", self.spin_process)
         
     def spin_process(self, args):
