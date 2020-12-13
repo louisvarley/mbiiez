@@ -127,6 +127,10 @@ For this reason the database can be used by external processes to query this inf
 
 Usablity is limited as there is no way beyond a name, to track a player between connections. 
 
+## Web GUI
+
+Big thanks to https://github.com/BootstrapDash for their bootstrap admin dashboard which powers the GUI
+
 ### Still to do
 
 Many things
@@ -134,7 +138,7 @@ Many things
 - [ ] Make process handler auto restart a failed service unless instance is being stopped
 - [ ] Make process handler auto restart instances at a given time rather than using crontab
 - [ ] Create service checking for MBII updates, and doing update when all servers are empty. 
-- [ ] Create the Web GUI
+- [/] Create the Web GUI (started)
 - [ ] Web to create, and edit server.json files
 - [ ] Web to show database logs
 - [ ] Web to handle bans
