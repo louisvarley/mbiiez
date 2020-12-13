@@ -77,17 +77,30 @@ pip3 install PTable
 pip3 install ConfigParser
 pip3 install sqlite3
 pip3 install flask
+pip3 install flask_httpauth
 
 clear
 
-echo -e "${CYAN}"
-echo -e "Downloading Movie Battles II CLI Updater..."
-echo -e "${NONE}"
-sleep 2
+if [ -f "$SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll" ]; then
 
-wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-unzip -o MBII_CLI_Updater.zip -d ./updater
-rm MBII_CLI_Updater.zip
+	clear
+	echo -e "${CYAN}"
+	echo -e "Movie Battles II Updater found, skipping..."
+	echo -e "${NONE}"
+	sleep 2
+		
+else	
+
+	echo -e "${CYAN}"
+	echo -e "Downloading Movie Battles II CLI Updater..."
+	echo -e "${NONE}"
+	sleep 2
+
+
+	wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+	unzip -o MBII_CLI_Updater.zip -d ./updater
+	rm MBII_CLI_Updater.zip
+fi
 
 if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	
@@ -98,7 +111,6 @@ if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	sleep 2
 	
 else	
-	
 	
 	clear
 	echo -e "${CYAN}"
@@ -140,7 +152,7 @@ rm -rf $OPENJKPATH/rtvrtm/Windows
 mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
 rm -rf $OPENJKPATH/rtvrtm
 
-cd ./MBII
+cd $MBIIPATH
 
 mv -f jampgamei386.so jampgamei386.jamp.so
 cp jampgamei386.nopp.so jampgamei386.so
@@ -148,13 +160,8 @@ cp jampgamei386.nopp.so jampgamei386.so
 cd $SCRIPTPATH
 
 rm -f /usr/bin/mbii 2> /dev/null
-rm -f /usr/bin/mbii-server 2> /dev/null
-
 ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
 chmod +x /usr/bin/mbii
-
-ln -s $SCRIPTPATH/mbii-server.py /usr/bin/mbii-server
-chmod +x /usr/bin/mbii-server
 
 if [ -f "/opt/openjk/base/jampgamei386.so" ]; then
 
@@ -195,16 +202,38 @@ cp /opt/openjk/*.so /opt/openjk/MBII
 chmod +x /usr/bin/*.i386
 
 clear
+echo -e "${CYAN}"
+echo -e "Installing MBIIEZ Web..."
+echo -e "${NONE}"
+
+servicefile="$SCRIPTPATH/mbii-web.service"
+cp $servicefile /lib/systemd/system/
+sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
+
+systemctl enable mbii-web
+service mbii-web start
+
+sleep 2
+clear
 
 echo -e "${CYAN}"
-echo -e "Installation is complete"
-echo -e "You now ${FUSCHIA}MUST${NONE} manually copy the following official Jedia Academy PK3 files to /opt/openjk/base"
+echo -e "${CYAN}Installation is complete${NONE}"
+echo "--------------------------------------------------"
+echo -e "You now ${FUSCHIA}MUST${NONE} manually copy the following official Jedi Academy PK3 files to /opt/openjk/base"
 echo -e "assets0.pk3"
 echo -e "assets1.pk3"
 echo -e "assets2.pk3"
 echo -e "assets3.pk3"
-echo -e "${NONE}"
-echo -e "The Engine ${FUSCHIA}mbiided.i386${NONE}is available to use in your config. Custom configs must be manually installed to /usr/bin"
+echo "--------------------------------------------------"
+echo -e "The Engines ${FUSCHIA}mbiided.i386${NONE} and ${FUSCHIA}openjkded.i386${NONE} are available to use in your config. Custom engines must be manually installed to /usr/bin"
+echo "--------------------------------------------------"
+echo -e "Web Interface is available at http://0.0.0.0:8080"
+echo -e "Default Login Details are"
+echo -e "Username: ${FUSCHIA}Admin${NONE}"
+echo -e "Password: ${FUSCHIA}Admin${NONE}"
+echo "--------------------------------------------------"
+echo -e "'mbii' can now be used as a shell command"
+echo -e "You can update MBIIEZ anytime by running ./update.sh"
 echo "--------------------------------------------------"
 echo "Press ENTER to exit"
 echo "--------------------------------------------------"
