@@ -21,7 +21,6 @@ from mbiiez.process_handler import process_handler
 from mbiiez.event_handler import event_handler
 from mbiiez.plugin_handler import plugin_handler
 from mbiiez.models import chatter, log
-
 from mbiiez import settings
 
 # An Instance of MBII                        
@@ -58,10 +57,33 @@ class instance:
         self.event_handler = event_handler(self)        
         self.db = db()
         
-        self.plugin_hander = plugin_handler(self)
-
         # Create a UDP / RCON Client
         self.console = console(self.config['security']['rcon_password'], str(self.config['server']['port']))
+        
+        # Load Internal Services
+        self.services_internal()
+
+        #Load Plugins
+        self.plugin_hander = plugin_handler(self)
+
+    def services_internal(self):
+        #Internal Services   
+
+        # Dedicated Server Service
+        cmd = "{} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);       
+        self.process_handler.register_service("OpenJK", cmd, 1) 
+        
+        # Log Watcher Service
+        self.process_handler.register_service("Log Watcher", self.log_handler.log_watcher)
+
+        # RTV Service
+        if(self.config['server']['enable_rtv']):
+            cmd = "python /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
+            self.process_handler.register_service("RTVRTM", cmd, 999, self.log_handler.log_await) 
+            
+        # Add Promotional Message if auto_message plugin is being used    
+        if(self.has_plugin("auto_message")):
+            self.config['plugins']['auto_message']['messages'].append("This server is powered by MBIIEZ, visit bit.ly/2JhJRpO")    
         
     # Use netstat to get the port used by this instance
     def get_port(self):  
@@ -190,15 +212,26 @@ class instance:
     def listbans(self):
         self.console.rcon("g_banips")
            
+    # True / False is server empty       
+    def is_empty(self):
+        if(self.players_count() > 0):
+            return False
+        else:
+            return True
+           
     # Int of the number of players in game        
     def players_count(self):
         return len(self.players())
             
-    # Get list of players in game
+    # Get list of players in game - Avoid client for quickness
     def players(self):
         
         players = []        
         status = self.console.console("getstatus", True)
+        
+        if(status == None):
+            return {}
+        
         status = status.split("\n")
 
         x = 2
@@ -245,6 +278,9 @@ class instance:
          
     # Start this instance
     def start(self):
+    
+        self.stop()
+        time.sleep(1)
 
         # Generate our configs
         self.conf.generate_server_config()
@@ -256,35 +292,40 @@ class instance:
              return;
         
         # Can Instance Can Start?
-        if(os.path.exists(self.config['server']['server_config_path'])):
-            print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching Dedicated Server")
-            
-            self.event_handler.run_event("before_launch_server")
-            self.launcher.launch_dedicated_server()
-            
-            
-            self.launcher.launch_services()
-            
-            print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching Log Watch Service")
-            self.launcher.launch_log_watch()
-            
-            if(self.config['messages']['auto_message_enable'] and len(self.config['messages']['auto_messages']) > 0):
-                print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching Auto Message Service") 
-                self.launcher.launch_auto_message()
-            
-            if(os.path.exists(self.config['server']['rtvrtm_config_path'])):
+        if(os.path.exists(self.config['server']['server_config_path'])): 
+
+            # Reason to Bail  
+            if(not os.path.isfile("{}/{}".format("/usr/bin", self.config['server']['engine']))):        
+                self.log_handler.log(bcolors.RED + "Failed to start. No engine found at {}/{}".format("/usr/bin", self.config['server']['engine']) + bcolors.ENDC)   
+                print(bcolors.FAIL + "[Error] " + bcolors.ENDC + "Failed to start. No engine found at {}/{}".format("/usr/bin", self.config['server']['engine']))
+                exit()
                 
-                if(self.config['server']['enable_rtv']):
-                    print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching RTV/RTM Service")               
-                    self.launcher.launch_rtv()
+            # Make sure can be executed    
+            os.system("chmod +x {}/{}".format("/usr/bin", self.config['server']['engine']))  
+              
+            # Sym Links
+            if(os.path.exists("/root/.local/share/openjk")):
+                if(not os.path.islink("/root/.local/share/openjk")):
+                    shutil.rmtree("/root/.local/share/openjk")       
+                    os.symlink(settings.locations.game_path, "/root/.local/share/openjk")
+            
+            if(os.path.exists("/root/.ja")):
+                if(not os.path.islink("/root/.ja")):
+                    shutil.rmtree("/root/.ja")       
+                    os.symlink(settings.locations.game_path, "/root/.ja")  
+        
+                           
+            self.event_handler.run_event("before_launch_server")
+            self.process_handler.launch_services()
+     
       
         else:
-            print(bcolors.FAIL + "[No] " + bcolors.ENDC + "Unable to Load a SERVER config at " + self.config['server']['server_config_path'])
+            print(bcolors.FAIL + "[Error] " + bcolors.ENDC + "Unable to Load a SERVER config at " + self.config['server']['server_config_path'])
             print(bcolors.FAIL + "Unable to proceed without a valid Server Config File" + bcolors.ENDC)
             
     def server_running(self):
     
-        if(self.process_handler.process_status(self.launcher.name_dedicated)):
+        if(self.process_handler.process_status_name("OpenJK")):
             return True
         else:
             return False
@@ -295,6 +336,13 @@ class instance:
         for item in output.splitlines():
             if(self.config['server']['rtvrtm_config_file'] in item):
                 return True
+        
+    def has_plugin(self, plugin_name):
+    
+        if(plugin_name in self.config['plugins']):
+            return True
+        else:
+            return False
                 
     # Instance Status Information
     def status(self):
@@ -315,7 +363,6 @@ class instance:
             print(bcolors.CYAN + "Plugins: " + bcolors.ENDC + ",".join(self.plugins_registered))
             print(bcolors.CYAN + "Uptime: " + bcolors.ENDC + self.uptime())
             
-   
             if(len(players) > 0):
                 print(bcolors.CYAN + "Players: " + bcolors.ENDC + bcolors.GREEN + str(len(players)) + "/32" + bcolors.ENDC) 
             else:
@@ -324,33 +371,13 @@ class instance:
                 
             
         print("------------------------------------")    
-        if(self.server_running()):
-            print("[{}Yes{}] OpenJK Server Running".format(bcolors.GREEN, bcolors.ENDC))
-        else:          
-            print("[{}No{}] OpenJK Server Running".format(bcolors.RED, bcolors.ENDC))    
-            
-            
-        for service in self.launcher.services:
-                if(self.process_handler.process_status(service['name'])):
+     
+        for service in self.process_handler.services:
+                if(self.process_handler.process_status_name(service['name'])):
                     print("[{}Yes{}] {} Running".format(bcolors.GREEN, bcolors.ENDC, service['name']))
                 else:
                     print("[{}No{}] {} Running".format(bcolors.RED, bcolors.ENDC, service['name']))
             
-        if(self.process_handler.process_status(self.launcher.name_rtvrtm)):
-            print("[{}Yes{}] RTV/RTM Service Running".format(bcolors.GREEN, bcolors.ENDC))  
-        else:          
-            print("[{}No{}] RTV/RTM Service Running".format(bcolors.RED, bcolors.ENDC))    
-
-        if(self.process_handler.process_status(self.launcher.name_auto_message)):
-            print("[{}Yes{}] Auto Server Messages".format(bcolors.GREEN, bcolors.ENDC))  
-        else:          
-            print("[{}No{}] Auto Server Messages".format(bcolors.RED, bcolors.ENDC))    
-
-        if(self.process_handler.process_status(self.launcher.name_log_watcher)):
-            print("[{}Yes{}] Log Monitoring Service Running".format(bcolors.GREEN, bcolors.ENDC))  
-        else:          
-            print("[{}No{}] Log Monitoring Service Running".format(bcolors.RED, bcolors.ENDC))    
-
 
         if(self.server_running()):        
             if(len(players) > 0):

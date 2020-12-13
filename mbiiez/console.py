@@ -1,98 +1,41 @@
 import time
 import six
 import re
+import socket 
 
-from socket import (socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, SHUT_RDWR, gethostbyname_ex,
-                    gaierror, timeout as socketTimeout, error as socketError)
-                    
-# Client for Handling RCON, SMOD and RAW server UDP Commands  
 class console:
 
-    rcon_password = None
-    server_port = None
-    header = (chr(255) + chr(255) + chr(255) + chr(255))
-
     def __init__(self, rcon_password, server_port):
-        self.rcon_password = rcon_password
-        self.server_port = int(server_port)
-      
-    # Send Command as RCON Command  
+        self.ip = "127.0.0.1"
+        self.port = int(server_port)
+        self.password = rcon_password
+        self.prefix_rcon = bytes([0xff, 0xff, 0xff, 0xff]) + b'rcon '
+        self.prefix_console = bytes([0xff, 0xff, 0xff, 0xff])        
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
     def rcon(self, command, quiet = False):
-    
-        reply = None
-        
-        try:        
-            time.sleep(0.6)   
-            if(not quiet):
-                print("Sent:{}".format(command))
-                
-            send_command       = (self.header + "rcon {} {}".format(self.rcon_password, command))          
-            serverAddressPort   = ("127.0.0.1", self.server_port)
-            bufferSize          = 1024
-            sock = socket(family=AF_INET, type=SOCK_DGRAM)
-            socket.settimeout(sock, 4)           
-            sock.sendto(six.b(send_command), serverAddressPort)
-            reply = sock.recvfrom(bufferSize)
-            reply = reply[0][4:].decode() 
-            sock.close()    
+        cmd = f"{self.password} {command}".encode()
+        query = self.prefix_rcon + cmd
+        return self.send(query)
 
-            if reply.startswith("print\nbad rconpassword"):
-                print("Incorrect rcon password.")               
-
-            elif(reply.startswith("disconnect")):
-                print("got a disconnect response")               
-
-            elif not reply.startswith("print"):
-                print("Unexpected error while contacting server for the first time.")
-
-            if(not quiet):
-                print("Reply:{}".format(reply))
-                
-            return reply
-
-        except Exception as e:
-            print("RCON Error: " + str(e))
-            
-        finally:
-            sock.close()
-
-    # Send Command as CONSOLE command
     def console(self, command, quiet = False):
-    
-    
-        reply = None
-    
+        cmd = f"{command}".encode()
+        query = self.prefix_console + cmd    
+        return self.send(query)
+
+    def send(self, query):
+        self.socket.connect((self.ip, self.port))
+        self.socket.send(query)
+        socket.socket.settimeout(self.socket, 4)    
+        
         try:
-            time.sleep(0.6)
-            if(not quiet):
-                print("Sent:{}".format(command))
-                
-            send_command       = (self.header + "{}".format(command))
-            serverAddressPort   = ("127.0.0.1", self.server_port)
-            bufferSize          = 1024
-            sock = socket(family=AF_INET, type=SOCK_DGRAM)
-            socket.settimeout(sock, 4)   
-            sock.sendto(six.b(send_command), serverAddressPort)
-            reply = sock.recvfrom(bufferSize)           
-            reply = reply[0][4:].decode('utf-8', 'ignore')
-            sock.close()
-            
-            if(reply == None):
-                return "No Response"
-
-            elif(reply.startswith("disconnect")):
-                print("got a disconnect response")               
-
-            if(not quiet):
-                print("Reply:{}".format(reply))
-                
-            return reply                
-
-        except Exception as e:
-            print("Console Error: " + str(e))
-            
-        finally:
-            sock.close()   
+            print("sent, waiting for response")
+            data = self.socket.recv(4096)
+            data = data.decode("utf-8", "ignore")
+       
+            return data
+        except socket.timeout:
+            return None
 
     # Send SAY as Server
     def say(self, message):
@@ -124,4 +67,5 @@ class console:
             
     def cvar_clean(self, text):
         return re.sub("\^[1-9]","",text)
-            
+   
+ 

@@ -18,7 +18,7 @@ class event_handler:
         self.events[event_name].append(func)
         
     def run_event(self, event_name, args = None):
-        self.instance.log_handler.log("Event {} started".format(event_name))
+
         if(event_name in self.events):
             for event in self.events[event_name]:
                 try: 
@@ -27,5 +27,5 @@ class event_handler:
                     else:
                         event(args)
                 except Exception as e:
-                    self.instance.log_handler.log("Plugin Exception: {}".format(str(e)))
+                    self.instance.exception_handler.log(e)
             

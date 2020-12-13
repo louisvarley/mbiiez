@@ -28,6 +28,5 @@ class database:
 class web_service:
     
     port = globals.config.get('web_service', 'port')
-    authentication = globals.config.get('web_service', 'authentication')
     username = globals.config.get('web_service', 'username') 
     password = globals.config.get('web_service', 'password')     

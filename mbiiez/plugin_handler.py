@@ -34,9 +34,8 @@ class plugin_handler:
         
         for p in discovered_plugins:
             plugin = discovered_plugins[p].plugin(self.instance)
-            if(hasattr(plugin, 'register_events')):
+            if(hasattr(plugin, 'register')):
                 self.instance.plugins_registered.append(plugin.plugin_name)
-                plugin.register_events()
+                plugin.register()
         
-        #plugins.rtvrtm.rtvrtm.plugin.on_load()
     

@@ -50,10 +50,27 @@ class plugin:
     def __init__(self, instance):
         self.instance = instance
         self.config = self.instance.config['plugins']['spin']
-    
+        
+        if(self.instance.has_plugin("auto_message")):
+            self.instance.config['plugins']['auto_message']['messages'].append("You can run the ^3!spin^7 command in chat to get a random perk or handicap")
+            self.instance.config['plugins']['auto_message']['messages'].append("^3!spin^7 has a " + str(self.config['cooldown']) + " second cooldown. Use your spins wisley",)
+            self.instance.config['plugins']['auto_message']['messages'].append("You can bind spin to a key by opening the console and entering: ^3bind <KEY> 'say !spin'^7")            
+            self.instance.config['plugins']['auto_message']['messages'].append("As a Jedi or Sith, you may have to set some keys to allow use of items instead of force powers") 
+            self.instance.config['plugins']['auto_message']['messages'].append("Items can only be used by Jedi and Sith when their saber is out... for some reason...") 
+            self.instance.config['plugins']['auto_message']['messages'].append("All is fair in Love and Spin! May the luck be with you!")
+            
+        v = 0    
+        for k in self.config['perks_chances']:    
+            v = v + self.config['perks_chances'][k] 
+            
+        if(v > 100 or v < 100):
+            self.instance.log_handler.log("Spin Perk Chances is currently {} but should add up to 100%".format(v))
+
     ''' use register event to have your given method notified when the event occurs '''
-    def register_events(self):
+    def register(self):
         self.instance.event_handler.register_event("player_chat_command", self.spin_process)
+        
+
         
     def spin_process(self, args):
         if(args['message'].startswith("!spin")): 
@@ -169,8 +186,19 @@ class plugin:
             elif(k=="cloak"):
                 command = "wannabe {} give item 11".format(args['player_id'])
                 self.instance.tell(args['player_id'], "You win a Cloaking Device!")                
-	
+
+            elif(k=="emplacement"):
+                command = "wannabe {} give item 10".format(args['player_id'])
+                self.instance.tell(args['player_id'], "You win a Gun Implacement!") 	
          
+            elif(k=="bacta"):
+                command = "wannabe {} give item 4".format(args['player_id'])
+                self.instance.tell(args['player_id'], "You win a Tank of Bacta!") 	
+                  
+            elif(k=="forcefield"):
+                command = "wannabe {} give item 2".format(args['player_id'])
+                self.instance.tell(args['player_id'], "You win a Forcefield Generator!") 
+                
             # Log This Spin
             self.spins[args['player_id']] = datetime.datetime.now()
          

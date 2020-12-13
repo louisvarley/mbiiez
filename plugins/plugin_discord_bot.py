@@ -63,9 +63,8 @@ class plugin:
         self.discord_bot.add_cog(server_bot(self.discord_bot, self.instance))
 
     ''' use register event to have your given method notified when the event occurs '''
-    def register_events(self):
-        #self.instance.event_handler.register_event("player_chat_command", self.spin_process)
-        self.instance.launcher.register_service("Discord Bot Service", self.start_bot)
+    def register(self):
+        self.instance.process_handler.register_service("Discord Bot Service", self.start_bot)
         
     def start_bot(self):
         self.discord_bot.run(self.config['token'])
@@ -84,7 +83,7 @@ class server_bot_response:
         self.message = ""
         
     def empty(self):
-        if(len(self.message.strip) == 0):
+        if(self.message.strip() == ""):
             return True
         else:
             return False
@@ -108,36 +107,44 @@ class server_bot(commands.Cog):
     @commands.command(name="server")
     async def commands_all(self, ctx, *args):
         
-        # On list, just says its name, so all bots print their names
+        # Clear the response holder
+        self.rs.clear()
+         
+        # On list, just says its name, so all bots print their instance names
         if(args[0] == "list"): 
             self.rs.append("{}".format(self.instance.name))
-            await ctx.send(self.rs.get())
+
+        # Help Commands
+        if(args[0] == "help"): 
+            self.rs.append("Commands Examples: `!server list` `!server *instance* restart` `!server *instance* map *map*` `!server *instance* status`")         
         
         # Used if the given instance is not this one, just exit so another bot can deal with request
-        if(not args[0] == self.instance.name):
-            return
-        
-        self.rs.clear()
+        if(args[0] == self.instance.name):
 
-        if(args[1] == "players"):  
-            self.rs.append("{} server currently has {} players".format(self.instance.name, self.instance.players_count()))
-            
-            if(self.instance.players_count() > 0):
-                players = self.instance.players()
-                if(len(players) > 0):
-                    for player in players:
-                        self.rs.append(players['name'])
+            if(args[1] == "players"):  
+                self.rs.append("**{}** instance currently has **{}** players".format(self.instance.name, self.instance.players_count()))
+                
+                if(self.instance.players_count() > 0):
+                    players = self.instance.players()
+                    if(len(players) > 0):
+                        for player in players:
+                            self.rs.append(players['name'])
 
-        if(args[1] == "status"):                         
-            self.rs.append(os.popen("mbii -i {} status".format(self.instance.name)).read())
+            if(args[1] == "status"):                         
+                self.rs.append(os.popen("mbii -i {} status".format(self.instance.name)).read())
+                
+            if(args[1] == "restart"): 
+                self.rs.append("Restarting Instance **{}**".format(self.instance.name))
+                await ctx.send(self.rs.get()) ## Add as once we called restart, we wont get to send
+                os.popen("mbii -i {} restart".format(self.instance.name))
+                return
             
-        if(args[1] == "restart"): 
-            self.rs.append("Restarting {}".format(self.instance.name))
-            await ctx.send(self.rs.get()) ## Add as once we called restart, we wont get to send
-            self.rs.append(os.popen("mbii -i {} restart".format(self.instance.name)))
-        
-        if(args[1] == "map"):                         
-            self.rs.append(os.popen("mbii -i {} map {}".format(self.instance.name, args[2])).read())
-                    
-        if(not self.rs.empty):
+            if(args[1] == "map"):                         
+                self.rs.append(os.popen("mbii -i {} map {}".format(self.instance.name, args[2])).read())
+                
+            if(args[1] == "say"):                         
+                self.rs.append(os.popen("mbii -i {} say {}".format(self.instance.name, args[2])).read())
+                            
+                        
+        if(not self.rs.empty()):
             await ctx.send(self.rs.get())    

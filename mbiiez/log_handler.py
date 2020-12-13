@@ -40,20 +40,27 @@ class log_handler:
         else:
             return True
 
-    """
-    Watches the log file for this instance, and sends lines to be processed
-    """
+
     def log_watcher(self):
-    
+        """
+        Watches the log file for this instance, and sends lines to be processed
+        """   
         self.log_await()
             
-        for line in tailer.follow(open(self.instance.config['server']['log_path'])):
+        # When / if this process hits a problem, have it auto restart again
+        try:
+        
+            for line in tailer.follow(open(self.instance.config['server']['log_path'])):
                 self.instance.log_handler.process(line)
 
-    """
-    Count the current # of lines in the instances log file
-    """
+        except Exception as e:
+            self.instance.exception_handler.log(e)    
+            self.log_watcher()
+
     def log_line_count(self):
+        """
+        Count the current # of lines in the instances log file
+        """    
         f = open(self.log_file, 'rb')
         lines = 0
         buf_size = 1024 * 1024
@@ -66,19 +73,19 @@ class log_handler:
 
         return lines
 
-    """
-    log to database
-    """
+
     def log(self, log_line):
+        """
+        log to database
+        """    
         log_line = log_line.lstrip().lstrip()
         log_line = helpers().ansi_strip(log_line)
         log().new(log_line, self.instance.name)
         
-    """
-    Processes a log line in the log file
-    """ 
     def process(self, last_line):
-  
+        """
+        Processes a log line in the log file
+        """   
         try:
         
             self.log(last_line)
@@ -108,7 +115,7 @@ class log_handler:
                 player_id = connection().get_player_id_from_name(player)
                 
                 # Run chat event     
-                self.instance.event_handler.run_event("player_chat",{"type": "TEAM", "message": message, "player_id": player_id, "player": player})  
+                self.instance.event_handler.run_event("player_chat_team",{"type": "TEAM", "message": message, "player_id": player_id, "player": player})  
 
                 # Save to Database                
                 chatter().new(player, self.instance.name, "TEAM", message)            
@@ -148,15 +155,4 @@ class log_handler:
         except Exception as e:
             self.instance.exception_handler.log(e)
 
-            #28:45 ClientConnect: (^3|NR|^7476) ID: 0 (IP: 73.199.53.19:29070)
-            #Send Player Connected
-            
-            # 0  1                   2        
-            #28:45 ClientDisconnect: 0
-            #Send Player Disconnected  
-                        
-            #21:04 : say: ^3|NR|^5SEAL^7TeamRicks: "!report something something"
-            #Send Moderator Report
-            
-            #21:04 Kill: 0 7 86: ^3|NR|^7476 killed |^3NR^7|DIO|^3PFC by MOD_SABER
-            #Send a Kill
+  

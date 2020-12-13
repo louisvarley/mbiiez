@@ -11,6 +11,7 @@ class db:
     def __init__(self):
         """ generates schema if not already created """
         self.generate_schema()
+        self.clean_up()
 
     def dict_factory(self, cursor, row):
         d = {}
@@ -28,6 +29,17 @@ class db:
         except Error as e:
             print(e)
 
+    """ Execute a statement """    
+    def execute(self, q):
+        conn = None
+        try:
+            conn = self.connect()
+            cur = conn.cursor()
+            cur.execute(q)
+            conn.commit()
+        except Error as e:
+            print(e)
+            
     """ Create a table using SQL """
     def create_table(self, create_table_sql):
      
@@ -40,11 +52,15 @@ class db:
 
     """ Delete from a table using ID Column """   
     def delete(self, table, id):
-        sql = ''' DELETE FROM ''' + table + ''' Where id == "''' + str(id) + '''"'''
-        conn = self.connect()
-        cur = conn.cursor()
-        cur.execute(sql)
-        conn.commit()
+       
+        try:
+            sql = ''' DELETE FROM ''' + table + ''' Where id == "''' + str(id) + '''"'''
+            conn = self.connect()
+            cur = conn.cursor()
+            cur.execute(sql)
+            conn.commit()
+        except Error as e:
+            print(e)        
 
     """ create an entry to given table using a data dictionary """            
     def insert(self, table, d):
@@ -91,16 +107,29 @@ class db:
         cur.execute(q, v)
         rows = cur.fetchall()
         return rows
-      
+        
+    def clean_up(self):
+        conn = self.connect()
+        cur = conn.cursor()
+        q = ''' delete FROM logs where added < datetime('now', '-30 day') '''
+        
     def temp_get_player_id(self, player):
         conn = self.connect()
         cur = conn.cursor()
         player = helpers().ansi_strip(player)     
-        q = ''' SELECT * FROM connections where player == "''' + player + '''" and type = "CONNECT" ORDER BY added DESC LIMIT 1; '''
+        q = ''' SELECT * FROM connections where player = "''' + player + '''" and type = "CONNECT" ORDER BY added DESC LIMIT 1; '''
         cur.execute(q)
         rows = cur.fetchall()
         return rows       
         
+    def get_latest_player_info_change(self, player_id):
+        conn = self.connect()
+        cur = conn.cursor()
+        player = helpers().ansi_strip(player)     
+        q = ''' SELECT * FROM logs where log LIKE "ClientUserinfoChanged: ''' + str(player_id) + '''" ORDER BY added DESC LIMIT 1; '''
+        cur.execute(q)
+        result = cur.fetchone()
+        return result           
         
     def generate_schema(self):
         

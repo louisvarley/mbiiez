@@ -11,8 +11,6 @@ class chatter:
         return db().insert("chatter", d)
         
         
-
-
 class process:
 
     id = None
@@ -139,3 +137,4 @@ class connection:
             return results[0]['player_id']
     
         return None
+        
