@@ -79,6 +79,7 @@ pip3 install sqlite3
 pip3 install flask
 pip3 install flask_httpauth
 pip3 install discord.py
+pip3 install shutil
 
 clear
 
