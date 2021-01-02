@@ -104,7 +104,7 @@ else
 	rm MBII_CLI_Updater.zip
 fi
 
-if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
+if [ -f "/opt/openjk/MBII/cgamei386.so" ]; then
 	
 	clear
 	echo -e "${CYAN}"
