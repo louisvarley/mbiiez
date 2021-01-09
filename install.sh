@@ -190,8 +190,7 @@ else
 
 fi
 	
-mkdir -p /root/.local/share/openjk/
-ln -s /opt/openjk /root/.local/share/openjk/
+ln -s /opt/openjk /root/.local/share/
 ln -s /opt/openjk /root/.ja
 
 # Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
