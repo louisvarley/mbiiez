@@ -47,6 +47,11 @@ class instance:
         self.external_ip = urllib.request.urlopen('http://ip.42.pl/raw').read().decode()       
         self.conf = conf(self.name, settings.locations.script_path, settings.locations.mbii_path)
         self.config = self.conf.config
+    
+        if(self.config == None):
+            print("No Instance config for {}".format(name))
+            exit()
+        
         self.plugins = self.config['plugins']
         self.plugins_registered = []
 

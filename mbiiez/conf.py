@@ -25,29 +25,35 @@ class conf:
         if(not os.path.isfile(config_file_path)):
             return False
 
-        with open(config_file_path) as config_data:
-            data = json.load(config_data)
+        try: 
+            with open(config_file_path) as config_data:
+                data = json.load(config_data)
             
-        data['server']['name'] = self.name
-            
-        data['server']['rtvrtm_config_file'] = "{}-rtvrtm.cfg".format(self.name)
-        data['server']['rtvrtm_config_path'] = "{}/{}".format(self.mbii_path, data['server']['rtvrtm_config_file'])
-        
-        data['server']['server_config_file'] = "{}-server.cfg".format(self.name) 
-        data['server']['server_config_path'] = "{}/{}".format(self.mbii_path, data['server']['server_config_file'])
-        
-        data['server']['primary_maplist_file'] = "{}-primary.txt".format(self.name) 
-        data['server']['primary_maplist_path'] = "{}/{}".format(self.mbii_path, data['server']['primary_maplist_file'])  
-        
-        data['server']['secondary_maplist_file'] = "{}-secondary.txt".format(self.name) 
-        data['server']['secondary_maplist_path'] = "{}/{}".format(self.mbii_path, data['server']['secondary_maplist_file']) 
-        
-        data['server']['log_file'] = "{}-games.log".format(self.name)  
-        data['server']['log_path'] = "{}/{}".format(self.mbii_path, data['server']['log_file'])
-            
-        data['server']['pid_file'] = "{}/pids/{}.pid".format(self.script_path, self.name)  
-        
-        self.config = data
+                data['server']['name'] = self.name
+                    
+                data['server']['rtvrtm_config_file'] = "{}-rtvrtm.cfg".format(self.name)
+                data['server']['rtvrtm_config_path'] = "{}/{}".format(self.mbii_path, data['server']['rtvrtm_config_file'])
+                
+                data['server']['server_config_file'] = "{}-server.cfg".format(self.name) 
+                data['server']['server_config_path'] = "{}/{}".format(self.mbii_path, data['server']['server_config_file'])
+                
+                data['server']['primary_maplist_file'] = "{}-primary.txt".format(self.name) 
+                data['server']['primary_maplist_path'] = "{}/{}".format(self.mbii_path, data['server']['primary_maplist_file'])  
+                
+                data['server']['secondary_maplist_file'] = "{}-secondary.txt".format(self.name) 
+                data['server']['secondary_maplist_path'] = "{}/{}".format(self.mbii_path, data['server']['secondary_maplist_file']) 
+                
+                data['server']['log_file'] = "{}-games.log".format(self.name)  
+                data['server']['log_path'] = "{}/{}".format(self.mbii_path, data['server']['log_file'])
+                    
+                data['server']['pid_file'] = "{}/pids/{}.pid".format(self.script_path, self.name)  
+                
+                self.config = data
+                
+        except Exception as e:
+            print("Error: JSON is formatted incorrectly in {}".format(config_file_path))
+            exit()
+    
         
         return self.config
 
@@ -146,6 +152,11 @@ class conf:
                 
             cl_string = cl_string.rstrip("-")
             data = data.replace("[class_limits]",cl_string)
+            
+            if("custom" in self.config):
+                data = data + "\n"
+                for x in self.config['custom'].keys():
+                    data = data + "\n" + "seta " + x + ' "' + str(self.config['custom'][x]) + '"'
             
             # Save to MBII Folder
             f = open(self.config['server']['server_config_path'], "w")
