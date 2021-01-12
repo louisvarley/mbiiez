@@ -92,23 +92,22 @@ class log_handler:
             
             # Was a chat
             if('say:' in last_line):
+            
+                # Ignore if sent by server
+                if('server:' in last_line):
+                    return
+                
                 player = last_line.split(":")[3].strip()
                 message = last_line.split(":")[4].strip()[1:-1]
                 player_id = connection().get_player_id_from_name(player)
-
                 # Run command event
                 if(message.startswith("!")):                 
                     self.instance.event_handler.run_event("player_chat_command",{"message": message, "player_id": player_id, "player": player})
                      
                 else:     
-                     
                     # Run chat event     
                     self.instance.event_handler.run_event("player_chat",{"type": "PUBLIC", "message": message, "player_id": player_id, "player": player})  
                     
-                    # Save to Database
-                    chatter().new(player, self.instance.name, "PUBLIC", message)
-            
-
             if('sayteam:' in last_line):
                 player = last_line.split(":")[3].strip().lstrip()
                 message = last_line.split(":")[4].strip()[1:-1]
@@ -116,10 +115,6 @@ class log_handler:
                 
                 # Run chat event     
                 self.instance.event_handler.run_event("player_chat_team",{"type": "TEAM", "message": message, "player_id": player_id, "player": player})  
-
-                # Save to Database                
-                chatter().new(player, self.instance.name, "TEAM", message)            
-            
                 
             if('Kill:' in last_line):
                 frag_info = last_line.split(":")[3]
@@ -130,27 +125,30 @@ class log_handler:
                 
                 if(fragger == fragged or "<world>" in fragger):
                     fragger = "SELF"
-
-                frag().new(self.instance.name, fragger, fragged, weapon)   
-
+                
+                # Run player killed event    
+                self.instance.event_handler.run_event("player_killed",{"fragger": fragger, "fragged": fragged, "weapon": weapon})  
+                        
             if('ClientConnect:' in last_line):
                 player = last_line.split(":")[2][:-4][1:].lstrip().lstrip("(")
                 player_id = last_line.split(":")[3][:-4][1:].lstrip()
                 ip = last_line.split(":")[4][1:]
-                type = "CONNECT"
-                connection().new(player, player_id, self.instance.name, ip, type)     
-
+                self.instance.event_handler.run_event("player_connected",{"ip": ip, "player_id": player_id, "player": player})
+ 
             if('ClientDisconnect:' in last_line):
                 player = ""
                 player_id = last_line.split(":")[2][1:]
                 ip = ""
-                type = "DISCONNECT"
-                connection().new(player, player_id, self.instance.name, ip, type)  
+                self.instance.event_handler.run_event("player_disconnected",{"ip": ip, "player_id": player_id, "player": player})
+                 
                 
             if('ClientBegin:' in last_line):
                 player = ""
-                player_id = last_line.split(":")[2][1:]                
+                player_id = last_line.split(":")[2][1:]                  
                 self.instance.event_handler.run_event("player_begin",{"player_id": player_id, "player": player})  
+
+            if('ClientUserinfoChanged' in last_line):
+                self.instance.event_handler.run_event("player_info_change",{"data": last_line})
 
         except Exception as e:
             self.instance.exception_handler.log(e)

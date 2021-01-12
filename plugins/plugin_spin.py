@@ -33,6 +33,7 @@ map_change                          map_name                        When the ser
 
 import random
 import datetime
+import time
 
 class plugin:
 
@@ -93,113 +94,132 @@ class plugin:
                     break;
         
             if(k=="lightsaber"): 
-                self.instance.tell(args['player_id'], "You win a LightSaber!")    
-                command = "wannabe {} give weapon 1".format(args['player_id'])
-              
+                self.instance.rcon("wannabe {} give weapon 1".format(args['player_id'])) 
+                self.instance.tell(args['player_id'], "You win a LightSaber!")   
+                
             elif(k=="disruptor"):
+                self.instance.rcon("wannabe {} give weapon 4".format(args['player_id']) )  
                 self.instance.tell(args['player_id'], "You win a Disruptor")
-                command = "wannabe {} give weapon 4".format(args['player_id']) 
-              
+                
             elif(k=="projectile_rifle"): 
-                self.instance.tell(args['player_id'], "You win a Projectile Rifle")
                 command = "wannabe {} give weapon 5".format(args['player_id'])
+                self.instance.rcon(command)  
+                self.instance.tell(args['player_id'], "You win a Projectile Rifle")
                 
             elif(k=="bowcaster"):
+                self.instance.rcon("wannabe {} give weapon 6".format(args['player_id']))  
                 self.instance.tell(args['player_id'], "You win a Bowcaster")
-                command = "wannabe {} give weapon 6".format(args['player_id'])
                 
             elif(k=="dc15"):
+                self.instance.rcon("wannabe {} give weapon 7".format(args['player_id']))  
                 self.instance.tell(args['player_id'], "You win a DC15")
-                command = "wannabe {} give weapon 7".format(args['player_id'])
- 
+                
             elif(k=="arc_pistol"):
                 self.instance.tell(args['player_id'], "You win an ARC Pistol")
                 command = "wannabe {} give weapon 8".format(args['player_id'])
+                self.instance.rcon(command) 
                 
-            elif(k=="rocket_launcher"):
-                self.instance.tell(args['player_id'], "You win a Rocket Launcher")
-                command = "wannabe {} give weapon 10".format(args['player_id'])               
- 
-            elif(k=="frag_grenades"):
+            elif(k=="rocket_launcher"):   
+                self.instance.rcon("wannabe {} give weapon 10".format(args['player_id']))      
+                self.instance.tell(args['player_id'], "You win a Rocket Launcher")   
+                
+            elif(k=="frag_grenades"):              
+                self.instance.rcon("wannabe {} give weapon 11".format(args['player_id'])   )        
                 self.instance.tell(args['player_id'], "You win a Frag Grenade")
-                command = "wannabe {} give weapon 11".format(args['player_id'])               
-  
-            elif(k=="pulse_grenades"):
+                
+            elif(k=="pulse_grenades"):              
+                self.instance.rcon("wannabe {} give weapon 12".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win 2 Pulse Grenades")
-                command = "wannabe {} give weapon 12".format(args['player_id'])
-
+                
             elif(k=="t21"):
-                self.instance.tell(args['player_id'], "You win a T21")
                 command = "wannabe {} give weapon 13".format(args['player_id'])              
-
+                self.instance.rcon(command)
+                self.instance.tell(args['player_id'], "You win a T21")
+                
             elif(k=="arm_blaster"):
-                self.instance.tell(args['player_id'], "You win an Arm Blaster")
-                command = "wannabe {} give weapon 14".format(args['player_id'])
-
-            elif(k=="welstar_34"):
+                self.instance.rcon("wannabe {} give weapon 14".format(args['player_id']))
+                self.instance.tell(args['player_id'], "You win an Arm Blaster")    
+                
+            elif(k=="welstar_34"): 
+                self.instance.rcon("wannabe {} give weapon 15".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Welstar34")
-                command = "wannabe {} give weapon 14".format(args['player_id'])
-
+                                
             elif(k=="armor_500"):
+                self.instance.rcon("wannabe {} give armor 500".format(args['player_id']))
                 self.instance.tell(args['player_id'], "Your armor is now 500")
-                command = "wannabe {} give armor 500".format(args['player_id'])
                 
             elif(k=="armor_200"):
-                self.instance.tell(args['player_id'], "Your armor is now 200")
-                command = "wannabe {} give armor 200".format(args['player_id'])                
+               
+                command = "wannabe {} give armor 200".format(args['player_id'])  
+                self.instance.rcon(command)
+                self.instance.tell(args['player_id'], "Your armor is now 200") 
                 
             elif(k=="armor_0"):
-                self.instance.tell(args['player_id'], "You armor is now 0")
-                command = "wannabe {} give armor 0".format(args['player_id'])
-
-            elif(k=="armor_0"):
-                self.instance.tell(args['player_id'], "You armor is now 0")
-                command = "wannabe {} give armor 0".format(args['player_id'])
-                
+                self.instance.rcon("wannabe {} give armor 0".format(args['player_id']))
+                self.instance.tell(args['player_id'], "You armor is now 0")               
+                     
             elif(k=="nothing"):
                 self.instance.tell(args['player_id'], "You won... nothing, sorry...")
          
             elif(k=="big"):
                 command = "wannabe {} set player_scale 150".format(args['player_id'])
+                self.instance.rcon(command)
                 self.instance.tell(args['player_id'], "You unexpectedly grew!")
  
             elif(k=="small"):
-                command = "wannabe {} set player_scale 50".format(args['player_id'])
+                self.instance.rcon("wannabe {} set player_scale 50".format(args['player_id']))
                 self.instance.tell(args['player_id'], "Have you lost some weight?")
- 
+                                
             elif(k=="binovision"):
-                command = "wannabe {} set zoom_mode 2".format(args['player_id'])
+                self.instance.rcon("wannabe {} set zoom_mode 2".format(args['player_id']))
                 self.instance.tell(args['player_id'], "Did you just glue them binoculars to your face?")
 
             elif(k=="seekerdroid"):
-                command = "wannabe {} give item 1".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 1".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Padawan's Seekerdroid!")                
 
             elif(k=="jetpack"):
-                command = "wannabe {} give item 7".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 7".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Jetpack!")
                 
             elif(k=="sentry"):
-                command = "wannabe {} give item 6".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 6".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Automated Sentry Gun!")                
 
             elif(k=="cloak"):
-                command = "wannabe {} give item 11".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 11".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Cloaking Device!")                
-
+             
             elif(k=="emplacement"):
-                command = "wannabe {} give item 10".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 10".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Gun Implacement!") 	
          
             elif(k=="bacta"):
-                command = "wannabe {} give item 4".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 4".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Tank of Bacta!") 	
-                  
+       
             elif(k=="forcefield"):
-                command = "wannabe {} give item 2".format(args['player_id'])
+                self.instance.rcon("wannabe {} give item 2".format(args['player_id']))
                 self.instance.tell(args['player_id'], "You win a Forcefield Generator!") 
+
+            elif(k=="tauntaun"):
+                self.instance.tell(args['player_id'], "You win a Taun Taun!. You have 5 seconds to get to a place it can spawn")  
+                time.sleep(5)
+                self.instance.rcon("wannacheat 1")
+                time.sleep(0.5)
+                self.instance.rcon("wannabe {} give tauntaun".format(args['player_id']))                
+                self.instance.rcon("wannacheat 0")               
+                               
+                
+            elif(k=="swoop"):
+                self.instance.tell(args['player_id'], "You win a Swoopbike!. You have 5 seconds to get to a place it can spawn")  
+                time.sleep(5)
+                self.instance.rcon("wannacheat 1")
+                time.sleep(0.5)
+                self.instance.rcon("wannabe {} give swoop".format(args['player_id']))                
+                self.instance.rcon("wannacheat 0")               
                 
             # Log This Spin
             self.spins[args['player_id']] = datetime.datetime.now()
          
-            self.instance.rcon(command)
+           

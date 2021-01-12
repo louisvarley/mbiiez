@@ -1,3 +1,4 @@
+import shutil
 import sys, getopt
 import os
 import subprocess
@@ -46,12 +47,13 @@ class instance:
         self.name = name
         self.external_ip = urllib.request.urlopen('http://ip.42.pl/raw').read().decode()       
         self.conf = conf(self.name, settings.locations.script_path, settings.locations.mbii_path)
+        
         self.config = self.conf.config
-    
+
         if(self.config == None):
             print("No Instance config for {}".format(name))
             exit()
-        
+            
         self.plugins = self.config['plugins']
         self.plugins_registered = []
 
@@ -68,27 +70,45 @@ class instance:
         # Load Internal Services
         self.services_internal()
 
+        # Load Internal Events
+        self.events_internal()
+
         #Load Plugins
         self.plugin_hander = plugin_handler(self)
+        
+        ''' Add any configs to external plugins if they are enabled '''    
+        if(self.has_plugin("auto_message")):
+            self.config['plugins']['auto_message']['messages'].append("This server is powered by MBIIEZ, visit bit.ly/2JhJRpO")    
 
     def services_internal(self):
-        #Internal Services   
+        ''' Internal Services we wish to start on an instance start ''' 
 
-        # Dedicated Server Service
+        ''' Runs the Dedicated OpenJK Server ''' 
         cmd = "{} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);       
         self.process_handler.register_service("OpenJK", cmd, 1) 
         
-        # Log Watcher Service
+        ''' Log Watcher Service ''' 
         self.process_handler.register_service("Log Watcher", self.log_handler.log_watcher)
+        
+        ''' Restarter Service '''
+        self.process_handler.register_service("Scheduled Restarter", self.event_handler.restarter)
 
-        # RTV Service
+        ''' RTV Service, Eventually move to a plugin ''' 
         if(self.config['server']['enable_rtv']):
             cmd = "python /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
             self.process_handler.register_service("RTVRTM", cmd, 999, self.log_handler.log_await) 
             
-        # Add Promotional Message if auto_message plugin is being used    
-        if(self.has_plugin("auto_message")):
-            self.config['plugins']['auto_message']['messages'].append("This server is powered by MBIIEZ, visit bit.ly/2JhJRpO")    
+    def events_internal(self):
+        ''' Events we wish to run internal methods on '''
+        self.event_handler.register_event("player_chat_command", self.event_handler.player_chat_command)
+        self.event_handler.register_event("player_chat", self.event_handler.player_chat)
+        self.event_handler.register_event("player_chat_team", self.event_handler.player_chat_team)
+        self.event_handler.register_event("player_killed", self.event_handler.player_killed)       
+        self.event_handler.register_event("player_connected", self.event_handler.player_connected)               
+        self.event_handler.register_event("player_disconnected", self.event_handler.player_disconnected)       
+        self.event_handler.register_event("player_begin", self.event_handler.player_begin)          
+        self.event_handler.register_event("player_info_change", self.event_handler.player_info_change)          
+        return
         
     # Use netstat to get the port used by this instance
     def get_port(self):  

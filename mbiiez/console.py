@@ -29,7 +29,6 @@ class console:
         socket.socket.settimeout(self.socket, 4)    
         
         try:
-            print("sent, waiting for response")
             data = self.socket.recv(4096)
             data = data.decode("utf-8", "ignore")
        
