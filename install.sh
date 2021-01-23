@@ -41,20 +41,22 @@ echo -e "Installating dependencies..."
 echo -e "${NONE}"
 sleep 2
 
-wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
+if ! command -v dotnet &> /dev/null
+then
+    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+	sudo dpkg -i packages-microsoft-prod.deb
+	rm packages-microsoft-prod.deb
+fi
 
 apt-get update 
 apt-get install python3-pip -y
-apt-get update 
 
-#if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-dpkg --add-architecture i386
-apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
-apt-get install -y zlib1g:i386 
-apt-get install -y curl:i386 
-#fi
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+	dpkg --add-architecture i386
+	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
+	apt-get install -y zlib1g:i386 
+	apt-get install -y curl:i386 
+fi
 
 apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
 
@@ -104,7 +106,7 @@ else
 	rm MBII_CLI_Updater.zip
 fi
 
-if [ -f "/opt/openjk/MBII/cgamei386.so" ]; then
+if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	
 	clear
 	echo -e "${CYAN}"
@@ -190,7 +192,8 @@ else
 
 fi
 	
-ln -s /opt/openjk /root/.local/share/
+mkdir -p /root/.local/share/openjk/
+ln -s /opt/openjk /root/.local/share/openjk/
 ln -s /opt/openjk /root/.ja
 
 # Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
@@ -235,9 +238,6 @@ echo -e "Password: ${FUSCHIA}Admin${NONE}"
 echo "--------------------------------------------------"
 echo -e "'mbii' can now be used as a shell command"
 echo -e "You can update MBIIEZ anytime by running ./update.sh"
-echo "--------------------------------------------------"
-echo "You ${FUSCHIA}MUST{NONE} ensure the correct ports UDP 28060-28062,28070-28071 are forwarded correctly"
-echo "If using an external firewall, you may also need to disable or configure your OS Firewall using command such as ${FUSCHIA}sudo ufw disable${NONE}"
 echo "--------------------------------------------------"
 echo "Press ENTER to exit"
 echo "--------------------------------------------------"
