@@ -7,6 +7,23 @@ The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for
 
 In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead. 
 
+## V1.7.2
+
+Doing some testing after this new update. 
+IF you get an "invalid entitystate" error after re-running "install.sh" to update and then trying to connect. 
+It seems the official updater is not updating correctly. 
+
+I was able to fix this by 
+- Manually copying all MBII files from my local computer using WinSCP 
+- renaming `jampgamei386.nopp.so` to `jampgamei386.so` (and original to `jampgamei386.old`) 
+
+You could also completely delete your MBII folder `/opt/openjk/MBII` and let install.sh completely reinstall MBII
+
+Reported the bug with their updater to the MBII Devs
+Install.sh has been changed to always re-download the latest updater binaries. 
+
+
+
 ## Features
 - Simple to use Web GUI 
 - Simple CLI for running automated commands
@@ -23,6 +40,10 @@ In a sense, you should not need to edit server configs, RTV/RTM configs, underst
 - Run `./install.sh` which will install all required depedencies 
 - Installation is a simple step by step process
 - Movie Battles II is downloaded automatically, as well as the most recent build of OpenJK For Linux
+
+## Updating
+- Re-Run install.sh to automatically grab any updates to depedencies, MBII etc
+- You can get the latest version of this repo by re-cloning it
 
 ## Adding Base files
 
