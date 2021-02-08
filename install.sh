@@ -85,26 +85,10 @@ pip3 install shutil
 
 clear
 
-if [ -f "$SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll" ]; then
-
-	clear
-	echo -e "${CYAN}"
-	echo -e "Movie Battles II Updater found, skipping..."
-	echo -e "${NONE}"
-	sleep 2
-		
-else	
-
-	echo -e "${CYAN}"
-	echo -e "Downloading Movie Battles II CLI Updater..."
-	echo -e "${NONE}"
-	sleep 2
-
-
-	wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-	unzip -o MBII_CLI_Updater.zip -d ./updater
-	rm MBII_CLI_Updater.zip
-fi
+echo -e "Downloading Movie Battles II Updater..."
+wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+unzip -o MBII_CLI_Updater.zip -d ./updater
+rm MBII_CLI_Updater.zip
 
 if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	
