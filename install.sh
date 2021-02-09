@@ -120,7 +120,7 @@ else
 
 	wget -O "$SCRIPTPATH/MBII.zip" $LINK
 	mkdir -p $MBIIPATH
-	unzip -o MBII.zip -d MBIIPATH
+	unzip -o MBII.zip -d $MBIIPATH
 	rm "$SCRIPTPATH/MBII.zip"
 
 fi
