@@ -37,7 +37,8 @@ Install.sh has been changed to always re-download the latest updater binaries.
 
 - Clone this repo into your home directory using `git clone` 
 - Run `chmod +x install.sh` on the installation bash script
-- Run `./install.sh` which will install all required depedencies 
+- Run `./install.sh` which will install all required depedencies
+- Amend the mbiiez.conf file to ensure paths are correctly set to your MBIIEZ path
 - Installation is a simple step by step process
 - Movie Battles II is downloaded automatically, as well as the most recent build of OpenJK For Linux
 
