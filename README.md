@@ -7,7 +7,7 @@ The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for
 
 In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead. 
 
-## V1.7.2
+## V1.7.2+
 
 Doing some testing after this new update. 
 IF you get an "invalid entitystate" error after re-running "install.sh" to update and then trying to connect. 
