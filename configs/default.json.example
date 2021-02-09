@@ -96,7 +96,7 @@
     "BountyHunter":50,
     "Hero":50,
     "SBD":50,
-	"Wookie": 50,
+    "Wookie": 50,
     "Droideka":50,
     "CloneTrooper":50,
     "Mandalorian":50,
@@ -105,13 +105,13 @@
   "map_rotation_order":[
     "mb2_corellia",  
     "mb2_commtower",
-	"mb2_lunarbase",	
+    "mb2_lunarbase",	
     "mb2_enclave",
     "mb2_jabba",
     "mb2_jeditemple",
     "mb2_cloudcity",
-	"mb2_kamino",
-	"mb2_dxun"
+    "mb2_kamino",
+    "mb2_dxun"
   ],
   "primary_maps":[
     "mb2_alderaan",
