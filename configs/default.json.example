@@ -41,7 +41,7 @@
     "map_round_limit":25,
     "competitive_config":0,
     "balance_mode":-1,
-	"message_of_the_day":"my message of the day\nhello everyone!"
+    "message_of_the_day":"my message of the day\nhello everyone!"
   },  
   "smod":{
     "admin_1":{
