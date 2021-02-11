@@ -46,8 +46,11 @@ class instance:
     
         self.name = name
         self.external_ip = urllib.request.urlopen('http://ip.42.pl/raw').read().decode()       
-        self.conf = conf(self.name, settings.locations.script_path, settings.locations.mbii_path)
-        
+
+        self.start_cmd = None
+
+        # Generate Config for this instance 
+        self.conf = conf(self.name, settings)       
         self.config = self.conf.config
 
         if(self.config == None):
@@ -84,7 +87,11 @@ class instance:
         ''' Internal Services we wish to start on an instance start ''' 
 
         ''' Runs the Dedicated OpenJK Server ''' 
-        cmd = "{} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], settings.dedicated.game, self.config['server']['server_config_file']);       
+        cmd = "{} --quiet +set dedicated 2 +set net_port {} +set fs_game {} +exec {}".format(self.config['server']['engine'], self.config['server']['port'], self.get_game(), self.config['server']['server_config_file']);       
+        
+        self.start_cmd = cmd
+        
+        print(cmd)
         self.process_handler.register_service("OpenJK", cmd, 1) 
         
         ''' Log Watcher Service ''' 
@@ -306,6 +313,8 @@ class instance:
     
         self.stop()
         time.sleep(1)
+        
+        print("Running Command: {}" + self.start_cmd)
 
         # Generate our configs
         self.conf.generate_server_config()
@@ -368,6 +377,16 @@ class instance:
             return True
         else:
             return False
+            
+    def get_game(self):
+    
+         # Allows GAME override using JSON
+        game = settings.dedicated.game
+        
+        if("game" in self.config['server'].keys()):           
+            game = self.config['server']['game']
+            
+        return game    
                 
     # Instance Status Information
     def status(self):
@@ -379,7 +398,8 @@ class instance:
             players = self.players()
  
             print(bcolors.CYAN + "Instance Name: " + bcolors.ENDC + self.name)   
-            print(bcolors.CYAN + "Server Name: " + bcolors.ENDC + bcolors().color_convert(self.config['server']['host_name']))    
+            print(bcolors.CYAN + "Server Name: " + bcolors.ENDC + bcolors().color_convert(self.config['server']['host_name']))
+            print(bcolors.CYAN + "Game: " + bcolors.ENDC + self.get_game())              
             print(bcolors.CYAN + "Engine: " + bcolors.ENDC + self.config['server']['engine'])           
             print(bcolors.CYAN + "Port: " + bcolors.ENDC + str(self.config['server']['port']))                
             print(bcolors.CYAN + "Full Address: " + bcolors.ENDC + self.external_ip + ":" + str(self.config['server']['port']))

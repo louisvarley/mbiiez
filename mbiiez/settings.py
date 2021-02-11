@@ -10,7 +10,7 @@ class globals:
 class locations:
 
     script_path = globals.script_path
-    game_path = globals.script_path
+    game_path = globals.config.get('locations', 'game_path')
     mbii_path = globals.config.get('locations', 'mbii_path')
     base_path = globals.config.get('locations', 'base_path')
     config_path = globals.config.get('locations', 'config_path')

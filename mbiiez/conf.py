@@ -1,35 +1,47 @@
 import os
 import json
 import time
+import os
 
 class conf:
 
     name = None
     mbii_path = None
     embii_path = None
+    game_path = None
+    default_game = None
     config_path = None   
     config = None
 
-    def __init__(self, name, script_path, mbii_path):
+    def __init__(self, name, settings):
+    
         self.name = name
-        self.mbii_path = mbii_path
-        self.script_path = script_path
-        self.config_path = "{}/configs".format(script_path)
+        self.script_path = settings.locations.script_path
+        self.game_path = settings.locations.game_path
+        self.default_game = settings.dedicated.game
+        self.config_path = "{}/configs".format(self.script_path)
         self.get_config()
     
     # Fetch Config, add additionals and save as dictionary
     def get_config(self):
 
         config_file_path = self.config_path + "/" + self.name + ".json"
-        
+
         if(not os.path.isfile(config_file_path)):
             return False
 
         try: 
             with open(config_file_path) as config_data:
                 data = json.load(config_data)
-            
+                
+                # Work out the MBII Path to use 
+                if("game" in data['server'].keys()):           
+                    self.mbii_path = os.path.join(self.game_path, data['server']['game'])
+                else:
+                    self.mbii_path = os.path.join(self.game_path, self.default_game)  
+
                 data['server']['name'] = self.name
+                data['server']['mbii_path'] = self.mbii_path
                     
                 data['server']['rtvrtm_config_file'] = "{}-rtvrtm.cfg".format(self.name)
                 data['server']['rtvrtm_config_path'] = "{}/{}".format(self.mbii_path, data['server']['rtvrtm_config_file'])
