@@ -184,7 +184,7 @@ ln -s /opt/openjk /root/.ja
 cp /opt/openjk/*.so /usr/lib/
 cp /opt/openjk/MBII/*.so /usr/lib/
 cp /opt/openjk/*.i386 /usr/bin/
-cp $SCRIPTPATH/mbiided.i386 /usr/bin
+cp $SCRIPTPATH/*.i386 /usr/bin
 cp /opt/openjk/*.so /opt/openjk/MBII
 
 chmod +x /usr/bin/*.i386

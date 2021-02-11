@@ -3,7 +3,7 @@
     "host_name":"[SERVER NAME]",
     "port":29071,
     "discord":"[DISCORD INVITE CODE]",
-    "engine": "mbiided.i386",	
+    "engine": "openjk.i386",	
     "restart_instance_every_hours":[RESTART SERVER AFTER X NUMBER OF HOURS IF SERVER IS EMPTY, EXAMPLE, 12],
     "enable_rtv":true,
     "enable_rtm":false,
