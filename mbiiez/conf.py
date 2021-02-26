@@ -1,47 +1,35 @@
 import os
 import json
 import time
-import os
 
 class conf:
 
     name = None
     mbii_path = None
     embii_path = None
-    game_path = None
-    default_game = None
     config_path = None   
     config = None
 
-    def __init__(self, name, settings):
-    
+    def __init__(self, name, script_path, mbii_path):
         self.name = name
-        self.script_path = settings.locations.script_path
-        self.game_path = settings.locations.game_path
-        self.default_game = settings.dedicated.game
-        self.config_path = "{}/configs".format(self.script_path)
+        self.mbii_path = mbii_path
+        self.script_path = script_path
+        self.config_path = "{}/configs".format(script_path)
         self.get_config()
     
     # Fetch Config, add additionals and save as dictionary
     def get_config(self):
 
         config_file_path = self.config_path + "/" + self.name + ".json"
-
+        
         if(not os.path.isfile(config_file_path)):
             return False
 
         try: 
             with open(config_file_path) as config_data:
                 data = json.load(config_data)
-                
-                # Work out the MBII Path to use 
-                if("game" in data['server'].keys()):           
-                    self.mbii_path = os.path.join(self.game_path, data['server']['game'])
-                else:
-                    self.mbii_path = os.path.join(self.game_path, self.default_game)  
-
+            
                 data['server']['name'] = self.name
-                data['server']['mbii_path'] = self.mbii_path
                     
                 data['server']['rtvrtm_config_file'] = "{}-rtvrtm.cfg".format(self.name)
                 data['server']['rtvrtm_config_path'] = "{}/{}".format(self.mbii_path, data['server']['rtvrtm_config_file'])
@@ -80,6 +68,47 @@ class conf:
             data = data.replace("[rcon_password]",self.config['security']['rcon_password'])
             data = data.replace("[log_name]",self.config['server']['log_file'])
             
+            # Master Server Lists
+            if("master1" in self.config['server'].keys()):      
+                data = data.replace("[master1]",self.config['server']['master1'])    
+            else:
+                data = data.replace("[master1]","master.moviebattles.org")
+
+            if("master2" in self.config['server'].keys()):      
+                data = data.replace("[master2]",self.config['server']['master2'])    
+            else:
+                data = data.replace("[master2]","master2.moviebattles.org")
+
+            if("master3" in self.config['server'].keys()):      
+                data = data.replace("[master3]",self.config['server']['master3'])    
+            else:
+                data = data.replace("[master3]","master.jkhub.org")
+
+            if("master4" in self.config['server'].keys()):      
+                data = data.replace("[master4]",self.config['server']['master4'])    
+            else:
+                data = data.replace("[master4]","masterjk3.ravensoft.com")
+
+            if("master5" in self.config['server'].keys()):      
+                data = data.replace("[master5]",self.config['server']['master5'])    
+            else:
+                data = data.replace("[master5]","")
+
+            if("DuelMidRoundRespawnTimerInitial" in self.config['server'].keys()):      
+                data = data.replace("[DuelMidRoundRespawnTimerInitial]",self.config['server']['DuelMidRoundRespawnTimerInitial'])    
+            else:
+                data = data.replace("[DuelMidRoundRespawnTimerInitial]","20")
+
+            if("DuelMidRoundRespawnTimerNoLives" in self.config['server'].keys()):      
+                data = data.replace("[DuelMidRoundRespawnTimerNoLives]",self.config['server']['DuelMidRoundRespawnTimerNoLives'])    
+            else:
+                data = data.replace("[DuelMidRoundRespawnTimerNoLives]","2")
+                
+            if("DuelMidRoundRespawnTimerNoLivesIncrement" in self.config['server'].keys()):      
+                data = data.replace("[DuelMidRoundRespawnTimerNoLivesIncrement]",self.config['server']['DuelMidRoundRespawnTimerNoLivesIncrement'])    
+            else:
+                data = data.replace("[DuelMidRoundRespawnTimerNoLivesIncrement]","2")                
+
             # Messages
             data = data.replace("[message_of_the_day]",self.config['game']['message_of_the_day'].replace("\n","\\n"))
             
