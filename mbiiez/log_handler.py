@@ -31,7 +31,9 @@ class log_handler:
         SECONDS_TO_WAIT = 10
         MAX = (SECONDS_TO_WAIT * 2)
         
-        while(not os.path.exists(self.instance.config['server']['log_path']) or x >= MAX): 
+        while(not os.path.exists(self.instance.config['server']['log_path'])):
+            if(x > MAX):
+                break
             time.sleep(0.5)
             x = x + 1        
         
