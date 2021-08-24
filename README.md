@@ -7,9 +7,13 @@ The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for
 
 In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead. 
 
-## August 2021 Update
+## August 2021 Update + Additional Notes
 
 Fixed a bug in the code and tweaked installer so hopefully prevent it dumping a duplicate MBII folder into the ```/opt/openjk/MBII``` folder. I don't have a full install setup to cant properly test
+
+Additional issue i've noticed on a few installs, installation creates a path like so ```/opt/openjk/MBII/MBII``` with some of the files being here rather than merely ```/opt/openjk/MBII/MBII```
+
+i've added a line to install to move them but if you get issues, check any files are moved to their correct places
 
 ## V1.7.2+
 
