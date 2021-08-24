@@ -9,7 +9,7 @@ In a sense, you should not need to edit server configs, RTV/RTM configs, underst
 
 ## August 2021 Update + Additional Notes
 
-Fixed a bug in the code and tweaked installer so hopefully prevent it dumping a duplicate MBII folder into the ```/opt/openjk/MBII``` folder. I don't have a full install setup to cant properly test
+Fixed a bug in the code which would not tell you when log file was not created within 10 seconds (indicating the server didnt start) I don't have a full install setup to properly test
 
 Additional issue i've noticed on a few installs, installation creates a path like so ```/opt/openjk/MBII/MBII``` with some of the files being here rather than merely ```/opt/openjk/MBII/MBII```
 
