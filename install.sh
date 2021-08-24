@@ -123,10 +123,9 @@ else
 	unzip -o MBII.zip -d $MBIIPATH
 	rm "$SCRIPTPATH/MBII.zip"
 	
-	if [ -f $MBIIPATH/MBII ]; then
-		mv $MBIIPATH/MBII/* ..
-		rmdir $MBIIPATH/MBII
-	fi
+	#Need a more eligant way of doing this when i can be arsed
+	mv /opt/openjk/MBII/MBII/* /opt/openjk/MBII
+	rmdir /opt/openjk/MBII/MBII
 
 fi
 
