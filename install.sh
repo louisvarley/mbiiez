@@ -17,7 +17,7 @@ cd $SCRIPTPATH
 
 if [ "$EUID" -ne 0 ]
   then echo "Installation requires root. Please run installation as root"
-  exit
+  ##exit
 fi
 
 echo -e "${CYAN}"
@@ -122,6 +122,11 @@ else
 	mkdir -p $MBIIPATH
 	unzip -o MBII.zip -d $MBIIPATH
 	rm "$SCRIPTPATH/MBII.zip"
+	
+	if [ -f $MBIIPATH/MBII ]; then
+		mv $MBIIPATH/MBII/* ..
+		rmdir $MBIIPATH/MBII
+	fi
 
 fi
 
