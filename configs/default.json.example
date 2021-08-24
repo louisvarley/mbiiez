@@ -5,7 +5,7 @@
     "discord":"[DISCORD INVITE CODE]",
     "engine": "openjk.i386",	
 	"game":	"MBII",
-    "restart_instance_every_hours":[RESTART SERVER AFTER X NUMBER OF HOURS IF SERVER IS EMPTY, EXAMPLE, 12],
+    "restart_instance_every_hours":24,
     "enable_rtv":true,
     "enable_rtm":false,
     "rtm_mode": 0
@@ -20,7 +20,7 @@
 		"repeat_minutes":5
 	},
 	"auto_map_rotation":{
-		"rotate_minutes": [MOVE TO THE NEXT MAP WHEN SERVER IS EMPTY AFTER X MINUTES]
+		"rotate_minutes": 30
 	},	
 	"stats":{},
 	"discord_bot":{
