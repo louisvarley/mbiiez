@@ -9,12 +9,12 @@ class conf:
     embii_path = None
     config_path = None   
     config = None
-
-    def __init__(self, name, script_path, mbii_path):
+    
+    def __init__(self, name, settings):    
         self.name = name
-        self.mbii_path = mbii_path
-        self.script_path = script_path
-        self.config_path = "{}/configs".format(script_path)
+        self.mbii_path = settings.locations.mbii_path
+        self.script_path = settings.locations.script_path
+        self.config_path = "{}/configs".format(settings.locations.script_path)
         self.get_config()
     
     # Fetch Config, add additionals and save as dictionary
