@@ -4,7 +4,7 @@
     "port":29071,
     "discord":"[DISCORD INVITE CODE]",
     "engine": "openjkded.i386",	
-	"game":	"MBII",
+    "game":	"MBII",
     "restart_instance_every_hours":24,
     "enable_rtv":true,
     "enable_rtm":false,
