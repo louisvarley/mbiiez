@@ -5,7 +5,7 @@
 MBIIEZ is a python wrapper for running instances of Movie Battles II. 
 The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for managing instances. 
 
-In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead. 
+In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead and basic JSON config files. 
 
 ## August 2021 Update + Additional Notes
 
@@ -15,7 +15,7 @@ Additional issue i've noticed on a few installs, installation creates a path lik
 
 i've added a line to install to move them but if you get issues, check any files are moved to their correct places
 
-## V1.7.2+
+## V1.7.2+ of MBII
 
 Doing some testing after this new update. 
 IF you get an "invalid entitystate" error after re-running "install.sh" to update and then trying to connect. 
@@ -63,13 +63,13 @@ These files include
 
 
 ## Instances
-"Instances" are a single game servers. Most modern visual servers or bare metal servers can support a number of instances running together. These instances will normally have a name. such as **open** or **duel**
+"Instances" are a single game servers. Most modern virtual servers or bare metal servers can support a number of instances running together. These instances will normally have a name. such as **open** or **duel**. Each instance will have a different port number
 
 ## Creating an Instance
 
 All that is needed to create an instance is to create your own instance json file located in the `config` folder of the project. There is a template file already included in the config file.
 
-The format is very easy to understand. 
+The format is very easy to understand. (Easier than the OpenJK Server Config Files)
 
 Edit the file and make any changes to the config which you want. Should you make any mistakes in the formatting. The server will not start and will warn you about JSON errors. 
 
@@ -154,6 +154,9 @@ A small SQLite database is used to store ALL log lines, all kills, keep track of
 For this reason the database can be used by external processes to query this information, or in a plugin, if for example, a discord bot wants to show when the last time a given player connected. 
 
 Usablity is limited as there is no way beyond a name, to track a player between connections. 
+
+## Get Involved
+This is still a little rough round the edges, i am NOT a full python dev, if anyone is interested in doing further development on this or pushing pull requests into this thats all fine with me. 
 
 ### Still to do
 
