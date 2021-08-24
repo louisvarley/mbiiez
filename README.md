@@ -159,13 +159,15 @@ Usablity is limited as there is no way beyond a name, to track a player between 
 
 Many things
 
-- [ ] Make process handler auto restart a failed service unless instance is being stopped
-- [ ] Make process handler auto restart instances at a given time rather than using crontab
+- [ ] Re-Write the install file to be better and handle quicker updates without re-checking depedencies + get updates from github
+- [x] Make process handler auto restart a failed service unless instance is being stopped
+- [x] Make process handler auto restart instances at a given time rather than using crontab
 - [ ] Create service checking for MBII updates, and doing update when all servers are empty. 
-- [ ] Create the Web GUI
+- [x] Create the Web GUI
 - [ ] Web to create, and edit server.json files
-- [ ] Web to show database logs
+- [x] Web to show database logs
 - [ ] Web to handle bans
 - [ ] Web to handle plugins
 - [ ] Web to start / stop / restart instances
+
 
