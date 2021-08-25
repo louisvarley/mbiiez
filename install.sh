@@ -119,13 +119,8 @@ else
 	done < downloads
 
 	wget -O "$SCRIPTPATH/MBII.zip" $LINK
-	mkdir -p $MBIIPATH
-	unzip -o MBII.zip -d $MBIIPATH
+	unzip -o MBII.zip -d $OPENJKPATH
 	rm "$SCRIPTPATH/MBII.zip"
-	
-	#Need a more eligant way of doing this when i can be arsed
-	mv /opt/openjk/MBII/MBII/* /opt/openjk/MBII
-	rmdir /opt/openjk/MBII/MBII
 
 fi
 
