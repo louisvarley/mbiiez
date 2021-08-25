@@ -15,6 +15,8 @@ Additional issue i've noticed on a few installs, installation creates a path lik
 
 i've added a line to install to move them but if you get issues, check any files are moved to their correct places
 
+Corrected where the MBII.zip extracts to the /opt/openjk folder instead of the /opt/openjk/MBII.
+
 ## V1.7.2+ of MBII
 
 Doing some testing after this new update. 
