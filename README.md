@@ -2,7 +2,9 @@
 
 Launching with mbii will load RTVRTM service twice for some reason.
 
-The OpenJK binaries will no longer be downloaded, MB Client Updater and MB Web are disabled at the moment in install.sh script. 
+The OpenJK binaries and engine will no longer be downloaded or used.
+
+ MB Client Updater and MB Web are disabled at the moment in install.sh script. 
 
 RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
 
