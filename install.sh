@@ -41,12 +41,12 @@ echo -e "Installating dependencies..."
 echo -e "${NONE}"
 sleep 2
 
-if ! command -v dotnet &> /dev/null
-then
-    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-	sudo dpkg -i packages-microsoft-prod.deb
-	rm packages-microsoft-prod.deb
-fi
+#if ! command -v dotnet &> /dev/null
+#then
+#    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+#	sudo dpkg -i packages-microsoft-prod.deb
+#	rm packages-microsoft-prod.deb
+#fi
 
 apt-get update 
 apt-get install python3-pip -y
