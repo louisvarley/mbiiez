@@ -21,7 +21,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 echo -e "${CYAN}"
-echo -e "Starting Installation of Easy Movie Battles II Servers"
+echo -e "Starting Installation of Easy Movie Battles II Server"
 echo -e "This installation will"
 echo -e "Install all dependencies"
 echo -e "Install MBII"
@@ -85,10 +85,10 @@ pip3 install shutil
 
 clear
 
-echo -e "Downloading Movie Battles II Updater..."
-wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-unzip -o MBII_CLI_Updater.zip -d ./updater
-rm MBII_CLI_Updater.zip
+#echo -e "Downloading Movie Battles II Updater..."
+#wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+#unzip -o MBII_CLI_Updater.zip -d ./updater
+#rm MBII_CLI_Updater.zip
 
 if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	
@@ -120,7 +120,7 @@ else
 
 	wget -O "$SCRIPTPATH/MBII.zip" $LINK
 	unzip -o MBII.zip -d $BASEPATH
-	rm "$SCRIPTPATH/MBII.zip"
+#	rm "$SCRIPTPATH/MBII.zip"
 
 fi
 
@@ -134,10 +134,10 @@ sleep 2
 
 # dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
-unzip -o RTVRTM.zip -d $BASEPATH/rtvrtm
-rm -rf $BASEPATH/rtvrtm/Windows
-mv -v $BASEPATH/rtvrtm/Linux/rtvrtm.py $BASEPATH/rtvrtm.py
-rm -rf $BASEPATH/rtvrtm
+#unzip -o RTVRTM.zip -d $BASEPATH/rtvrtm
+#rm -rf $BASEPATH/rtvrtm/Windows
+#mv -v $BASEPATH/rtvrtm/Linux/rtvrtm.py $BASEPATH/rtvrtm.py
+#rm -rf $BASEPATH/rtvrtm
 
 cd $MBIIPATH
 
@@ -168,7 +168,7 @@ chmod +x /usr/bin/mbii
 #
 #	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
 #
-#	tar xvzf "$SCRIPTPATH/openjk.zip" -C $BASEJKPATH
+#	tar xvzf "$SCRIPTPATH/openjk.zip" -C $BASEPATH
 #	mv -vf $BASEPATH/install/JediAcademy/* ../../
 #	rm "$SCRIPTPATH/openjk.zip"
 #	rm -rf $BASEPATH/install
@@ -180,11 +180,8 @@ ln -s /opt/openjk /root/.local/share/openjk/
 ln -s /opt/openjk /root/.ja
 
 # Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
-cp /opt/openjk/*.so /usr/lib/
 cp /opt/openjk/MBII/*.so /usr/lib/
 cp /opt/openjk/*.i386 /usr/bin/
-cp $SCRIPTPATH/*.i386 /usr/bin
-cp /opt/openjk/*.so /opt/openjk/MBII
 
 chmod +x /usr/bin/*.i386
 
@@ -212,7 +209,7 @@ echo -e "assets1.pk3"
 echo -e "assets2.pk3"
 echo -e "assets3.pk3"
 echo "--------------------------------------------------"
-echo -e "The Engines ${FUSCHIA}mbiided.i386${NONE} and ${FUSCHIA}openjkded.i386${NONE} are available to use in your config. Custom engines must be manually installed to /usr/bin"
+echo -e "The Engines ${FUSCHIA}mbiided.i386${NONE} are available to use in your config. Custom engines must be manually installed to /usr/bin"
 echo "--------------------------------------------------"
 #echo -e "Web Interface is available at http://0.0.0.0:8080"
 #echo -e "Default Login Details are"
