@@ -40,7 +40,7 @@ Install.sh has been changed to always re-download the latest updater binaries.
 - Plugin System for creating additional plugins 
 - Included plugins include 
 - - Auto Server Messages, Unlimited rotating service messages  
-- - RTV/RTM, intergrated as a plugin  
+- - RTV/RTM, integrated as a plugin  
 - - Discord Bot, allow certain roles in your discord channel, to restart instances, change map, kick players, etc
 
 ## Installing
