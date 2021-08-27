@@ -192,10 +192,10 @@ ln -s /opt/openjk /root/.local/share/openjk/
 ln -s /opt/openjk /root/.ja
 
 # Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
-cp /opt/openjk/MBII/*.so /usr/lib/
-cp /opt/openjk/*.i386 /usr/bin/
+cp /opt/openjk/MBII/jampgamei386.so /usr/lib/
+cp /opt/openjk/mbiided.i386 /usr/bin/
 
-chmod +x /usr/bin/*.i386
+chmod +x /usr/bin/mbiided.i386
 
 #clear
 #echo -e "${CYAN}"
