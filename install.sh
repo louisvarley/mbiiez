@@ -4,7 +4,7 @@
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 BASEPATH="/opt/openjk"
-MBIIPATH="$OPENJKPATH/MBII"
+MBIIPATH="$BASEPATH/MBII"
 
 clear
 
@@ -67,9 +67,9 @@ apt-get install -y python3
 apt-get install -y nano
 apt-get install -y python3-pip
 apt-get install -y unzip
-apt-get install -y apt-transport-https
-apt-get install -y dotnet-sdk-5.0
-apt-get install -y dotnet-sdk-3.1
+#apt-get install -y apt-transport-https
+#apt-get install -y dotnet-sdk-5.0
+#apt-get install -y dotnet-sdk-3.1
 
 pip3 install watchgod 
 pip3 install tailer
@@ -119,12 +119,12 @@ else
 	done < downloads
 
 	wget -O "$SCRIPTPATH/MBII.zip" $LINK
-	unzip -o MBII.zip -d $OPENJKPATH
+	unzip -o MBII.zip -d $BASEPATH
 	rm "$SCRIPTPATH/MBII.zip"
 
 fi
 
-cd $OPENJKPATH
+cd $BASEPATH
 
 clear
 echo -e "${CYAN}"
@@ -132,12 +132,12 @@ echo -e "Validating Movie Battles II Files..."
 echo -e "${NONE}"
 sleep 2
 
-dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
+# dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
-unzip -o RTVRTM.zip -d $OPENJKPATH/rtvrtm
-rm -rf $OPENJKPATH/rtvrtm/Windows
-mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
-rm -rf $OPENJKPATH/rtvrtm
+unzip -o RTVRTM.zip -d $BASEPATH/rtvrtm
+rm -rf $BASEPATH/rtvrtm/Windows
+mv -v $BASEPATH/rtvrtm/Linux/rtvrtm.py $BASEPATH/rtvrtm.py
+rm -rf $BASEPATH/rtvrtm
 
 cd $MBIIPATH
 
@@ -150,30 +150,30 @@ rm -f /usr/bin/mbii 2> /dev/null
 ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
 chmod +x /usr/bin/mbii
 
-if [ -f "/opt/openjk/base/jampgamei386.so" ]; then
-
-	clear
-	echo -e "${CYAN}"
-	echo -e "OpenJK Installation found, skipping..."
-	echo -e "${NONE}"
-	sleep 2
-
-else
-
-	clear
-	echo -e "${CYAN}"
-	echo -e "Downloading OpenJK"
-	echo -e "${NONE}"
-	sleep 2
-
-	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
-
-	tar xvzf "$SCRIPTPATH/openjk.zip" -C $OPENJKPATH
-	mv -vf $OPENJKPATH/install/JediAcademy/* ../../
-	rm "$SCRIPTPATH/openjk.zip"
-	rm -rf $OPENJKPATH/install
-
-fi
+#if [ -f "/opt/openjk/base/jampgamei386.so" ]; then
+#
+#	clear
+#	echo -e "${CYAN}"
+#	echo -e "OpenJK Installation found, skipping..."
+#	echo -e "${NONE}"
+#	sleep 2
+#
+#else
+#
+#	clear
+#	echo -e "${CYAN}"
+#	echo -e "Downloading OpenJK"
+#	echo -e "${NONE}"
+#	sleep 2
+#
+#	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
+#
+#	tar xvzf "$SCRIPTPATH/openjk.zip" -C $BASEJKPATH
+#	mv -vf $BASEPATH/install/JediAcademy/* ../../
+#	rm "$SCRIPTPATH/openjk.zip"
+#	rm -rf $BASEPATH/install
+#
+#fi
 	
 mkdir -p /root/.local/share/openjk/
 ln -s /opt/openjk /root/.local/share/openjk/
@@ -188,17 +188,17 @@ cp /opt/openjk/*.so /opt/openjk/MBII
 
 chmod +x /usr/bin/*.i386
 
-clear
-echo -e "${CYAN}"
-echo -e "Installing MBIIEZ Web..."
-echo -e "${NONE}"
+#clear
+#echo -e "${CYAN}"
+#echo -e "Installing MBIIEZ Web..."
+#echo -e "${NONE}"
 
-servicefile="$SCRIPTPATH/mbii-web.service"
-cp $servicefile /lib/systemd/system/
-sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
+#servicefile="$SCRIPTPATH/mbii-web.service"
+#cp $servicefile /lib/systemd/system/
+#sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
 
-systemctl enable mbii-web
-service mbii-web start
+#systemctl enable mbii-web
+#service mbii-web start
 
 sleep 2
 clear
@@ -214,14 +214,14 @@ echo -e "assets3.pk3"
 echo "--------------------------------------------------"
 echo -e "The Engines ${FUSCHIA}mbiided.i386${NONE} and ${FUSCHIA}openjkded.i386${NONE} are available to use in your config. Custom engines must be manually installed to /usr/bin"
 echo "--------------------------------------------------"
-echo -e "Web Interface is available at http://0.0.0.0:8080"
-echo -e "Default Login Details are"
-echo -e "Username: ${FUSCHIA}Admin${NONE}"
-echo -e "Password: ${FUSCHIA}Admin${NONE}"
-echo "--------------------------------------------------"
-echo -e "'mbii' can now be used as a shell command"
-echo -e "You can update MBIIEZ anytime by running ./update.sh"
-echo "--------------------------------------------------"
+#echo -e "Web Interface is available at http://0.0.0.0:8080"
+#echo -e "Default Login Details are"
+#echo -e "Username: ${FUSCHIA}Admin${NONE}"
+#echo -e "Password: ${FUSCHIA}Admin${NONE}"
+#echo "--------------------------------------------------"
+#echo -e "'mbii' can now be used as a shell command"
+#echo -e "You can update MBIIEZ anytime by running ./update.sh"
+#echo "--------------------------------------------------"
 echo "Press ENTER to exit"
 echo "--------------------------------------------------"
 read -r _
