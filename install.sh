@@ -91,6 +91,24 @@ clear
 #unzip -o MBII_CLI_Updater.zip -d ./updater
 #rm MBII_CLI_Updater.zip
 
+if [ -d $MBIIPATH ]; then
+
+       clear
+       echo -e "${CYAN}"
+       echo -e "MovieBattles 2 Directory not found....."
+       echo -e "${NONE}"
+       unzip -o MBII.zip -d $BASEPATH
+       sleep 2
+else
+
+       clear
+       echo -e "${CYAN}"
+       echo -e "Extracting Moviebattles 2 Zip file."
+       echo -e "${NONE}"
+       unzip -o MBII.zip -d $BASEPATH
+       sleep 2
+fi
+
 if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	
 	clear
@@ -99,14 +117,6 @@ if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	echo -e "${NONE}"
 	sleep 2
 	
-elif [ -f "$SCRIPTPATH/MBII.zip" ]; then
-
-       clear
-       echo -e "${CYAN}"
-       echo -e "Moviebattles 2 Zip file found, skipping..."
-       echo -e "${NONE}"
-       sleep 2
-
 else
 
 	
