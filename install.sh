@@ -25,6 +25,7 @@ echo -e "Starting Installation of Easy Movie Battles II Server"
 echo -e "This installation will"
 echo -e "Install all dependencies"
 echo -e "Install MBII"
+echo -e "Install RTVRTM"
 #echo -e "Install OpenJK"
 echo -e "Configure and Install the management script 'mbii'"
 echo -e "${NONE}"
@@ -98,7 +99,16 @@ if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
 	echo -e "${NONE}"
 	sleep 2
 	
-else	
+elif [ -f "$SCRIPTPATH/MBII.zip" ]; then
+
+       clear
+       echo -e "${CYAN}"
+       echo -e "Moviebattles 2 Zip file found, skipping..."
+       echo -e "${NONE}"
+       sleep 2
+
+else
+
 	
 	clear
 	echo -e "${CYAN}"
@@ -118,6 +128,7 @@ else
 		fi	
 	done < downloads
 
+
 	wget -O "$SCRIPTPATH/MBII.zip" $LINK
 	unzip -o MBII.zip -d $BASEPATH
 #	rm "$SCRIPTPATH/MBII.zip"
@@ -126,11 +137,11 @@ fi
 
 cd $BASEPATH
 
-clear
-echo -e "${CYAN}"
-echo -e "Validating Movie Battles II Files..."
-echo -e "${NONE}"
-sleep 2
+#clear
+#echo -e "${CYAN}"
+#echo -e "Validating Movie Battles II Files..."
+#echo -e "${NONE}"
+#sleep 2
 
 # dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
@@ -224,3 +235,4 @@ echo "--------------------------------------------------"
 read -r _
 
 reset
+
