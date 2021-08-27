@@ -1,6 +1,12 @@
 ## Update ##
 
-The OpenJK, RTVRTM, MB Client Updater and MB Web are disabled at the moment in install.sh script. Linux mbiided.i386 and jampgamei386 aren't using the current latest release, mainly mkiided.i386. RTVRTM are also not loading but working on a solution.
+The OpenJK binaries will no longer be downloaded, MB Client Updater and MB Web are disabled at the moment in install.sh script. 
+
+RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
+
+Install script has been updated along more to come soon.
+
+I will update the MB Client Updater soon and enable MBWeb in the install.sh script.
 
 ## Movie Battles II EZ
 
