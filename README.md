@@ -1,6 +1,6 @@
 ## Update ##
 
-Launching with mbii will load RTVRTM service twice for some reason.
+Launching with mbii command will load RTVRTM service twice for some reason.
 
 The OpenJK binaries and engine will no longer be downloaded or used.
 
