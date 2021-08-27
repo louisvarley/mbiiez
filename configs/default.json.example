@@ -1,7 +1,7 @@
 {
   "server":{
     "host_name":"[SERVER NAME]",
-    "port":29071,
+    "port":29070,
     "discord":"[DISCORD INVITE CODE]",
     "engine": "mbiided.i386",	
     "game":	"MBII",
