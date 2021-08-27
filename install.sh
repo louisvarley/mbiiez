@@ -145,10 +145,11 @@ cd $BASEPATH
 
 # dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
-#unzip -o RTVRTM.zip -d $BASEPATH/rtvrtm
-#rm -rf $BASEPATH/rtvrtm/Windows
-#mv -v $BASEPATH/rtvrtm/Linux/rtvrtm.py $BASEPATH/rtvrtm.py
-#rm -rf $BASEPATH/rtvrtm
+unzip -o RTVRTM.zip -d $BASEPATH/rtvrtm
+rm -rf $BASEPATH/rtvrtm/Windows
+mv -v $BASEPATH/rtvrtm/Linux/rtvrtm.py $BASEPATH/rtvrtm.py
+rm -rf $BASEPATH/rtvrtm
+chmod +x $BASEPATH/rtvrtm.py
 
 cd $MBIIPATH
 
