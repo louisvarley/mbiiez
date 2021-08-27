@@ -3,7 +3,7 @@
     "host_name":"[SERVER NAME]",
     "port":29071,
     "discord":"[DISCORD INVITE CODE]",
-    "engine": "openjkded.i386",	
+    "engine": "mbiided.i386",	
     "game":	"MBII",
     "restart_instance_every_hours":24,
     "enable_rtv":true,
