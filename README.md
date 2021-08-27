@@ -1,4 +1,6 @@
+## Update ##
 
+The OpenJK and MB Web are disabled at the moment in install.sh script. Linux mbiided.i386 and jampgamei386 aren't using the current latest release, mainly mkiided.i386. RTVRTM are also not loading but working on a solution.
 
 ## Movie Battles II EZ
 
