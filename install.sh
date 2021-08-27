@@ -3,7 +3,7 @@
 #get script path
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
-OPENJKPATH="/opt/openjk"
+BASEPATH="/opt/openjk"
 MBIIPATH="$OPENJKPATH/MBII"
 
 clear
@@ -25,7 +25,7 @@ echo -e "Starting Installation of Easy Movie Battles II Servers"
 echo -e "This installation will"
 echo -e "Install all dependencies"
 echo -e "Install MBII"
-echo -e "Install OpenJK"
+#echo -e "Install OpenJK"
 echo -e "Configure and Install the management script 'mbii'"
 echo -e "${NONE}"
 echo "--------------------------------------------------"
