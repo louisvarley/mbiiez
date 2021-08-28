@@ -1,16 +1,14 @@
-## Update ##
+## Update / Current Changes ##
 
-Launching with mbii command will load RTVRTM service twice for some reason.
+- default.json.example and discord.json.example are there for examples.
+- Launching with mbii command with discord.json not filled out will load RTVRTM service twice.
+- The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine.
+- MB Client Updater and MB Web are disabled at the moment in install.sh script. 
+- RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
+- Install script has been updated.
 
-The OpenJK binaries and engine will no longer be downloaded or used.
-
- MB Client Updater and MB Web are disabled at the moment in install.sh script. 
-
-RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
-
-Install script has been updated along more to come soon. MB2 Dedicated Linux binary is the default engine.
-
-I will update the MB Client Updater soon and enable MBWeb in the install.sh script.
+Coming Soon
+- more json.examples, mbweb enabled, mb client updater and more to come. 
 
 ## Movie Battles II EZ
 
