@@ -119,7 +119,7 @@ fi
         ;;
         4) clear;
             option_picked "\n${menu} Installing Moviebattle II Server...\n";
- 	if [ ! -d $MBIIPATH ]; then
+ 	if [ -d $MBIIPATH ]; then
 		clear;
                 printf "${menu} MovieBattles 2 Directory found...\n"
        		sleep 2
