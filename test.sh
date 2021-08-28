@@ -2,7 +2,7 @@
 #get script path
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
-BASEPATH="/opt/openjk"
+OPENJKPATH="/opt/openjk"
 MBIIPATH="$OPENJKPATH/MBII"
 FUSCHIA='\033[35m'
 UNDERLINE='\033[4m'
@@ -26,7 +26,7 @@ show_menu(){
     printf "${menu}**${number} 1)${menu} Dependencies ${normal}\n"
     printf "${menu}**${number} 2)${menu} Python Tools ${normal}\n"
     printf "${menu}**${number} 3)${menu} MBIIWeb Tools${normal}\n"
-    printf "${menu}**${number} 4)${menu} MBII ${normal}\n"
+    printf "${menu}**${number} 4)${menu} MBII Dedicated Server${normal}\n"
     printf "${menu}**${number} 5)${menu} RTVRTM ${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
@@ -115,8 +115,32 @@ while [ $opt != '' ]
         ;;
         4) clear;
             option_picked "\n${menu} Installing Moviebattle II Server...\n";
+ 	if [ -d $MBIIPATH ]; then
+		clear;
+                printf "${menu} MovieBattles 2 Directory found...\n"
+       		sleep 2
+	else
 
+        	clear;
+        	printf "${menu} Downloading Movie Battles II...\n"
+        	sleep 2
 
+        #Download file lists, get the latest
+        wget -O "$SCRIPTPATH/downloads" https://archive.moviebattles.org/releases/
+
+        while IFS= read -r line; do
+
+                SUB='FULL'
+                if [[ "$line" == *"$SUB"* ]]; then
+                  FILENAME=`echo "$line" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i'`
+                  LINK="https://archive.moviebattles.org/releases/$FILENAME"
+                fi
+        done < downloads
+
+       wget -O "$SCRIPTPATH/MBII.zip" $LINK
+       printf "${menu} Extracting Moviebattles 2 Zip file...\n"
+       unzip -o MBII.zip -d $OPENJKPATH
+fi
            clear;
            show_menu;
         ;;
