@@ -52,7 +52,7 @@ while [ $opt != '' ]
     else
       case $opt in
         1) clear;
-            option_picked "\n${menu} Installing System Dependencies...\n";
+            option_picked "\n${menu} Installing System Dependencies...${normal}\n";
 	    apt-get update 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 		dpkg --add-architecture i386
@@ -65,7 +65,7 @@ fi
            show_menu;
         ;;
         2) clear;
-            option_picked "\n${menu} Installing Python Tools...\n";
+            option_picked "\n${menu} Installing Python Tools...${normal}\n";
 		apt-get update
 		apt-get install python3-pip -y
 		apt-get install -y python-setuptools python-dev 
@@ -89,7 +89,7 @@ fi
            show_menu;
         ;;
         3) clear;
-            option_picked "\n${menu} Installing MBIIWeb Tools...\n";
+            option_picked "\n${menu} Installing MBIIWeb Tools...${normal}\n";
                 apt-get update
 		wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 		dpkg -i packages-microsoft-prod.deb
@@ -112,21 +112,21 @@ fi
 		printf "${menu}Username: ${admin}Admin${NONE}\n"
 		printf "${menu}Password: ${admin}Admin${NONE}\n"
                 printf "\n${menu}*************************************************${normal}\n"
-                printf "Press enter key to return back to the menu.\n"
+                printf "Press enter key to return back to the menu${normal}\n"
 		read -r _
 		clear;
             show_menu;
         ;;
         4) clear;
-            option_picked "\n${menu} Installing Moviebattle II Server...\n";
+            option_picked "\n${menu} Installing Moviebattle II Server...${normal}\n";
  	if [ -d $MBIIPATH ]; then
 		clear;
-                printf "${menu} MovieBattles 2 Directory found...\n"
+                printf "${menu} MovieBattles 2 Directory found...${normal}\n"
        		sleep 2
 	else
 
         	clear;
-        	printf "${menu} Downloading Movie Battles II...\n"
+        	printf "${menu} Downloading Movie Battles II...${normal}\n"
         	sleep 2
 
         #Download file lists, get the latest
@@ -141,15 +141,36 @@ fi
                 fi
         done < downloads
 
-       wget -O "$SCRIPTPATH/MBII.zip" $LINK
-       printf "${menu} Extracting Moviebattles 2 Zip file...\n"
-       unzip -o MBII.zip -d $OPENJKPATH
-fi
+      		wget -O "$SCRIPTPATH/MBII.zip" $LINK
+       		printf "${menu} Extracting Moviebattles 2 Zip file...${normal}\n"
+       		unzip -o MBII.zip -d $OPENJKPATH
+		cd $MBIIPATH
+
+		mv -f jampgamei386.so jampgamei386.jamp.so
+		cp jampgamei386.nopp.so jampgamei386.so
+
+		cd $SCRIPTPATH
+
+		rm -f /usr/bin/mbii 2> /dev/null
+		ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
+		chmod +x /usr/bin/mbii
+
+		mkdir -p /root/.local/share/openjk/
+		ln -s /opt/openjk /root/.local/share/openjk/
+		ln -s /opt/openjk /root/.ja
+
+		# Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
+		cp /opt/openjk/MBII/jampgamei386.so /usr/lib/
+		cp /opt/openjk/mbiided.i386 /usr/bin/
+
+		chmod +x /usr/bin/mbiided.i386
+
+	fi
            clear;
            show_menu;
         ;;
         5) clear;
-            option_picked "\n${menu} Installing something...\n";
+            option_picked "\n${menu} Installing something...${normal}\n";
 
 
            clear;
