@@ -1,11 +1,11 @@
-#!/bin/sh
+!#/bin/sh
+
 #get script path
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 OPENJKPATH="/opt/openjk"
 MBIIPATH="$OPENJKPATH/MBII"
-FUSCHIA='\033[35m'
-UNDERLINE='\033[4m'
+MACHINE_TYPE=`uname -m`
 
 cd $SCRIPTPATH
 
@@ -18,6 +18,7 @@ show_menu(){
     normal=`echo "\033[m"`
     menu=`echo "\033[36m"` #Blue
     number=`echo "\033[33m"` #yellow
+    admin=`echo "\033[32m"` #green
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
     printf "\n${menu}*************************************************${normal}\n"
@@ -41,6 +42,7 @@ option_picked(){
 }
 
 
+
 clear
 show_menu
 while [ $opt != '' ]
@@ -52,11 +54,13 @@ while [ $opt != '' ]
         1) clear;
             option_picked "\n${menu} Installing System Dependencies...\n";
 	    apt-get update 
-	
-	    dpkg --add-architecture i386
-	    apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
-	    apt-get install -y zlib1g:i386 
-	    apt-get install -y curl:i386 
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+		dpkg --add-architecture i386
+		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
+		apt-get install -y zlib1g:i386 
+		apt-get install -y curl:i386 
+fi
+		apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386	
 	   clear;
            show_menu;
         ;;
@@ -86,11 +90,11 @@ while [ $opt != '' ]
         ;;
         3) clear;
             option_picked "\n${menu} Installing MBIIWeb Tools...\n";
+                apt-get update
 		wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 		dpkg -i packages-microsoft-prod.deb
 		rm packages-microsoft-prod.deb
 
-		apt-get update 
 		apt-get install -y apt-transport-https
 		apt-get install -y dotnet-sdk-5.0
 		apt-get install -y dotnet-sdk-3.1
@@ -105,17 +109,17 @@ while [ $opt != '' ]
     		printf "\n${menu}*************************************************${normal}\n"
 		printf "${menu}Web Interface is available at http://0.0.0.0:8080\n"
 		printf "${menu}Default Login Details are\n"
-		printf "${menu}Username: ${FUSCHIA}Admin${NONE}\n"
-		printf "${menu}Password: ${FUSCHIA}Admin${NONE}\n"
+		printf "${menu}Username: ${admin}Admin${NONE}\n"
+		printf "${menu}Password: ${admin}Admin${NONE}\n"
                 printf "\n${menu}*************************************************${normal}\n"
-                printf "Press any key to return back to the menu.\n"
+                printf "Press enter key to return back to the menu.\n"
 		read -r _
 		clear;
             show_menu;
         ;;
         4) clear;
             option_picked "\n${menu} Installing Moviebattle II Server...\n";
- 	if [ -d $MBIIPATH ]; then
+ 	if [ ! -d $MBIIPATH ]; then
 		clear;
                 printf "${menu} MovieBattles 2 Directory found...\n"
        		sleep 2
