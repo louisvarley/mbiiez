@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #get script path
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
@@ -20,15 +20,15 @@ show_menu(){
     number=`echo "\033[33m"` #yellow
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
-    printf "\n${menu}*********************************************${normal}\n"
+    printf "\n${menu}*************************************************${normal}\n"
     printf "${menu} 	 Moviebattles II EZ Installer		\n"
-    printf "${menu}*********************************************${normal}\n\n"
+    printf "${menu}*************************************************${normal}\n\n"
     printf "${menu}**${number} 1)${menu} Dependencies ${normal}\n"
     printf "${menu}**${number} 2)${menu} Python Tools ${normal}\n"
     printf "${menu}**${number} 3)${menu} MBIIWeb Tools${normal}\n"
     printf "${menu}**${number} 4)${menu} MBII ${normal}\n"
     printf "${menu}**${number} 5)${menu} RTVRTM ${normal}\n"
-    printf "\n${menu}*********************************************${normal}\n"
+    printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
 }
@@ -86,9 +86,31 @@ while [ $opt != '' ]
         ;;
         3) clear;
             option_picked "\n${menu} Installing MBIIWeb Tools...\n";
+		wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+		dpkg -i packages-microsoft-prod.deb
+		rm packages-microsoft-prod.deb
 
+		apt-get update 
+		apt-get install -y apt-transport-https
+		apt-get install -y dotnet-sdk-5.0
+		apt-get install -y dotnet-sdk-3.1
 
+		servicefile="$SCRIPTPATH/mbii-web.service"
+		cp $servicefile /lib/systemd/system/
+		sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
+
+		systemctl enable mbii-web
+		service mbii-web start
 	   clear;
+    		printf "\n${menu}*************************************************${normal}\n"
+		printf "${menu}Web Interface is available at http://0.0.0.0:8080\n"
+		printf "${menu}Default Login Details are\n"
+		printf "${menu}Username: ${FUSCHIA}Admin${NONE}\n"
+		printf "${menu}Password: ${FUSCHIA}Admin${NONE}\n"
+                printf "\n${menu}*************************************************${normal}\n"
+                printf "Press any key to return back to the menu.\n"
+		read -r _
+		clear;
             show_menu;
         ;;
         4) clear;
