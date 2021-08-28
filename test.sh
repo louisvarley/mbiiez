@@ -170,9 +170,13 @@ fi
            show_menu;
         ;;
         5) clear;
-            option_picked "\n${menu} Installing something...${normal}\n";
-
-
+            option_picked "\n${menu} Installing RTVRTM...${normal}\n";
+		cd $OPENJKPATH
+		unzip -o RTVRTM.zip -d $OPENJKPATH/rtvrtm
+		rm -rf $OPENJKPATH/rtvrtm/Windows
+		mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
+		rm -rf $OPENJKPATH/rtvrtm
+		chmod +x $OPENJKPATH/rtvrtm.py
            clear;
            show_menu;
         ;;
