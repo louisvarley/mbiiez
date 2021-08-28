@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #get script path
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
@@ -25,7 +25,7 @@ show_menu(){
     printf "${menu}*********************************************${normal}\n\n"
     printf "${menu}**${number} 1)${menu} Dependencies ${normal}\n"
     printf "${menu}**${number} 2)${menu} Python Tools ${normal}\n"
-    printf "${menu}**${number} 3)${menu} MBIIWeb ${normal}\n"
+    printf "${menu}**${number} 3)${menu} MBIIWeb Tools${normal}\n"
     printf "${menu}**${number} 4)${menu} MBII ${normal}\n"
     printf "${menu}**${number} 5)${menu} RTVRTM ${normal}\n"
     printf "\n${menu}*********************************************${normal}\n"
@@ -57,8 +57,8 @@ while [ $opt != '' ]
 	    apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
 	    apt-get install -y zlib1g:i386 
 	    apt-get install -y curl:i386 
-	    clear;
-            show_menu;
+	   clear;
+           show_menu;
         ;;
         2) clear;
             option_picked "\n${menu} Installing Python Tools...\n";
@@ -81,18 +81,29 @@ while [ $opt != '' ]
 		pip3 install flask
 		pip3 install flask_httpauth
 		pip3 install discord.py
-	    clear;
-            show_menu;
+	   clear;
+           show_menu;
         ;;
         3) clear;
-            option_picked "Option 3 Picked";
-            printf "sudo service apache2 restart";
+            option_picked "\n${menu} Installing MBIIWeb Tools...\n";
+
+
+	   clear;
             show_menu;
         ;;
         4) clear;
-            option_picked "Option 4 Picked";
-            printf "ssh lmesser@ -p 2010";
-            show_menu;
+            option_picked "\n${menu} Installing Moviebattle II Server...\n";
+
+
+           clear;
+           show_menu;
+        ;;
+        5) clear;
+            option_picked "\n${menu} Installing something...\n";
+
+
+           clear;
+           show_menu;
         ;;
         x)exit;
         ;;
