@@ -7,7 +7,7 @@
 - MB Client Updater and MB Web are disabled at the moment in install.sh script. 
 - RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
 
-- Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine Symlinks, Update and much more ) for existing installs.
+- Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine, Update and much more ) for existing installs.
 
 ## Movie Battles II EZ
 
