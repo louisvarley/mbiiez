@@ -1,4 +1,4 @@
-## Update / Changelog ##
+## Update / Changelog 
 
 - Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it
 - New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
