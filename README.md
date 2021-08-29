@@ -1,14 +1,13 @@
 ## Update / Current Changes ##
 
+- New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh renamed to oldinstall.sh as a backup.
 - default.json.example and discord.json.example are there for examples.
 - Launching with mbii command with discord.json not filled out will load RTVRTM service twice.
 - The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine.
 - MB Client Updater and MB Web are disabled at the moment in install.sh script. 
 - RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
-- Install script has been updated.
 
-Coming Soon
-- more json.examples, mbweb enabled, mb client updater and more to come. 
+- Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine Symlinks, Update and much more ) for existing installs.
 
 ## Movie Battles II EZ
 
