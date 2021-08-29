@@ -1,10 +1,11 @@
-## Update / Current Changes ##
+## Update / Changelog ##
 
-- New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh renamed to oldinstall.sh as a backup.
+- Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it.
+- New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed.
 - default.json.example and discord.json.example are there for examples.
 - Launching with mbii command with discord.json not filled out will load RTVRTM service twice.
 - The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine.
-- MB Client Updater and MB Web are disabled at the moment in install.sh script. 
+- MB Web are enabled in the install.sh script. 
 - RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server.
 
 - Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine, Update and much more ) for existing installs.
@@ -15,16 +16,6 @@ MBIIEZ is a python wrapper for running instances of Movie Battles II.
 The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for managing instances. 
 
 In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead and basic JSON config files. 
-
-## August 2021 Update + Additional Notes
-
-Fixed a bug in the code which would not tell you when log file was not created within 10 seconds (indicating the server didnt start) I don't have a full install setup to properly test
-
-Additional issue i've noticed on a few installs, installation creates a path like so ```/opt/openjk/MBII/MBII``` with some of the files being here rather than merely ```/opt/openjk/MBII/MBII```
-
-i've added a line to install to move them but if you get issues, check any files are moved to their correct places
-
-Corrected where the MBII.zip extracts to the /opt/openjk folder instead of the /opt/openjk/MBII.
 
 ## V1.7.2+ of MBII
 
