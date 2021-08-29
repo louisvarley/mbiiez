@@ -156,7 +156,6 @@ fi
 
 		mkdir -p /root/.local/share/openjk/
 		ln -s /opt/openjk /root/.local/share/openjk/
-		ln -s /opt/openjk /root/.ja
 
 		# Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
 		cp /opt/openjk/MBII/jampgamei386.so /usr/lib/
