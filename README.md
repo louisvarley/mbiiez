@@ -1,6 +1,6 @@
 ## Update / Changelog 
 
-1. Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it
+1. Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it with ln -s /opt/openjk /root/.ja
 2. New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
 3. default.json.example and discord.json.example are there for examples
 4. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
