@@ -1,12 +1,12 @@
 ## Update / Changelog 
 
-- Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it
-- New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
-- default.json.example and discord.json.example are there for examples
-- Launching with mbii command with discord.json not filled out will load RTVRTM service twice
-- The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
-- MB Web are enabled in the install.sh script 
-- RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
+1. Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it
+2. New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
+3. default.json.example and discord.json.example are there for examples
+4. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
+5. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
+6. MB Web are enabled in the install.sh script 
+7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
 
 - Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine, Update and much more ) for existing installs
 
