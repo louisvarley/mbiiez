@@ -56,11 +56,10 @@ while [ $opt != '' ]
 	    apt-get update 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 		dpkg --add-architecture i386
-		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
-		apt-get install -y zlib1g:i386 
-		apt-get install -y curl:i386 
-fi
-		apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386	
+		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386
+	else
+		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386	
+	fi
 	   clear;
            show_menu;
         ;;

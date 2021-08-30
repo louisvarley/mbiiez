@@ -52,131 +52,32 @@ while [ $opt != '' ]
     else
       case $opt in
         1) clear;
-            option_picked "\n${menu} Installing System Dependencies...${normal}\n";
-	    apt-get update 
-	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-		dpkg --add-architecture i386
-		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
-		apt-get install -y zlib1g:i386 
-		apt-get install -y curl:i386 
-fi
-		apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386	
+            option_picked "\n${menu} Option 1...${normal}\n";
+
 	   clear;
            show_menu;
         ;;
         2) clear;
-            option_picked "\n${menu} Installing Python Tools...${normal}\n";
-		apt-get update
-		apt-get install python3-pip -y
-		apt-get install -y python-setuptools python-dev 
-		apt-get install -y net-tools
-		apt-get install -y fping
-		apt-get install -y python3
-		apt-get install -y nano
-		apt-get install -y python3-pip
-		apt-get install -y unzip
-		pip3 install watchgod 
-		pip3 install tailer
-		pip3 install six
-		pip3 install psutil
-		pip3 install PTable
-		pip3 install ConfigParser
-		pip3 install pysqlite3
-		pip3 install flask
-		pip3 install flask_httpauth
-		pip3 install discord.py
+            option_picked "\n${menu} Option 2...${normal}\n";
+
 	   clear;
            show_menu;
         ;;
         3) clear;
-            option_picked "\n${menu} Installing MBIIWeb Tools...${normal}\n";
-                apt-get update
-		wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-		dpkg -i packages-microsoft-prod.deb
-		rm packages-microsoft-prod.deb
+            option_picked "\n${menu} Option 3...${normal}\n";
 
-		apt-get install -y apt-transport-https
-		apt-get install -y dotnet-sdk-5.0
-		apt-get install -y dotnet-sdk-3.1
-
-		servicefile="$SCRIPTPATH/mbii-web.service"
-		cp $servicefile /lib/systemd/system/
-		sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
-
-		systemctl enable mbii-web
-		service mbii-web start
-	   clear;
-    		printf "\n${menu}*************************************************${normal}\n"
-		printf "${menu}Web Interface is available at http://0.0.0.0:8080\n"
-		printf "${menu}Default Login Details are\n"
-		printf "${menu}Username: ${admin}Admin${NONE}\n"
-		printf "${menu}Password: ${admin}Admin${NONE}\n"
-                printf "\n${menu}*************************************************${normal}\n"
-                printf "Press enter key to return back to the menu${normal}\n"
-		read -r _
-		clear;
+	    clear;
             show_menu;
         ;;
         4) clear;
-            option_picked "\n${menu} Installing Moviebattle II Server...${normal}\n";
- 	if [ -d $MBIIPATH ]; then
-		clear;
-                printf "${menu} MovieBattles 2 Directory found...${normal}\n"
-       		sleep 2
-	else
+            option_picked "\n${menu} Option 4...${normal}\n";
 
-        	clear;
-        	printf "${menu} Downloading Movie Battles II...${normal}\n"
-        	sleep 2
-
-        #Download file lists, get the latest
-        wget -O "$SCRIPTPATH/downloads" https://archive.moviebattles.org/releases/
-
-        while IFS= read -r line; do
-
-                SUB='FULL'
-                if [[ "$line" == *"$SUB"* ]]; then
-                  FILENAME=`echo "$line" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i'`
-                  LINK="https://archive.moviebattles.org/releases/$FILENAME"
-                fi
-        done < downloads
-
-      		wget -O "$SCRIPTPATH/MBII.zip" $LINK
-       		printf "${menu} Extracting Moviebattles 2 Zip file...${normal}\n"
-       		unzip -o MBII.zip -d $OPENJKPATH
-		cd $MBIIPATH
-
-		mv -f jampgamei386.so jampgamei386.jamp.so
-		cp jampgamei386.nopp.so jampgamei386.so
-
-		cd $SCRIPTPATH
-
-		rm -f /usr/bin/mbii 2> /dev/null
-		ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
-		chmod +x /usr/bin/mbii
-
-		mkdir -p /root/.local/share/openjk/
-		ln -s /opt/openjk /root/.local/share/openjk/
-		ln -s /opt/openjk /root/.ja
-
-		# Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
-		cp /opt/openjk/MBII/jampgamei386.so /usr/lib/
-		cp /opt/openjk/mbiided.i386 /usr/bin/
-
-		chmod +x /usr/bin/mbiided.i386
-
-	fi
            clear;
            show_menu;
         ;;
         5) clear;
-            option_picked "\n${menu} Installing RTVRTM...${normal}\n";
-		cd $OPENJKPATH
-		unzip -o RTVRTM.zip -d $OPENJKPATH/rtvrtm
-		rm -rf $OPENJKPATH/rtvrtm/Windows
-		mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
-		rm -rf $OPENJKPATH/rtvrtm
-		chmod +x $OPENJKPATH/rtvrtm.py
+            option_picked "\n${menu} Option 5...${normal}\n";
+
            clear;
            show_menu;
         ;;
