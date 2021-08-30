@@ -22,13 +22,13 @@ show_menu(){
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
     printf "\n${menu}*************************************************${normal}\n"
-    printf "${menu} 	 Moviebattles II EZ Installer		\n"
+    printf "${menu} 	 Moviebattles II EZ Toolkit		\n"
     printf "${menu}*************************************************${normal}\n\n"
-    printf "${menu}**${number} 1)${menu} Dependencies ${normal}\n"
-    printf "${menu}**${number} 2)${menu} Python Tools ${normal}\n"
-    printf "${menu}**${number} 3)${menu} MBIIWeb Tools${normal}\n"
-    printf "${menu}**${number} 4)${menu} MBII Dedicated Server${normal}\n"
-    printf "${menu}**${number} 5)${menu} RTVRTM ${normal}\n"
+    printf "${menu}**${number} 1)${menu} Download MBII.zip${normal}\n"
+    printf "${menu}**${number} 2)${menu} Extract Full MBII.zip${normal}\n"
+    printf "${menu}**${number} 3)${menu} Download MBII Update${normal}\n"
+    printf "${menu}**${number} 4)${menu} Extract MBII Update${normal}\n"
+    printf "${menu}**${number} 5)${menu} Fix MBII Symlinks${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
