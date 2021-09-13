@@ -7,8 +7,9 @@
 5. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
 6. MB Web are enabled in the install.sh script 
 7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
+8. update.sh script has been added to update mb2 servers.
 
-- Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine, Update and much more ) for existing installs
+- Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine )
 
 ## Movie Battles II EZ
 
