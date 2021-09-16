@@ -5,11 +5,10 @@
 3. default.json.example and discord.json.example are there for examples
 4. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
 5. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
-6. MB Web are enabled in the install.sh script 
+6. MB Web are enabled in the install.sh script and optional to install 
 7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
 8. update.sh script has been added to update mb2 servers.
-
-- Coming soon toolkit.sh ( Repair, Download / Extract, MBII Engine )
+9. Support for older Ubuntu releases with running 32-bit libraries for install.sh script.
 
 ## Movie Battles II EZ
 
