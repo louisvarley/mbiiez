@@ -26,9 +26,9 @@ show_menu(){
     printf "${menu}*************************************************${normal}\n\n"
     printf "${menu}**${number} 1)${menu} Dependencies ${normal}\n"
     printf "${menu}**${number} 2)${menu} Python Tools ${normal}\n"
-    printf "${menu}**${number} 3)${menu} MBIIWeb Tools${normal}\n"
-    printf "${menu}**${number} 4)${menu} MBII Dedicated Server${normal}\n"
-    printf "${menu}**${number} 5)${menu} RTVRTM ${normal}\n"
+    printf "${menu}**${number} 3)${menu} MBII Dedicated Server${normal}\n"
+    printf "${menu}**${number} 4)${menu} RTVRTM ${normal}\n"
+    printf "${menu}**${number} 5)${menu} MBIIWeb Tools (Optional)${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -56,10 +56,10 @@ while [ $opt != '' ]
 	    apt-get update 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 		dpkg --add-architecture i386
-		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386
+		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1
 	else
 		dpkg --add-architecture i386
-		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386	
+		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1
 	fi
 	   clear;
            show_menu;
@@ -89,36 +89,6 @@ while [ $opt != '' ]
            show_menu;
         ;;
         3) clear;
-            option_picked "\n${menu} Installing MBIIWeb Tools...${normal}\n";
-		wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-		dpkg -i packages-microsoft-prod.deb
-		rm packages-microsoft-prod.deb
-
-
-                apt-get update
-		apt-get install -y apt-transport-https
-		apt-get install -y dotnet-sdk-5.0
-		apt-get install -y dotnet-sdk-3.1
-
-		servicefile="$SCRIPTPATH/mbii-web.service"
-		cp $servicefile /lib/systemd/system/
-		sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
-
-		systemctl enable mbii-web
-		service mbii-web start
-	   clear;
-    		printf "\n${menu}*************************************************${normal}\n"
-		printf "${menu}Web Interface is available at http://0.0.0.0:8080\n"
-		printf "${menu}Default Login Details are\n"
-		printf "${menu}Username: ${admin}Admin${NONE}\n"
-		printf "${menu}Password: ${admin}Admin${NONE}\n"
-                printf "\n${menu}*************************************************${normal}\n"
-                printf "Press enter key to return back to the menu${normal}\n"
-		read -r _
-		clear;
-            show_menu;
-        ;;
-        4) clear;
             option_picked "\n${menu} Installing Moviebattle II Server...${normal}\n";
  	if [ -d $MBIIPATH ]; then
 		clear;
@@ -168,7 +138,7 @@ while [ $opt != '' ]
            clear;
            show_menu;
         ;;
-        5) clear;
+        4) clear;
             option_picked "\n${menu} Installing RTVRTM...${normal}\n";
 		cd $OPENJKPATH
 		unzip -o RTVRTM.zip -d $OPENJKPATH/rtvrtm
@@ -179,6 +149,37 @@ while [ $opt != '' ]
            clear;
            show_menu;
         ;;
+        5) clear;
+            option_picked "\n${menu} Installing MBIIWeb Tools...${normal}\n";
+                wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                dpkg -i packages-microsoft-prod.deb
+                rm packages-microsoft-prod.deb
+
+
+                apt-get update
+                apt-get install -y apt-transport-https
+                apt-get install -y dotnet-sdk-5.0
+                apt-get install -y dotnet-sdk-3.1
+
+                servicefile="$SCRIPTPATH/mbii-web.service"
+                cp $servicefile /lib/systemd/system/
+                sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
+
+                systemctl enable mbii-web
+                service mbii-web start
+           clear;
+                printf "\n${menu}*************************************************${normal}\n"
+                printf "${menu}Web Interface is available at http://0.0.0.0:8080\n"
+                printf "${menu}Default Login Details are\n"
+                printf "${menu}Username: ${admin}Admin${NONE}\n"
+                printf "${menu}Password: ${admin}Admin${NONE}\n"
+                printf "\n${menu}*************************************************${normal}\n"
+                printf "Press enter key to return back to the menu${normal}\n"
+                read -r _
+                clear;
+            show_menu;
+        ;;
+
         x)exit;
         ;;
         \n)exit;
