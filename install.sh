@@ -58,8 +58,7 @@ while [ $opt != '' ]
 		dpkg --add-architecture i386
 		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1
 	else
-		dpkg --add-architecture i386
-		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1
+		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 
 	fi
 	   clear;
            show_menu;
