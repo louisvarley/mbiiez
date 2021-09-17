@@ -67,4 +67,4 @@ class plugin:
             self.instance.tell(args['player_id'], "^7Your current stats^5:")
             self.instance.tell(args['player_id'], "^7Kills:^5 {}".format(my_client.global_stats.kills))
             self.instance.tell(args['player_id'], "^7Deaths:^5 {}".format(my_client.global_stats.deaths))           
-            self.instance.tell(args['player_id'], "^7Suicides:^7 {}".format(my_client.global_stats.suicides))	
+            self.instance.tell(args['player_id'], "^7Suicides:^5 {}".format(my_client.global_stats.suicides))	
