@@ -9,6 +9,7 @@
 7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
 8. update.sh script has been added to update mb2 servers.
 9. Support for older Ubuntu releases with running 32-bit libraries for install.sh script.
+10. Intel oneAPI compiled binary mbiided.i386 with patches added from JACoders, Yberion and EternalJK devs.
 
 ## Movie Battles II EZ
 

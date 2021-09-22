@@ -127,9 +127,8 @@ while [ $opt != '' ]
 		mkdir -p /root/.local/share/openjk/
 		ln -s /opt/openjk /root/.local/share/openjk/
 
-		# Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
-		cp /opt/openjk/MBII/jampgamei386.so /usr/lib/
-		cp /opt/openjk/mbiided.i386 /usr/bin/
+		# Copies Binaries so you can run mbiided.i386 as your engine
+		cp $SCRIPTPATH/mbiided.i386 /usr/bin/
 
 		chmod +x /usr/bin/mbiided.i386
 
