@@ -97,6 +97,9 @@ seta g_InactivityKick "0"
 seta g_InactivitySpec "180"                     
 seta g_filterban "1"                           
 
+seta g_CTFSpawnRotation "0"
+seta g_classlimitsCTF "50-50-50-50-50-50-50-50-50-50-02-50-50-50"
+
 set d1 "map [map_1];set nextmap vstr d2"
 set d2 "map [map_2];set nextmap vstr d3"
 set d3 "map [map_3];set nextmap vstr d4"
