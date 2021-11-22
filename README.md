@@ -1,3 +1,10 @@
+## Projects Future
+
+I have handed this project over the Valzhar (Wookie) who will be continuing development, 
+
+you can find his fork here https://github.com/Wookiee-/mbiiez 
+
+he has fixed a number of issues and will be running the project 
 
 
 ## Movie Battles II EZ
