@@ -1,4 +1,4 @@
-## Update / Changelog 
+## Update (Requires Ubuntu Server 21.04/ Changelog 
 
 1. Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it with ln -s /opt/openjk /root/.ja
 2. New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
@@ -9,7 +9,8 @@
 7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
 8. update.sh script has been added to update mb2 servers.
 9. Support for older Ubuntu releases with running 32-bit libraries for install.sh script.
-10. Intel oneAPI compiled binary mbiided.i386 with patches added from JACoders, Yberion and EternalJK devs.
+10. Added a Pre-CTF installer before 1.9 for those who don't want the CTF.
+11. Added in Update.sh a fix symbolic links when starting fresh or downloadgrading.
 
 ## Movie Battles II EZ
 

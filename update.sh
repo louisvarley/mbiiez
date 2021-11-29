@@ -22,11 +22,12 @@ show_menu(){
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
     printf "\n${menu}*************************************************${normal}\n"
-    printf "${menu} 	 Moviebattles II EZ Server Updater		\n"
+    printf "${menu} 	 Moviebattles II EZ Server Tool Updater		\n"
     printf "${menu}*************************************************${normal}\n\n"
     printf "${menu}**${number} 1)${menu} Install Dependancies${normal}\n"
     printf "${menu}**${number} 2)${menu} Install MBII Server Updater${normal}\n"
     printf "${menu}**${number} 3)${menu} Update MBII Server${normal}\n"
+    printf "${menu}**${number} 4)${menu} Fix Symbolic Links${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -82,6 +83,15 @@ while [ $opt != '' ]
 	        mv -f jampgamei386.so jampgamei386.jamp.so
 	        cp jampgamei386.nopp.so jampgamei386.so
 
+           clear;
+           show_menu;
+        ;;
+        4) clear;
+            option_picked "\n${menu} Fixing Symbolics Links...${normal}\n";
+                cd /root/.local/share/openjk/
+		unlink openjk 
+		mkdir -p /root/.local/share/openjk/
+		ln -s /opt/openjk /root/.local/share/openjk/
            clear;
            show_menu;
         ;;
