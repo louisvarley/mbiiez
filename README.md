@@ -10,7 +10,7 @@
 8. update.sh script has been added to update mb2 servers.
 9. Support for older Ubuntu releases with running 32-bit libraries for install.sh script.
 10. Added a Pre-CTF installer before 1.9 for those who don't want the CTF.
-11. Added in Update.sh a fix symbolic links when starting fresh or downloadgrading.
+11. Added in Update.sh a fix symbolic links when starting fresh or downgrading.
 
 ## Movie Battles II EZ
 
