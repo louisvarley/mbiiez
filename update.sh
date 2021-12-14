@@ -52,6 +52,7 @@ while [ $opt != '' ]
       case $opt in
         1) clear;
             option_picked "\n${menu} Installing Dependancies...${normal}\n";
+
                 wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
                 dpkg -i packages-microsoft-prod.deb
                 rm packages-microsoft-prod.deb
@@ -67,6 +68,7 @@ while [ $opt != '' ]
         ;;
         2) clear;
             option_picked "\n${menu} Installing MBII Server Updater...${normal}\n";
+
 		wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
 		unzip -o MBII_CLI_Updater.zip -d ./updater
 		rm MBII_CLI_Updater.zip
@@ -76,6 +78,7 @@ while [ $opt != '' ]
         ;;
         3) clear;
             option_picked "\n${menu} Updating MBII Server...${normal}\n";
+
                 cd $OPENJKPATH
                 dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
@@ -88,10 +91,12 @@ while [ $opt != '' ]
         ;;
         4) clear;
             option_picked "\n${menu} Fixing Symbolics Links...${normal}\n";
+
                 cd /root/.local/share/openjk/
 		unlink openjk 
 		mkdir -p /root/.local/share/openjk/
 		ln -s /opt/openjk /root/.local/share/openjk/
+
            clear;
            show_menu;
         ;;

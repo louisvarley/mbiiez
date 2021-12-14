@@ -53,11 +53,12 @@ while [ $opt != '' ]
       case $opt in
         1) clear;
             option_picked "\n${menu} Installing System Dependencies...${normal}\n";
-	    apt-get update 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 		dpkg --add-architecture i386
+                apt-get update
 		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1
 	else
+                apt-get update
 		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 
 	fi
 	   clear;
