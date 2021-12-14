@@ -61,7 +61,7 @@ while [ $opt != '' ]
                 apt-get update
 		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 
 	fi
-	   clear;
+	   reset;
            show_menu;
         ;;
         2) clear;
@@ -85,7 +85,7 @@ while [ $opt != '' ]
 		pip3 install flask
 		pip3 install flask_httpauth
 		pip3 install discord.py
-	   clear;
+	   reset;
            show_menu;
         ;;
         3) clear;
@@ -134,7 +134,7 @@ while [ $opt != '' ]
 		chmod +x /usr/bin/mbiided.i386
 
 	fi
-           clear;
+           reset;
            show_menu;
         ;;
         4) clear;
@@ -145,7 +145,7 @@ while [ $opt != '' ]
 		mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
 		rm -rf $OPENJKPATH/rtvrtm
 		chmod +x $OPENJKPATH/rtvrtm.py
-           clear;
+           reset;
            show_menu;
         ;;
         5) clear;
@@ -175,12 +175,11 @@ while [ $opt != '' ]
                 printf "\n${menu}*************************************************${normal}\n"
                 printf "Press enter key to return back to the menu${normal}\n"
                 read -r _
-                clear;
+                reset;
             show_menu;
         ;;
 
         x)exit;
-	reset;
         ;;
         \n)exit;
         ;;

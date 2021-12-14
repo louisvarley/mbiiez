@@ -63,7 +63,7 @@ while [ $opt != '' ]
                 apt-get install -y dotnet-sdk-5.0
                 apt-get install -y dotnet-sdk-3.1
 
-	   clear;
+	   reset;
            show_menu;
         ;;
         2) clear;
@@ -73,7 +73,7 @@ while [ $opt != '' ]
 		unzip -o MBII_CLI_Updater.zip -d ./updater
 		rm MBII_CLI_Updater.zip
 
-	   clear;
+	   reset;
            show_menu;
         ;;
         3) clear;
@@ -86,7 +86,7 @@ while [ $opt != '' ]
 	        mv -f jampgamei386.so jampgamei386.jamp.so
 	        cp jampgamei386.nopp.so jampgamei386.so
 
-           clear;
+           reset;
            show_menu;
         ;;
         4) clear;
@@ -97,11 +97,10 @@ while [ $opt != '' ]
 		mkdir -p /root/.local/share/openjk/
 		ln -s /opt/openjk /root/.local/share/openjk/
 
-           clear;
+           reset;
            show_menu;
         ;;
         x)exit;
-	reset;
         ;;
         \n)exit;
         ;;
