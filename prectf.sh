@@ -180,6 +180,7 @@ while [ $opt != '' ]
         ;;
 
         x)exit;
+	reset;
         ;;
         \n)exit;
         ;;

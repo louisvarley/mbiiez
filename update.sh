@@ -101,6 +101,7 @@ while [ $opt != '' ]
            show_menu;
         ;;
         x)exit;
+	reset;
         ;;
         \n)exit;
         ;;
