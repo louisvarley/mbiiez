@@ -1,6 +1,6 @@
 !#/bin/sh
 
-#get script path
+#get script path here
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 OPENJKPATH="/opt/openjk"
