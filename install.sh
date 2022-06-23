@@ -55,7 +55,7 @@ while [ $opt != '' ]
             option_picked "\n${menu} Installing System Dependencies...${normal}\n";
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 		dpkg --add-architecture i386
-                apt-get upda te
+                apt-get update
 		apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386
 	else
                 apt-get update
