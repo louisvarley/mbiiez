@@ -1,4 +1,9 @@
-## Update (Requires Ubuntu Server 21.04)/ Changelog 
+## Latest News
+
+Since the latest version of Ubuntu 22.04, there has been many conflicts with Python2/3 and dotnet not supporting sdk 3.1.
+I have made a small temporary change to get this working.
+
+## Update (Requires Ubuntu Server 22.04)/ Changelog 
 
 1. Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it with ln -s /opt/openjk /root/.ja
 2. New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
