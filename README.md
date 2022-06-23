@@ -1,7 +1,7 @@
 ## Latest News
 
 Since the latest version of Ubuntu 22.04, there has been many conflicts with Python2/3 and dotnet not supporting sdk 3.1.
-I have made a small temporary change to get this working.
+I have made a small temporary changes to get this working.
 
 ## Update (Requires Ubuntu Server 22.04)/ Changelog 
 
