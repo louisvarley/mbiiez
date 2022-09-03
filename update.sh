@@ -24,8 +24,10 @@ show_menu(){
     printf "\n${menu}*************************************************${normal}\n"
     printf "${menu} 	 Moviebattles II EZ Server Tool Updater		\n"
     printf "${menu}*************************************************${normal}\n\n"
-    printf "${menu}**${number} 1)${menu} Update MBII Server${normal}\n"
-    printf "${menu}**${number} 2)${menu} Fix Symbolic Links${normal}\n"
+    printf "${menu}**${number} 1)${menu} Install Dependancies${normal}\n"
+    printf "${menu}**${number} 2)${menu} Install MBII Server Updater${normal}\n"
+    printf "${menu}**${number} 3)${menu} Update MBII Server${normal}\n"
+    printf "${menu}**${number} 4)${menu} Fix Symbolic Links${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -49,26 +51,30 @@ while [ $opt != '' ]
     else
       case $opt in
         1) clear;
+            option_picked "\n${menu} Installing Dependancies...${normal}\n";
+                apt-get update
+                apt-get install -y apt-transport-https
+                apt-get install -y snapd
+		snap install dotnet-runtime-31 --classic
+		snap alias dotnet-runtime-31.dotnet dotnet
+		ln -s /snap/dotnet-runtime-31/current/dotnet /usr/local/bin/dotnet
+
+	   reset;
+           show_menu;
+        ;;
+        2) clear;
+            option_picked "\n${menu} Installing MBII Server Updater...${normal}\n";
+		wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+		unzip -o MBII_CLI_Updater.zip -d ./updater
+		rm MBII_CLI_Updater.zip
+
+	   reset;
+           show_menu;
+        ;;
+        3) clear;
             option_picked "\n${menu} Updating MBII Server...${normal}\n";
-#
-        #Download file lists, get the latest
-#        wget -O "$SCRIPTPATH/downloads" https://archive.moviebattles.org/releases/
-#
- #       while IFS= read -r line; do
-#
-#                SUB='UPGRADE'
- #               if [[ "$line" == *"$SUB"* ]]; then
-  #                FILENAME=`echo "$line" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i'`
-   #               LINK="https://archive.moviebattles.org/releases/$FILENAME"
-    #            fi
-    #    done < downloads
-#
-     		wget -O "$SCRIPTPATH/UPGRADE.zip" https://update.moviebattles.org/MovieBattlesII_Upgrade_V1.9.1_V1.9.1.1.zip
- 
-      		printf "${menu} Extracting Moviebattles 2 Zip file...${normal}\n"
-       		unzip -o UPGRADE.zip -d $OPENJKPATH
-		rm UPGRADE.zip
-		cd $MBIIPATH
+                cd $OPENJKPATH
+                dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
                 cd $MBIIPATH
 	        mv -f jampgamei386.so jampgamei386.jamp.so
@@ -77,14 +83,12 @@ while [ $opt != '' ]
            reset;
            show_menu;
         ;;
-        2) clear;
+        4) clear;
             option_picked "\n${menu} Fixing Symbolics Links...${normal}\n";
-
                 cd /root/.local/share/openjk/
 		unlink openjk 
 		mkdir -p /root/.local/share/openjk/
 		ln -s /opt/openjk /root/.local/share/openjk/
-
            reset;
            show_menu;
         ;;
