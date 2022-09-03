@@ -68,7 +68,7 @@ while [ $opt != '' ]
             option_picked "\n${menu} Installing Python Tools...${normal}\n";
 		apt-get update
 		apt-get install python3-pip -y
-		apt-get install -y python2-setuptools python2-dev 
+		apt-get install -y python2 python2-setuptools python2-dev 
 		apt-get install -y net-tools
 		apt-get install -y fping
 		apt-get install -y python3

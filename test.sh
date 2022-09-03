@@ -22,13 +22,12 @@ show_menu(){
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
     printf "\n${menu}*************************************************${normal}\n"
-    printf "${menu} 	 Moviebattles II EZ Toolkit		\n"
+    printf "${menu} 	 Moviebattles II EZ Server Tool Updater		\n"
     printf "${menu}*************************************************${normal}\n\n"
-    printf "${menu}**${number} 1)${menu} Download MBII.zip${normal}\n"
-    printf "${menu}**${number} 2)${menu} Extract Full MBII.zip${normal}\n"
-    printf "${menu}**${number} 3)${menu} Download MBII Update${normal}\n"
-    printf "${menu}**${number} 4)${menu} Extract MBII Update${normal}\n"
-    printf "${menu}**${number} 5)${menu} Fix MBII Symlinks${normal}\n"
+    printf "${menu}**${number} 1)${menu} Install Dependancies${normal}\n"
+    printf "${menu}**${number} 2)${menu} Install MBII Server Updater${normal}\n"
+    printf "${menu}**${number} 3)${menu} Update MBII Server${normal}\n"
+    printf "${menu}**${number} 4)${menu} Fix Symbolic Links${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -52,33 +51,41 @@ while [ $opt != '' ]
     else
       case $opt in
         1) clear;
-            option_picked "\n${menu} Option 1...${normal}\n";
+            option_picked "\n${menu} Installing Dependancies...${normal}\n";
+                apt-get update
+                apt-get install -y apt-transport-https
 
-	   clear;
+	   reset;
            show_menu;
         ;;
         2) clear;
-            option_picked "\n${menu} Option 2...${normal}\n";
+            option_picked "\n${menu} Installing MBII Server Updater...${normal}\n";
+		wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+		unzip -o MBII_CLI_Updater.zip -d ./updater
+		rm MBII_CLI_Updater.zip
 
-	   clear;
+	   reset;
            show_menu;
         ;;
         3) clear;
-            option_picked "\n${menu} Option 3...${normal}\n";
+            option_picked "\n${menu} Updating MBII Server...${normal}\n";
+                cd $OPENJKPATH
+                dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
 
-	    clear;
-            show_menu;
-        ;;
-        4) clear;
-            option_picked "\n${menu} Option 4...${normal}\n";
+                cd $MBIIPATH
+	        mv -f jampgamei386.so jampgamei386.jamp.so
+	        cp jampgamei386.nopp.so jampgamei386.so
 
-           clear;
+           reset;
            show_menu;
         ;;
-        5) clear;
-            option_picked "\n${menu} Option 5...${normal}\n";
-
-           clear;
+        4) clear;
+            option_picked "\n${menu} Fixing Symbolics Links...${normal}\n";
+                cd /root/.local/share/openjk/
+		unlink openjk 
+		mkdir -p /root/.local/share/openjk/
+		ln -s /opt/openjk /root/.local/share/openjk/
+           reset;
            show_menu;
         ;;
         x)exit;
