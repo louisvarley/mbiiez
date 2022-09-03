@@ -54,9 +54,15 @@ while [ $opt != '' ]
             option_picked "\n${menu} Installing Dependancies...${normal}\n";
                 apt-get update
                 apt-get install -y apt-transport-https
+
                 wget -O "dotnet.tar.gz" https://download.visualstudio.microsoft.com/download/pr/4fd83694-c9ad-487f-bf26-ef80f3cbfd9e/6ca93b498019311e6f7732717c350811/dotnet-sdk-3.1.422-linux-x64.tar.gz
 		mkdir -p dotnet && tar -xzvf dotnet.tar.gz -C dotnet
 		ln -s /root/mbiiez/dotnet/dotnet /usr/local/bin/dotnet
+		rm dotnet.tar.gz
+
+		wget -O "libssl1.deb" http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+		dpkg -i libssl1.deb
+		rm libssl1.deb
 
 	   reset;
            show_menu;
