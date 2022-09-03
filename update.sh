@@ -54,10 +54,9 @@ while [ $opt != '' ]
             option_picked "\n${menu} Installing Dependancies...${normal}\n";
                 apt-get update
                 apt-get install -y apt-transport-https
-                apt-get install -y snapd
-		snap install dotnet-runtime-31 --classic
-		snap alias dotnet-runtime-31.dotnet dotnet
-		ln -s /snap/dotnet-runtime-31/current/dotnet /usr/local/bin/dotnet
+                wget -O "dotnet.tar.gz" https://download.visualstudio.microsoft.com/download/pr/4fd83694-c9ad-487f-bf26-ef80f3cbfd9e/6ca93b498019311e6f7732717c350811/dotnet-sdk-3.1.422-linux-x64.tar.gz
+		mkdir -p dotnet && tar -xzvf dotnet.tar.gz -C dotnet
+		ln -s /root/mbiiez/dotnet/dotnet /usr/local/bin/dotnet
 
 	   reset;
            show_menu;
