@@ -1,4 +1,7 @@
-## Latest News for Ubuntu 22.04+
+## Latest News for Ubuntu 22.04+ (2023) Update
+
+The Linux Client Updater has been updated to use the dotnet-sdk-6.0 and added into update.sh.
+RTVRTM still requires python2 until then the recent Ubuntu edition's doesn't run it.
 
 Since the latest version of Ubuntu 22.04, there has been many conflicts with Python2/3 and dotnet not supporting sdk 3.1. I have provided a working solution by reverting to the previous way to update with dotnet.
 You may need to run the update.sh option 3 several times to get all the updates. On certain vps like mine it hangs alot but others I have tried works that runs fine.
