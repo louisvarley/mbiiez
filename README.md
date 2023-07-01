@@ -3,7 +3,7 @@
 The Linux Client Updater has been updated to use the dotnet-sdk-6.0 and added into update.sh.
 RTVRTM still requires python2 until then the recent Ubuntu edition's doesn't run it.
 
-Since the latest version of Ubuntu 22.04, there has been many conflicts with Python2/3 and dotnet not supporting sdk 3.1. I have provided a working solution by reverting to the previous way to update with dotnet.
+There has been many conflicts with Python2/3. I have worked out a solution so python2 is set at the main command.
 You may need to run the update.sh option 3 several times to get all the updates. On certain vps like mine it hangs alot but others I have tried works that runs fine.
 
 ## Update (Requires Ubuntu Server 20.04+)/ Changelog 
