@@ -1,27 +1,20 @@
-## Latest News for Ubuntu 22.04/23.04 (2023) Update
+## Latest News Update
 
-New update method for installing on ubuntu systems with the ubuntu.sh script with the install.sh and update.sh combined.
-The rtvrtm.py has been updated from Python2 to Python3.
+No longer recommend Ubuntu Server to run MB2 on and best to run it on Debian.
+I will be making another install scripts for Fedora or Arch based systems.
 
-The Linux Client Updater has been updated to use the dotnet-sdk-6.0 and added into update.sh.
-RTVRTM still requires python2 until then the recent Ubuntu edition's doesn't run it.
+## Update (Requires Debian)/ Changelog 
 
-There has been many conflicts with Python2/3. I have worked out a solution so python2 is set at the main command.
-You may need to run the update.sh option 3 several times to get all the updates. On certain vps like mine it hangs alot but others I have tried works that runs fine.
-
-## Update (Requires Ubuntu Server 20.04+)/ Changelog 
-
-1. Fixed a symlink error in the install.sh where it confused the mbiided engine causing it not to load. We don't use linuxjampded so we don't need to symlink it with ln -s /opt/openjk /root/.ja
-2. New install.sh with a menu on a brand new fresh install with no /opt/openjk/MBII folder. Old install.sh now removed
+1. Now everything is included under the one install with 7 options.
+2. install.sh renamed to aptinstall.sh for Debian based systems
 3. default.json.example and discord.json.example are there for examples
 4. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
 5. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
 6. MB Web are enabled in the install.sh script and optional to install 
 7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
-8. update.sh script has been added to update mb2 servers.
-9. Support for older Ubuntu releases with running 32-bit libraries for install.sh script.
-10. Added a Pre-CTF installer before 1.9 for those who don't want the CTF.
-11. Added in Update.sh a fix symbolic links when starting fresh or downgrading.
+9. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
+10. The rtvrtm.py has been updated from Python2 to Python3. 
+11. Dotnet 6 SDK updated from 3.11
 
 ## Movie Battles II EZ
 
