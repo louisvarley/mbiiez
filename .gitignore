@@ -6,6 +6,4 @@ updater
 *.db
 __pycache__
 MBII.zip
-dotnet
-dotnet.tar.gz
 .gitconfig

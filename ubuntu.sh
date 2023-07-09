@@ -11,7 +11,7 @@ cd $SCRIPTPATH
 
 if [ "$EUID" -ne 0 ]
   then echo "Installation requires root. Please run installation as root"
-  ##exit
+  exit
 fi
 
 show_menu(){
@@ -22,13 +22,15 @@ show_menu(){
     bgred=`echo "\033[41m"`
     fgred=`echo "\033[31m"`
     printf "\n${menu}*************************************************${normal}\n"
-    printf "${menu} 	 Moviebattles II EZ Installer		\n"
+    printf "${menu} 	 Moviebattles II EZ Installer Tool		\n"
     printf "${menu}*************************************************${normal}\n\n"
     printf "${menu}**${number} 1)${menu} Dependencies ${normal}\n"
     printf "${menu}**${number} 2)${menu} Python Tools ${normal}\n"
-    printf "${menu}**${number} 3)${menu} Set Python2 as Default${normal}\n"
-    printf "${menu}**${number} 4)${menu} MBII Dedicated Server${normal}\n"
-    printf "${menu}**${number} 5)${menu} RTVRTM ${normal}\n"
+    printf "${menu}**${number} 3)${menu} MBII Dedicated Server${normal}\n"
+    printf "${menu}**${number} 4)${menu} RTVRTM ${normal}\n"
+    printf "${menu}**${number} 5)${menu} Install Dotnet${normal}\n"
+    printf "${menu}**${number} 6)${menu} Install MBII Server Updater${normal}\n"
+    printf "${menu}**${number} 7)${menu} Update MBII Server${normal}\n"
     printf "\n${menu}*************************************************${normal}\n"
     printf "Please enter a menu option and enter or ${fgred}x to exit. ${normal}"
     read opt
@@ -68,7 +70,6 @@ while [ $opt != '' ]
             option_picked "\n${menu} Installing Python Tools...${normal}\n";
 		apt-get update
 		apt-get install python3-pip -y
-		apt-get install -y python2 python2-dev 
 		apt-get install -y net-tools
 		apt-get install -y fping
 		apt-get install -y python3
@@ -89,12 +90,6 @@ while [ $opt != '' ]
            show_menu;
         ;;
         3) clear;
-            option_picked "\n${menu} Setting Python2 as Default...${normal}\n";
-		update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
-                reset;
-            show_menu;
-        ;;
-        4) clear;
             option_picked "\n${menu} Installing Moviebattle II Server...${normal}\n";
  	if [ -d $MBIIPATH ]; then
 		clear;
@@ -144,14 +139,44 @@ while [ $opt != '' ]
            reset;
            show_menu;
         ;;
-        5) clear;
+        4) clear;
             option_picked "\n${menu} Installing RTVRTM...${normal}\n";
-		cd $OPENJKPATH
-		unzip -o RTVRTM.zip -d $OPENJKPATH/rtvrtm
-		rm -rf $OPENJKPATH/rtvrtm/Windows
-		mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
-		rm -rf $OPENJKPATH/rtvrtm
+		cd $SCRIPTPATH
+		
+		cp rtvrtm.py $OPENJKPATH/  
 		chmod +x $OPENJKPATH/rtvrtm.py
+           reset;
+           show_menu;
+        ;;
+        5) clear;
+            option_picked "\n${menu} Installing Dotnet...${normal}\n";
+                apt-get update
+                apt-get install -y apt-transport-https dotnet-sdk-6.0
+
+                rm /usr/local/bin/dotnet
+                ln -s /usr/lib/dotnet/dotnet /usr/local/bin/dotnet
+
+           reset;
+           show_menu;
+        ;;
+        6) clear;
+            option_picked "\n${menu} Installing MBII Server Updater...${normal}\n";
+                wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+                unzip -o MBII_CLI_Updater.zip -d ./updater
+                rm MBII_CLI_Updater.zip
+
+           reset;
+           show_menu;
+        ;;
+        7) clear;
+            option_picked "\n${menu} Updating MBII Server...${normal}\n";
+                cd $OPENJKPATH
+                dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
+
+                cd $MBIIPATH
+                mv -f jampgamei386.so jampgamei386.jamp.so
+                cp jampgamei386.nopp.so jampgamei386.so
+
            reset;
            show_menu;
         ;;
