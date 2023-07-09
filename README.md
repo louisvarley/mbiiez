@@ -3,7 +3,7 @@
 No longer recommend Ubuntu Server to run MB2 on and best to run it on Debian.
 I will be making another install scripts for Fedora or Arch based systems.
 
-## Update (Requires Debian)/ Changelog 
+## Changelog 
 
 1. Now everything is included under the one install with 7 options.
 2. install.sh renamed to aptinstall.sh for Debian based systems
