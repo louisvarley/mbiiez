@@ -10,11 +10,10 @@ I will be making another install scripts for Fedora or Arch based systems.
 3. default.json.example and discord.json.example are there for examples
 4. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
 5. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
-6. MB Web are enabled in the install.sh script and optional to install 
-7. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
-9. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
-10. The rtvrtm.py has been updated from Python2 to Python3. 
-11. Dotnet 6 SDK updated from 3.11
+6. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
+7. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
+8. The rtvrtm.py has been updated from Python2 to Python3. 
+9. Dotnet 6 SDK updated from 3.11
 
 ## Movie Battles II EZ
 
