@@ -1,4 +1,7 @@
-## Latest News for Ubuntu 22.04+ (2023) Update
+## Latest News for Ubuntu 22.04/23.04 (2023) Update
+
+New update method for installing on ubuntu systems with the ubuntu.sh script with the install.sh and update.sh combined.
+The rtvrtm.py has been updated from Python2 to Python3.
 
 The Linux Client Updater has been updated to use the dotnet-sdk-6.0 and added into update.sh.
 RTVRTM still requires python2 until then the recent Ubuntu edition's doesn't run it.
