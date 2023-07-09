@@ -76,16 +76,17 @@ while [ $opt != '' ]
 		apt-get install -y nano
 		apt-get install -y python3-pip
 		apt-get install -y unzip
-		pip3 install watchgod 
-		pip3 install tailer
-		pip3 install six
-		pip3 install psutil
-		pip3 install PTable
-		pip3 install ConfigParser
-		pip3 install pysqlite3
-		pip3 install flask
-		pip3 install flask_httpauth
-		pip3 install discord.py
+		pip3 install watchgod --break-system-packages
+		pip3 install tailer --break-system-packages
+		pip3 install six --break-system-packages
+		pip3 install psutil --break-system-packages
+		pip3 install PTable --break-system-packages
+		pip3 install ConfigParser --break-system-packages
+		pip3 install pysqlite3 --break-system-packages
+		pip3 install flask --break-system-packages
+		pip3 install flask_httpauth --break-system-packages
+		pip3 install discord.py --break-system-packages
+		pip3 install prettytable --break-system-packages
 	   reset;
            show_menu;
         ;;
