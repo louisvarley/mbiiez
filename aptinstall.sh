@@ -69,6 +69,7 @@ while [ $opt != '' ]
         2) clear;
             option_picked "\n${menu} Installing Python Tools...${normal}\n";
 		apt-get update
+		apt-get install -y python-is-python3
 		apt-get install python3-pip -y
 		apt-get install -y net-tools
 		apt-get install -y fping
@@ -151,6 +152,10 @@ while [ $opt != '' ]
         ;;
         5) clear;
             option_picked "\n${menu} Installing Dotnet...${normal}\n";
+		wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+		dpkg -i packages-microsoft-prod.deb
+		rm packages-microsoft-prod.deb
+
                 apt-get update
                 apt-get install -y apt-transport-https dotnet-sdk-6.0
 
