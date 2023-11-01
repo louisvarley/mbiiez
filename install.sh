@@ -100,7 +100,7 @@ debian () {
 		sudo chmod +x /usr/bin/mbii
 
 		mkdir -p $HOME/.local/share/openjk/
-		ln -s openjk $HOME/.local/share/openjk/
+		ln -s $HOME/mbiiez/openjk $HOME/.local/share/openjk/
 
 		# Copies Binaries so you can run mbiided.i386 as your engine
 		sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
@@ -225,7 +225,7 @@ ubuntu () {
 		sudo chmod +x /usr/bin/mbii
 
 		mkdir -p $HOME/.local/share/openjk/
-		ln -s openjk $HOME/.local/share/openjk/
+		ln -s $HOME/mbiiez/openjk $HOME/.local/share/openjk/
 
 		# Copies Binaries so you can run mbiided.i386 as your engine
 		sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
