@@ -4,7 +4,7 @@
 #get script path here
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
-OPENJKPATH="~/openjk"
+OPENJKPATH="openjk"
 MBIIPATH="$OPENJKPATH/MBII"
 MACHINE_TYPE=`uname -m`
 
