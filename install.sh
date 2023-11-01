@@ -270,7 +270,7 @@ ubuntu () {
 }
 
 main () {
-local PS3=$'\nEnter a number and press enter '
+local PS3=$'\nEnter a number and press enter: '
 local options=("Debian" "Ubuntu" "Quit")
 local opt
 select opt in "${options[@]}"
@@ -299,7 +299,7 @@ echo "*************************************************"
 echo ""
 echo "		Press a number to install 	       "
 
-PS3=$'\nEnter a number and press enter '
+PS3=$'\nEnter a number and press enter: '
 options=("Debian" "Ubuntu" "Quit")
 select opt in "${options[@]}"
 do
