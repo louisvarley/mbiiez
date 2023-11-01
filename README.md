@@ -1,7 +1,7 @@
 ## Latest News Update
 
-No longer recommend Ubuntu Server to run MB2 on and best to run it on Debian.
-I will be making another install scripts for Fedora or Arch based systems.
+A new installer to support both Debian and Ubuntu systems. You must run these under your user than other root and have sudo permissions.
+Shoutout to the MBII development team (Defiant) for helping me out with a small dotnet update issue.
 
 ## Changelog 
 
