@@ -4,7 +4,7 @@
 #get script path here
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
-OPENJKPATH="$HOME/mbiiez/openjk"
+OPENJKPATH="$HOME/openjk"
 MBIIPATH="$OPENJKPATH/MBII"
 MACHINE_TYPE=`uname -m`
 
@@ -100,7 +100,7 @@ debian () {
 		sudo chmod +x /usr/bin/mbii
 
 		mkdir -p $HOME/.local/share/openjk/
-		ln -s $HOME/mbiiez/openjk $HOME/.local/share/openjk/
+		ln -s $HOME/openjk $HOME/.local/share/openjk/
 
 		# Copies Binaries so you can run mbiided.i386 as your engine
 		sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
@@ -131,6 +131,9 @@ debian () {
           "Update MBII")
                 cd $OPENJKPATH
                 dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
+
+                sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
+                sudo chmod +x /usr/bin/mbiided.i386
 
                 cd $MBIIPATH
                 mv -f jampgamei386.so jampgamei386.jamp.so
@@ -225,7 +228,7 @@ ubuntu () {
 		sudo chmod +x /usr/bin/mbii
 
 		mkdir -p $HOME/.local/share/openjk/
-		ln -s $HOME/mbiiez/openjk $HOME/.local/share/openjk/
+		ln -s $HOME/openjk $HOME/.local/share/openjk/
 
 		# Copies Binaries so you can run mbiided.i386 as your engine
 		sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
@@ -256,6 +259,9 @@ ubuntu () {
           "Update MBII")
                 cd $OPENJKPATH
                 dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
+
+                sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
+                sudo chmod +x /usr/bin/mbiided.i386
 
                 cd $MBIIPATH
                 mv -f jampgamei386.so jampgamei386.jamp.so
