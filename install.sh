@@ -12,7 +12,7 @@ cd $SCRIPTPATH
 
 debian () {
   local PS3=$'\nPlease enter sub option: '
-  local options=("Dependancies" "Python Tools" "MBII Server" "RTVRTM" "Dotnet" "MBII Updater" "Update MBII" "Back to main menu")
+  local options=("Dependancies" "Python Tools" "Python2" "MBII Server" "RTVRTM" "Dotnet" "MBII Updater" "Update MBII" "Back to main menu")
   local opt
   select opt in "${options[@]}"
   do
@@ -50,20 +50,10 @@ debian () {
 		sudo pip3 install prettytable --break-system-packages
               ;;
           "Python2")
-		sudo sed -i '$ a\\ndeb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb-src http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb-src http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb-src http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb-src http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb http://archive.canonical.com/ubuntu focal partner' /etc/apt/sources.list
-		sudo sed -i '$ a\\ndeb-src http://archive.canonical.com/ubuntu focal partner' /etc/apt/sources.list
-		sudo apt-get update
-		sudo apt-get install python2-dev
-                sudo apt-get install python-is-python2
-		#sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+                sudo add-apt-repository ppa:deadsnakes/ppa
+                sudo apt-get update
+                sudo apt-get install python2-dev
+                sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
               ;;
           "MBII Server")
  	if [ -d $MBIIPATH ]; then
@@ -125,17 +115,13 @@ debian () {
               ;;
           "MBII Updater")
                 wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-                unzip -o MBII_CLI_Updater.zip -d ./updater
+                unzip -o MBII_CLI_Updater.zip -d $SCRIPTPATH
                 rm MBII_CLI_Updater.zip
               ;;
           "Update MBII")
                 cd $OPENJKPATH
-                dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
+                dotnet MBII_CommandLine_Update_XPlatform.dll
 
-                sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
-                sudo chmod +x /usr/bin/mbiided.i386
-
-                cd $MBIIPATH
                 mv -f jampgamei386.so jampgamei386.jamp.so
                 cp jampgamei386.nopp.so jampgamei386.so
               ;;
@@ -149,7 +135,7 @@ debian () {
 
 ubuntu () {
   local PS3=$'\nPlease enter sub option: '
-  local options=("Dependancies" "Python Tools" "MBII Server" "RTVRTM" "Dotnet" "MBII Updater" "Update MBII" "Back to main menu")
+  local options=("Dependancies" "Python Tools" "Python2" "MBII Server" "RTVRTM" "Dotnet" "MBII Updater" "Update MBII" "Back to main menu")
   local opt
   select opt in "${options[@]}"
   do
@@ -187,11 +173,10 @@ ubuntu () {
 		sudo pip3 install prettytable --break-system-packages
               ;;
           "Python2")
-		sed -i '$ a\\ndeb http://ftp.us.debian.org/debian bullseye main' /etc/apt/sources.list
-		sudo apt-get update
-		sudo apt-get install python2-dev
-                sudo apt-get install python-is-python2
-		#sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+                sudo add-apt-repository ppa:deadsnakes/ppa
+                sudo apt-get update
+                sudo apt-get install python2-dev
+                sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
               ;;
           "MBII Server")
  	if [ -d $MBIIPATH ]; then
@@ -231,7 +216,7 @@ ubuntu () {
 		ln -s $HOME/openjk $HOME/.local/share/openjk/
 
 		# Copies Binaries so you can run mbiided.i386 as your engine
-		sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
+		sudo cp $SCRIPTPATH/mbiided.i386 /usr/bin/
 
 		sudo chmod +x /usr/bin/mbiided.i386
 
@@ -253,15 +238,12 @@ ubuntu () {
               ;;
           "MBII Updater")
                 wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-                unzip -o MBII_CLI_Updater.zip -d ./updater
+                unzip -o MBII_CLI_Updater.zip -d $OPENJKPATH
                 rm MBII_CLI_Updater.zip
               ;;
           "Update MBII")
                 cd $OPENJKPATH
-                dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
-
-                sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
-                sudo chmod +x /usr/bin/mbiided.i386
+                dotnet MBII_CommandLine_Update_XPlatform.dll
 
                 cd $MBIIPATH
                 mv -f jampgamei386.so jampgamei386.jamp.so
