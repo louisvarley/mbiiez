@@ -1,19 +1,16 @@
-## Latest News Update
+## Latest News Update for Debian/Ubuntu 22.04/10
 
 A new installer to support both Debian and Ubuntu systems. You must run these under your user than other root and have sudo permissions.
 Shoutout to the MBII development team (Defiant) for helping me out with a small dotnet update issue.
 
 ## Changelog 
 
-1. Now everything is included under the one install with 7 options.
-2. install.sh renamed to aptinstall.sh for Debian based systems
-3. default.json.example and discord.json.example are there for examples
-4. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
-5. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
-6. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
-7. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
-8. The rtvrtm.py has been updated from Python2 to Python3. 
-9. Dotnet 6 SDK updated from 3.11
+1. default.json.example and discord.json.example are there for examples
+2. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
+3. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
+4. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
+5. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
+6. Dotnet 6 SDK updated from 3.11
 
 ## Movie Battles II EZ
 

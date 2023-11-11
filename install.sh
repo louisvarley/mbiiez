@@ -26,6 +26,7 @@ debian () {
                 sudo apt-get update
 		sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386 
 	fi
+		debian;
               ;;
           "Python Tools")
 		sudo apt-get update
@@ -48,12 +49,14 @@ debian () {
 		sudo pip3 install flask_httpauth --break-system-packages
 		sudo pip3 install discord.py --break-system-packages
 		sudo pip3 install prettytable --break-system-packages
-              ;;
+		debian;
+		;;
           "Python2")
                 sudo add-apt-repository ppa:deadsnakes/ppa
                 sudo apt-get update
                 sudo apt-get install python2-dev
                 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+		debian;
               ;;
           "MBII Server")
  	if [ -d $MBIIPATH ]; then
@@ -98,25 +101,26 @@ debian () {
 		sudo chmod +x /usr/bin/mbiided.i386
 
 	fi
+                debian;
               ;;
           "RTVRTM")
 		cd $SCRIPTPATH
 		
 		cp rtvrtm.py $OPENJKPATH/  
 		chmod +x $OPENJKPATH/rtvrtm.py
+                debian
               ;;
           "Dotnet")
-		wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-		sudo dpkg -i packages-microsoft-prod.deb
-		rm packages-microsoft-prod.deb
-
+		sudo cp 99microsoft-dotnet.pref /etc/apt/preferences.d/
                 sudo apt-get update
                 sudo apt-get install -y apt-transport-https dotnet-sdk-6.0
+                debian;
               ;;
           "MBII Updater")
                 wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
                 unzip -o MBII_CLI_Updater.zip -d $SCRIPTPATH
                 rm MBII_CLI_Updater.zip
+                debian;
               ;;
           "Update MBII")
                 cd $OPENJKPATH
@@ -124,6 +128,7 @@ debian () {
 
                 mv -f jampgamei386.so jampgamei386.jamp.so
                 cp jampgamei386.nopp.so jampgamei386.so
+                debian;
               ;;
           "Back to main menu")
               main;
@@ -149,6 +154,7 @@ ubuntu () {
                 sudo apt-get update
 		sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386 
 	fi
+            ubuntu;
               ;;
           "Python Tools")
 		sudo apt-get update
@@ -160,24 +166,26 @@ ubuntu () {
 		sudo apt-get install -y nano
 		sudo apt-get install -y python3-pip
 		sudo apt-get install -y unzip
-		sudo pip3 install watchgod --break-system-packages
-		sudo pip3 install tailer --break-system-packages
-		sudo pip3 install six --break-system-packages
-		sudo pip3 install psutil --break-system-packages
-		sudo pip3 install PTable --break-system-packages
-		sudo pip3 install ConfigParser --break-system-packages
-		sudo pip3 install pysqlite3 --break-system-packages
-		sudo pip3 install flask --break-system-packages
-		sudo pip3 install flask_httpauth --break-system-packages
-		sudo pip3 install discord.py --break-system-packages
-		sudo pip3 install prettytable --break-system-packages
+		sudo pip3 install watchgod 
+		sudo pip3 install tailer 
+		sudo pip3 install six 
+		sudo pip3 install psutil 
+		sudo pip3 install PTable 
+		sudo pip3 install ConfigParser 
+		sudo pip3 install pysqlite3 
+		sudo pip3 install flask 
+		sudo pip3 install flask_httpauth 
+		sudo pip3 install discord.py 
+		sudo pip3 install prettytable 
+            ubuntu;
               ;;
           "Python2")
                 sudo add-apt-repository ppa:deadsnakes/ppa
                 sudo apt-get update
                 sudo apt-get install python2-dev
                 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
-              ;;
+            ubuntu;
+		;;
           "MBII Server")
  	if [ -d $MBIIPATH ]; then
 		clear;
@@ -227,19 +235,19 @@ ubuntu () {
 		
 		cp rtvrtm.py $OPENJKPATH/  
 		chmod +x $OPENJKPATH/rtvrtm.py
+            ubuntu;
               ;;
           "Dotnet")
-		wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-		sudo dpkg -i packages-microsoft-prod.deb
-		rm packages-microsoft-prod.deb
-
+                sudo cp 99microsoft-dotnet.pref /etc/apt/preferences.d/
                 sudo apt-get update
                 sudo apt-get install -y apt-transport-https dotnet-sdk-6.0
+            ubuntu;
               ;;
           "MBII Updater")
                 wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
                 unzip -o MBII_CLI_Updater.zip -d $OPENJKPATH
                 rm MBII_CLI_Updater.zip
+            ubuntu;
               ;;
           "Update MBII")
                 cd $OPENJKPATH
@@ -248,6 +256,7 @@ ubuntu () {
                 cd $MBIIPATH
                 mv -f jampgamei386.so jampgamei386.jamp.so
                 cp jampgamei386.nopp.so jampgamei386.so
+            ubuntu;
               ;;
           "Back to main menu")
               main;
