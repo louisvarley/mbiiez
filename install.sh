@@ -4,7 +4,7 @@
 #get script path here
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
-OPENJKPATH="$HOME/openjk"
+OPENJKPATH="/opt/openjk"
 MBIIPATH="$OPENJKPATH/MBII"
 MACHINE_TYPE=`uname -m`
 
@@ -52,10 +52,10 @@ debian () {
 		debian;
 		;;
           "Python2")
-                sudo add-apt-repository ppa:deadsnakes/ppa
-                sudo apt-get update
-                sudo apt-get install python2-dev
-                sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+		sed -i '$ a\\ndeb http://ftp.us.debian.org/debian bullseye main' /etc/apt/sources.list
+		sudo apt-get update
+		sudo apt-get install python2-dev
+                sudo apt-get install python-is-python2
 		debian;
               ;;
           "MBII Server")
@@ -118,7 +118,7 @@ debian () {
               ;;
           "MBII Updater")
                 wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-                unzip -o MBII_CLI_Updater.zip -d $SCRIPTPATH
+                unzip -o MBII_CLI_Updater.zip -d $OPENJKPATH
                 rm MBII_CLI_Updater.zip
                 debian;
               ;;

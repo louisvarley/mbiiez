@@ -1,7 +1,6 @@
 ## Latest News Update for Debian/Ubuntu 22.04/10
 
-A new installer to support both Debian and Ubuntu systems. You must run these under your user than other root and have sudo permissions.
-Shoutout to the MBII development team (Defiant) for helping me out with a small dotnet update issue.
+A new installer to support both Debian and Ubuntu systems. You must run this under root.
 
 ## Changelog 
 
