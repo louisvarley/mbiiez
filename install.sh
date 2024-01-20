@@ -173,7 +173,7 @@ else
 	echo -e "${NONE}"
 	sleep 2
 
-	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
+	wget -O "$SCRIPTPATH/openjk.zip" https://github.com/JACoders/OpenJK/releases/download/latest/OpenJK-linux-x86.tar.gz
 
 	tar xvzf "$SCRIPTPATH/openjk.zip" -C $OPENJKPATH
 	mv -vf $OPENJKPATH/install/JediAcademy/* ../../
