@@ -45,7 +45,7 @@ class instance:
     def __init__(self, name):
     
         self.name = name
-        self.external_ip = urllib.request.urlopen('http://ip.42.pl/raw').read().decode()       
+        self.external_ip = urllib.request.urlopen('https://www.myexternalip.com/raw').read().decode()       
 
         self.start_cmd = None
 
