@@ -56,6 +56,7 @@ if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
 	apt-get install -y zlib1g:i386 
 	apt-get install -y curl:i386 
+ 	apt-get install -y lib32stdc++6
 fi
 
 apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
@@ -70,6 +71,7 @@ apt-get install -y unzip
 apt-get install -y apt-transport-https
 apt-get install -y dotnet-sdk-5.0
 apt-get install -y dotnet-sdk-3.1
+
 
 pip3 install watchgod 
 pip3 install tailer
