@@ -1,7 +1,3 @@
-## Latest News Update for Debian/Ubuntu 22.04/10
-
-A new installer to support both Debian and Ubuntu systems. You must run this under root.
-
 ## Changelog 
 
 1. default.json.example and discord.json.example are there for examples
