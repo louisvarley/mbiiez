@@ -6,3 +6,5 @@ updater
 *.db
 __pycache__
 MBII.zip
+.gitconfig
+downloads

@@ -11,19 +11,27 @@
     "rtm_mode": 0
   },
   "plugins":{
-        "auto_message":{
-                "messages":[
-                        "MESSAGES HERE WILL",
-                        "ROTATE AND SHOW BASED ON THE",
-                        "REPEAT MINUTES BELOW"
-                ],
-                "repeat_minutes":5
-        },
-        "auto_map_rotation":{
-                "rotate_minutes": 30
-        },
-        "stats":{}
-  },
+	"auto_message":{
+		"messages":[
+			"MESSAGES HERE WILL",
+			"ROTATE AND SHOW BASED ON THE",
+			"REPEAT MINUTES BELOW"
+		],
+		"repeat_minutes":5
+	},
+	"auto_map_rotation":{
+		"rotate_minutes": 30
+	},	
+	"stats":{},
+	"discord_bot":{
+		"token": "[IF WANTING TO USE A DISCORD BOT, ADD YOUR TOKEN HERE]",
+		"command_prefix": "!",
+		"roles_restart": ["NR"],
+		"roles_status": ["NR"],
+		"roles_test": ["NR"],
+		"roles_say": ["NR"]
+	}
+  }, 
   "security":{
     "rcon_password":"[CHOOSE AN RCON PASSWORD]",
     "server_password":"[LEAVE ME BLANK IF THIS IS OPEN FOR ALL TO JOIN]"
@@ -333,3 +341,4 @@
 	"som_snowfacility"
   ]
 }
+

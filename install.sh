@@ -1,234 +1,315 @@
-!#bin/sh
+#!/bin/bash
+# submenu
 
-#get script path
+#get script path here
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 OPENJKPATH="/opt/openjk"
 MBIIPATH="$OPENJKPATH/MBII"
-
-clear
-
-NONE='\033[0m'
-CYAN='\033[36m'
-FUSCHIA='\033[35m'
-UNDERLINE='\033[4m'
-
-cd $SCRIPTPATH
-
-if [ "$EUID" -ne 0 ]
-  then echo "Installation requires root. Please run installation as root"
-  ##exit
-fi
-
-echo -e "${CYAN}"
-echo -e "Starting Installation of Easy Movie Battles II Servers"
-echo -e "This installation will"
-echo -e "Install all dependencies"
-echo -e "Install MBII"
-echo -e "Install OpenJK"
-echo -e "Configure and Install the management script 'mbii'"
-echo -e "${NONE}"
-echo "--------------------------------------------------"
-echo "Press ENTER to proceed or CTRL+C to abort"
-echo "--------------------------------------------------"
-read -r _
-
 MACHINE_TYPE=`uname -m`
 
-clear
-echo -e "${CYAN}"
-echo -e "Installating dependencies..."
-echo -e "${NONE}"
-sleep 2
-
-if ! command -v dotnet &> /dev/null
-then
-    wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-	sudo dpkg -i packages-microsoft-prod.deb
-	rm packages-microsoft-prod.deb
-fi
-
-apt-get update 
-apt-get install python3-pip -y
-
-if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-	dpkg --add-architecture i386
-	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
-	apt-get install -y zlib1g:i386 
-	apt-get install -y curl:i386 
-fi
-
-apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
-
-apt-get install -y python-setuptools python-dev 
-apt-get install -y net-tools
-apt-get install -y fping
-apt-get install -y python3
-apt-get install -y nano
-apt-get install -y python3-pip
-apt-get install -y unzip
-apt-get install -y apt-transport-https
-apt-get install -y dotnet-sdk-5.0
-apt-get install -y dotnet-sdk-3.1
-
-pip3 install watchgod 
-pip3 install tailer
-pip3 install six
-pip3 install psutil
-pip3 install PTable
-pip3 install ConfigParser
-pip3 install pysqlite3
-pip3 install flask
-pip3 install flask_httpauth
-pip3 install discord.py
-pip3 install shutil
-
-clear
-
-echo -e "Downloading Movie Battles II Updater..."
-wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
-unzip -o MBII_CLI_Updater.zip -d ./updater
-rm MBII_CLI_Updater.zip
-
-if [ -f "/opt/openjk/MBII/MBII.pk3" ]; then
-	
-	clear
-	echo -e "${CYAN}"
-	echo -e "Movie Battles II Installation found, skipping..."
-	echo -e "${NONE}"
-	sleep 2
-	
-else	
-	
-	clear
-	echo -e "${CYAN}"
-	echo -e "Downloading Movie Battles II..."
-	echo -e "${NONE}"
-	sleep 2
-
-	#Download file lists, get the latest
-	wget -O "$SCRIPTPATH/downloads" https://archive.moviebattles.org/releases/
-
-	while IFS= read -r line; do
-		
-		SUB='FULL'
-		if [[ "$line" == *"$SUB"* ]]; then
-		  FILENAME=`echo "$line" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i'`
-		  LINK="https://archive.moviebattles.org/releases/$FILENAME"
-		fi	
-	done < downloads
-
-	wget -O "$SCRIPTPATH/MBII.zip" $LINK
-	mkdir -p $MBIIPATH
-	unzip -o MBII.zip -d $MBIIPATH
-	rm "$SCRIPTPATH/MBII.zip"
-	
-	#Need a more eligant way of doing this when i can be arsed
-	mv /opt/openjk/MBII/MBII/* /opt/openjk/MBII
-	rmdir /opt/openjk/MBII/MBII
-
-fi
-
-cd $OPENJKPATH
-
-clear
-echo -e "${CYAN}"
-echo -e "Validating Movie Battles II Files..."
-echo -e "${NONE}"
-sleep 2
-
-dotnet $SCRIPTPATH/updater/MBII_CommandLine_Update_XPlatform.dll
-
-unzip -o RTVRTM.zip -d $OPENJKPATH/rtvrtm
-rm -rf $OPENJKPATH/rtvrtm/Windows
-mv -v $OPENJKPATH/rtvrtm/Linux/rtvrtm.py $OPENJKPATH/rtvrtm.py
-rm -rf $OPENJKPATH/rtvrtm
-
-cd $MBIIPATH
-
-mv -f jampgamei386.so jampgamei386.jamp.so
-cp jampgamei386.nopp.so jampgamei386.so
-
 cd $SCRIPTPATH
 
-rm -f /usr/bin/mbii 2> /dev/null
-ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
-chmod +x /usr/bin/mbii
+debian () {
+  local PS3=$'\nPlease enter sub option: '
+  local options=("Dependancies" "Python Tools" "Python2" "MBII Server" "RTVRTM" "Dotnet" "MBII Updater" "Update MBII" "Back to main menu")
+  local opt
+  select opt in "${options[@]}"
+  do
+      case $opt in
+          "Dependancies")
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+		sudo dpkg --add-architecture i386
+                sudo apt-get update
+		sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386
+	else
+                sudo apt-get update
+		sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386 
+	fi
+		debian;
+              ;;
+          "Python Tools")
+		sudo apt-get update
+		sudo apt-get install -y python-is-python3
+		sudo apt-get install python3-pip -y
+		sudo apt-get install -y net-tools
+		sudo apt-get install -y fping
+		sudo apt-get install -y python3
+		sudo apt-get install -y nano
+		sudo apt-get install -y python3-pip
+		sudo apt-get install -y unzip
+		sudo pip3 install watchgod --break-system-packages
+		sudo pip3 install tailer --break-system-packages
+		sudo pip3 install six --break-system-packages
+		sudo pip3 install psutil --break-system-packages
+		sudo pip3 install PTable --break-system-packages
+		sudo pip3 install ConfigParser --break-system-packages
+		sudo pip3 install pysqlite3 --break-system-packages
+		sudo pip3 install flask --break-system-packages
+		sudo pip3 install flask_httpauth --break-system-packages
+		sudo pip3 install discord.py --break-system-packages
+		sudo pip3 install prettytable --break-system-packages
+		debian;
+		;;
+          "Python2")
+		sed -i '$ a\\ndeb http://ftp.us.debian.org/debian bullseye main' /etc/apt/sources.list
+		sudo apt-get update
+		sudo apt-get install python2-dev
+                sudo apt-get install python-is-python2
+		debian;
+              ;;
+          "MBII Server")
+ 	if [ -d $MBIIPATH ]; then
+		clear;
+       		sleep 2
+	else
+        	clear;
+        	sleep 2
 
-if [ -f "/opt/openjk/base/jampgamei386.so" ]; then
+        #Download file lists, get the latest
+        wget -O "$SCRIPTPATH/downloads" https://archive.moviebattles.org/releases/
 
-	clear
-	echo -e "${CYAN}"
-	echo -e "OpenJK Installation found, skipping..."
-	echo -e "${NONE}"
-	sleep 2
+        while IFS= read -r line; do
 
-else
+                SUB='FULL'
+                if [[ "$line" == *"$SUB"* ]]; then
+                  FILENAME=`echo "$line" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i'`
+                  LINK="https://archive.moviebattles.org/releases/$FILENAME"
+                fi
+        done < downloads
 
-	clear
-	echo -e "${CYAN}"
-	echo -e "Downloading OpenJK"
-	echo -e "${NONE}"
-	sleep 2
+      		wget -O "$SCRIPTPATH/MBII.zip" $LINK
+       		unzip -o MBII.zip -d $OPENJKPATH
+		rm MBII.zip
+		cd $MBIIPATH
 
-	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
+		mv -f jampgamei386.so jampgamei386.jamp.so
+		cp jampgamei386.nopp.so jampgamei386.so
 
-	tar xvzf "$SCRIPTPATH/openjk.zip" -C $OPENJKPATH
-	mv -vf $OPENJKPATH/install/JediAcademy/* ../../
-	rm "$SCRIPTPATH/openjk.zip"
-	rm -rf $OPENJKPATH/install
+		cd $SCRIPTPATH
 
-fi
-	
-mkdir -p /root/.local/share/openjk/
-ln -s /opt/openjk /root/.local/share/openjk/
-ln -s /opt/openjk /root/.ja
+		sudo rm -f /usr/bin/mbii 2> /dev/null
+		sudo ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
+		sudo chmod +x /usr/bin/mbii
 
-# Copies Binaries so you can run openjk.i386 or mbiided.i386 as your engine
-cp /opt/openjk/*.so /usr/lib/
-cp /opt/openjk/MBII/*.so /usr/lib/
-cp /opt/openjk/*.i386 /usr/bin/
-cp $SCRIPTPATH/*.i386 /usr/bin
-cp /opt/openjk/*.so /opt/openjk/MBII
+		mkdir -p $HOME/.local/share/openjk/
+		ln -s $HOME/openjk $HOME/.local/share/openjk/
 
-chmod +x /usr/bin/*.i386
+		# Copies Binaries so you can run mbiided.i386 as your engine
+		sudo cp $OPENJKPATH/mbiided.i386 /usr/bin/
 
-clear
-echo -e "${CYAN}"
-echo -e "Installing MBIIEZ Web..."
-echo -e "${NONE}"
+		sudo chmod +x /usr/bin/mbiided.i386
 
-servicefile="$SCRIPTPATH/mbii-web.service"
-cp $servicefile /lib/systemd/system/
-sed -i 's@WORKING_DIRECTORY@'"$SCRIPTPATH"'@g' /lib/systemd/system/mbii-web.service
+	fi
+                debian;
+              ;;
+          "RTVRTM")
+		cd $SCRIPTPATH
+		
+		cp rtvrtm.py $OPENJKPATH/  
+		chmod +x $OPENJKPATH/rtvrtm.py
+                debian
+              ;;
+          "Dotnet")
+		sudo cp 99microsoft-dotnet.pref /etc/apt/preferences.d/
+                sudo apt-get update
+                sudo apt-get install -y apt-transport-https dotnet-sdk-6.0
+                debian;
+              ;;
+          "MBII Updater")
+                wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+                unzip -o MBII_CLI_Updater.zip -d $OPENJKPATH
+                rm MBII_CLI_Updater.zip
+                debian;
+              ;;
+          "Update MBII")
+                cd $OPENJKPATH
+                dotnet MBII_CommandLine_Update_XPlatform.dll
 
-systemctl enable mbii-web
-service mbii-web start
+                mv -f jampgamei386.so jampgamei386.jamp.so
+                cp jampgamei386.nopp.so jampgamei386.so
+                debian;
+              ;;
+          "Back to main menu")
+              main;
+              ;;
+          *) echo "invalid option $REPLY";;
+      esac
+  done
+}
 
-sleep 2
-clear
+ubuntu () {
+  local PS3=$'\nPlease enter sub option: '
+  local options=("Dependancies" "Python Tools" "Python2" "MBII Server" "RTVRTM" "Dotnet" "MBII Updater" "Update MBII" "Back to main menu")
+  local opt
+  select opt in "${options[@]}"
+  do
+      case $opt in
+          "Dependancies")
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+		sudo dpkg --add-architecture i386
+                sudo apt-get update
+		sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386
+	else
+                sudo apt-get update
+		sudo apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 curl:i386 lib32z1 build-essential cmake gcc-multilib g++-multilib libjpeg-dev:i386 libpng-dev:i386 zlib1g-dev:i386 
+	fi
+            ubuntu;
+              ;;
+          "Python Tools")
+		sudo apt-get update
+		sudo apt-get install -y python-is-python3
+		sudo apt-get install python3-pip -y
+		sudo apt-get install -y net-tools
+		sudo apt-get install -y fping
+		sudo apt-get install -y python3
+		sudo apt-get install -y nano
+		sudo apt-get install -y python3-pip
+		sudo apt-get install -y unzip
+		sudo pip3 install watchgod 
+		sudo pip3 install tailer 
+		sudo pip3 install six 
+		sudo pip3 install psutil 
+		sudo pip3 install PTable 
+		sudo pip3 install ConfigParser 
+		sudo pip3 install pysqlite3 
+		sudo pip3 install flask 
+		sudo pip3 install flask_httpauth 
+		sudo pip3 install discord.py 
+		sudo pip3 install prettytable 
+            ubuntu;
+              ;;
+          "Python2")
+                sudo add-apt-repository ppa:deadsnakes/ppa
+                sudo apt-get update
+                sudo apt-get install python2-dev
+                sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+            ubuntu;
+		;;
+          "MBII Server")
+ 	if [ -d $MBIIPATH ]; then
+		clear;
+       		sleep 2
+	else
+        	clear;
+        	sleep 2
 
-echo -e "${CYAN}"
-echo -e "${CYAN}Installation is complete${NONE}"
-echo "--------------------------------------------------"
-echo -e "You now ${FUSCHIA}MUST${NONE} manually copy the following official Jedi Academy PK3 files to /opt/openjk/base"
-echo -e "assets0.pk3"
-echo -e "assets1.pk3"
-echo -e "assets2.pk3"
-echo -e "assets3.pk3"
-echo "--------------------------------------------------"
-echo -e "The Engines ${FUSCHIA}mbiided.i386${NONE} and ${FUSCHIA}openjkded.i386${NONE} are available to use in your config. Custom engines must be manually installed to /usr/bin"
-echo "--------------------------------------------------"
-echo -e "Web Interface is available at http://0.0.0.0:8080"
-echo -e "Default Login Details are"
-echo -e "Username: ${FUSCHIA}Admin${NONE}"
-echo -e "Password: ${FUSCHIA}Admin${NONE}"
-echo "--------------------------------------------------"
-echo -e "'mbii' can now be used as a shell command"
-echo -e "You can update MBIIEZ anytime by running ./update.sh"
-echo "--------------------------------------------------"
-echo "Press ENTER to exit"
-echo "--------------------------------------------------"
-read -r _
+        #Download file lists, get the latest
+        wget -O "$SCRIPTPATH/downloads" https://archive.moviebattles.org/releases/
 
-reset
+        while IFS= read -r line; do
+
+                SUB='FULL'
+                if [[ "$line" == *"$SUB"* ]]; then
+                  FILENAME=`echo "$line" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i'`
+                  LINK="https://archive.moviebattles.org/releases/$FILENAME"
+                fi
+        done < downloads
+
+      		wget -O "$SCRIPTPATH/MBII.zip" $LINK
+       		unzip -o MBII.zip -d $OPENJKPATH
+		rm MBII.zip
+		cd $MBIIPATH
+
+		mv -f jampgamei386.so jampgamei386.jamp.so
+		cp jampgamei386.nopp.so jampgamei386.so
+
+		cd $SCRIPTPATH
+
+		sudo rm -f /usr/bin/mbii 2> /dev/null
+		sudo ln -s $SCRIPTPATH/mbii.py /usr/bin/mbii
+		sudo chmod +x /usr/bin/mbii
+
+		mkdir -p $HOME/.local/share/openjk/
+		ln -s $HOME/openjk $HOME/.local/share/openjk/
+
+		# Copies Binaries so you can run mbiided.i386 as your engine
+		sudo cp $SCRIPTPATH/mbiided.i386 /usr/bin/
+
+		sudo chmod +x /usr/bin/mbiided.i386
+
+	fi
+              ;;
+          "RTVRTM")
+		cd $SCRIPTPATH
+		
+		cp rtvrtm.py $OPENJKPATH/  
+		chmod +x $OPENJKPATH/rtvrtm.py
+            ubuntu;
+              ;;
+          "Dotnet")
+                sudo cp 99microsoft-dotnet.pref /etc/apt/preferences.d/
+                sudo apt-get update
+                sudo apt-get install -y apt-transport-https dotnet-sdk-6.0
+            ubuntu;
+              ;;
+          "MBII Updater")
+                wget https://www.moviebattles.org/download/MBII_CLI_Updater.zip
+                unzip -o MBII_CLI_Updater.zip -d $OPENJKPATH
+                rm MBII_CLI_Updater.zip
+            ubuntu;
+              ;;
+          "Update MBII")
+                cd $OPENJKPATH
+                dotnet MBII_CommandLine_Update_XPlatform.dll
+
+                cd $MBIIPATH
+                mv -f jampgamei386.so jampgamei386.jamp.so
+                cp jampgamei386.nopp.so jampgamei386.so
+            ubuntu;
+              ;;
+          "Back to main menu")
+              main;
+              ;;
+          *) echo "invalid option $REPLY";;
+      esac
+  done
+}
+
+main () {
+local PS3=$'\nEnter a number and press enter: '
+local options=("Debian" "Ubuntu" "Quit")
+local opt
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Debian")
+            debian
+            ;;
+        "Ubuntu")
+            ubuntu
+            ;;
+        "Quit")
+            exit
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+}
+
+
+# main menu
+echo "*************************************************"
+echo " 	   Moviebattles II EZ Installer Tool           "
+echo "        	  Interactive Menu                     "
+echo "*************************************************"
+echo ""
+echo "		Press a number to install 	       "
+
+PS3=$'\nEnter a number and press enter: '
+options=("Debian" "Ubuntu" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Debian")
+            debian
+            ;;
+        "Ubuntu")
+            ubuntu
+            ;;
+        "Quit")
+            exit
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
