@@ -45,7 +45,7 @@ class instance:
     def __init__(self, name):
     
         self.name = name
-        self.external_ip = urllib.request.urlopen('https://ifconfig.me/ip').read().decode()       
+        self.external_ip = urllib.request.urlopen('http://ip.42.pl/raw').read().decode()       
 
         self.start_cmd = None
 
@@ -80,8 +80,8 @@ class instance:
         self.plugin_hander = plugin_handler(self)
         
         ''' Add any configs to external plugins if they are enabled '''    
-        ''' if(self.has_plugin("auto_message")):
-            self.config['plugins']['auto_message']['messages'].append("This server is powered by MBIIEZ, visit bit.ly/2JhJRpO") '''   
+        if(self.has_plugin("auto_message")):
+            self.config['plugins']['auto_message']['messages'].append("This server is powered by MBIIEZ, visit bit.ly/2JhJRpO")    
 
     def services_internal(self):
         ''' Internal Services we wish to start on an instance start ''' 

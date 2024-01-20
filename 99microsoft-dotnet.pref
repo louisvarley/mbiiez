@@ -1,3 +1,0 @@
-package: *
-Pin: origin "package.microsoft.com"
-Pin-Priority: 1001
