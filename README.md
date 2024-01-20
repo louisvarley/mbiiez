@@ -1,11 +1,15 @@
-## Projects Future
+## Latest News Update for Debian/Ubuntu 22.04/10
 
-I have handed this project over the Valzhar (Wookie) who will be continuing development, 
+A new installer to support both Debian and Ubuntu systems. You must run this under root.
 
-you can find his fork here https://github.com/Wookiee-/mbiiez 
+## Changelog 
 
-he has fixed a number of issues and will be running the project 
-
+1. default.json.example and discord.json.example are there for examples
+2. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
+3. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
+4. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
+5. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
+6. Dotnet 6 SDK updated from 3.11
 
 ## Movie Battles II EZ
 
@@ -13,14 +17,6 @@ MBIIEZ is a python wrapper for running instances of Movie Battles II.
 The wrapper acts as both a CLI (Command Line Interface) as well as a Web GUI for managing instances. 
 
 In a sense, you should not need to edit server configs, RTV/RTM configs, understand installing any of the components needed to run an MBII server. Using the WebGUI to manage everything instead and basic JSON config files. 
-
-## August 2021 Update + Additional Notes
-
-Fixed a bug in the code which would not tell you when log file was not created within 10 seconds (indicating the server didnt start) I don't have a full install setup to properly test
-
-Additional issue i've noticed on a few installs, installation creates a path like so ```/opt/openjk/MBII/MBII``` with some of the files being here rather than merely ```/opt/openjk/MBII/MBII```
-
-i've added a line to install to move them but if you get issues, check any files are moved to their correct places
 
 ## V1.7.2+ of MBII
 
@@ -43,7 +39,7 @@ Install.sh has been changed to always re-download the latest updater binaries.
 - Plugin System for creating additional plugins 
 - Included plugins include 
 - - Auto Server Messages, Unlimited rotating service messages  
-- - RTV/RTM, intergrated as a plugin  
+- - RTV/RTM, integrated as a plugin  
 - - Discord Bot, allow certain roles in your discord channel, to restart instances, change map, kick players, etc
 
 ## Installing
