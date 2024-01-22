@@ -22,7 +22,7 @@
 	"auto_map_rotation":{
 		"rotate_minutes": 30
 	},	
-	"stats":{},
+	"stats":{}
   }, 
   "security":{
     "rcon_password":"MyRconPassword",
