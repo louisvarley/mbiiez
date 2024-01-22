@@ -43,6 +43,8 @@ echo -e "Installating dependencies..."
 echo -e "${NONE}"
 sleep 2
 
+apt-get install -y wget
+
 if ! command -v dotnet &> /dev/null
 then
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -217,7 +219,7 @@ echo -e "${NONE}"
 
 decoded_assets=$(echo "$GAME_ASSETS" | base64 -d)
     
-aa=${decoded_urls:0:63}
+aa=${decoded_assets:0:63}
 ab=${decoded_assets:63:63}
 ac=${decoded_assets:126:63}
 ad=${decoded_assets:189:63}
@@ -226,10 +228,23 @@ ad=${decoded_assets:189:63}
 fails=0
 
 # Download files
-wget -O "/opt/openjk/base/assets0.pk3" "$aa" || fails=1
-wget -O "/opt/openjk/base/assets1.pk3" "$ab" || fails=1
-wget -O "/opt/openjk/base/assets2.pk3" "$ac" || fails=1
-wget -O "/opt/openjk/base/assets3.pk3" "$ad" || fails=1
+# Download files only if they don't exist
+if [ ! -f "/opt/openjk/base/assets0.pk3" ]; then
+    wget -O "/opt/openjk/base/assets0.pk3" "$aa" || fails=1
+fi
+
+if [ ! -f "/opt/openjk/base/assets1.pk3" ]; then
+    wget -O "/opt/openjk/base/assets1.pk3" "$ab" || fails=1
+fi
+
+if [ ! -f "/opt/openjk/base/assets2.pk3" ]; then
+    wget -O "/opt/openjk/base/assets2.pk3" "$ac" || fails=1
+fi
+
+if [ ! -f "/opt/openjk/base/assets3.pk3" ]; then
+    wget -O "/opt/openjk/base/assets3.pk3" "$ad" || fails=1
+fi
+
 
 # Check if any downloads failed
 if [ $fails -eq 1 ]; then
@@ -256,7 +271,7 @@ echo -e "Please ensure you have port forwards setup for all ports you wish to us
 echo -e "For Instances"
 echo "--------------------------------------------------"
 echo -e "'mbii' can now be used as a shell command"
-echo -e "You can update MBIIEZ anytime by running ${FUSCHIA}./update.sh{NONE} or ${FUSCHIA}git pull{NONE}"
+echo -e "You can update MBIIEZ anytime by running ${FUSCHIA}./update.sh${NONE} or ${FUSCHIA}git pull${NONE}"
 echo "--------------------------------------------------"
 echo -e "Please edit /mbiiez/configs/demo.json with your first instance server settings"
 echo -e "You can launch this instance with the command ${FUSCHIA}mbii -i demo start${NONE}"
