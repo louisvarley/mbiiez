@@ -6,3 +6,4 @@ updater
 *.db
 __pycache__
 MBII.zip
+!demo.json
