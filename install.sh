@@ -178,7 +178,7 @@ else
 	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
 
 	tar xvzf "$SCRIPTPATH/openjk.zip" -C $OPENJKPATH
-	mv -vf $OPENJKPATH/install/JediAcademy/* ../../
+	mv -vf $OPENJKPATH/install/JediAcademy/* $OPENJKPATH
 	rm "$SCRIPTPATH/openjk.zip"
 	rm -rf $OPENJKPATH/install
 
