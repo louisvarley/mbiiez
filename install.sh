@@ -13,6 +13,8 @@ CYAN='\033[36m'
 FUSCHIA='\033[35m'
 UNDERLINE='\033[4m'
 
+GAME_ASSETS="aHR0cHM6Ly93d3cueC1yYWlkZXJzLm5ldC9kb3dubG9hZC9qazMvYXNzZXRzMC9maWxlL2Fzc2V0czAucGszaHR0cHM6Ly93d3cueC1yYWlkZXJzLm5ldC9kb3dubG9hZC9qazMvYXNzZXRzMS9maWxlL2Fzc2V0czEucGszaHR0cHM6Ly93d3cueC1yYWlkZXJzLm5ldC9kb3dubG9hZC9qazMvYXNzZXRzMi9maWxlL2Fzc2V0czIucGszaHR0cHM6Ly93d3cueC1yYWlkZXJzLm5ldC9kb3dubG9hZC9qazMvYXNzZXRzMy9maWxlL2Fzc2V0czMucGszCg=="
+
 cd $SCRIPTPATH
 
 if [ "$EUID" -ne 0 ]
@@ -56,7 +58,6 @@ if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
 	apt-get install -y zlib1g:i386 
 	apt-get install -y curl:i386 
- 	apt-get install -y lib32stdc++6
 fi
 
 apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
@@ -71,7 +72,6 @@ apt-get install -y unzip
 apt-get install -y apt-transport-https
 apt-get install -y dotnet-sdk-5.0
 apt-get install -y dotnet-sdk-3.1
-
 
 pip3 install watchgod 
 pip3 install tailer
@@ -173,7 +173,7 @@ else
 	echo -e "${NONE}"
 	sleep 2
 
-	wget -O "$SCRIPTPATH/openjk.zip" https://github.com/JACoders/OpenJK/releases/download/latest/OpenJK-linux-x86.tar.gz
+	wget -O "$SCRIPTPATH/openjk.zip" https://builds.openjk.org/openjk-2018-02-26-e3f22070-linux.tar.gz
 
 	tar xvzf "$SCRIPTPATH/openjk.zip" -C $OPENJKPATH
 	mv -vf $OPENJKPATH/install/JediAcademy/* ../../
@@ -210,14 +210,40 @@ service mbii-web start
 sleep 2
 clear
 
+clear
+echo -e "${CYAN}"
+echo -e "Downloading JK2 Base Assets..."
+echo -e "${NONE}"
+
+decoded_assets=$(echo "$GAME_ASSETS" | base64 -d)
+    
+aa=${decoded_urls:0:63}
+ab=${decoded_assets:63:63}
+ac=${decoded_assets:126:63}
+ad=${decoded_assets:189:63}
+
+
+fails=0
+
+# Download files
+wget -O "/opt/openjk/base/assets0.pk3" "$aa" || fails=1
+wget -O "/opt/openjk/base/assets1.pk3" "$ab" || fails=1
+wget -O "/opt/openjk/base/assets2.pk3" "$ac" || fails=1
+wget -O "/opt/openjk/base/assets3.pk3" "$ad" || fails=1
+
+# Check if any downloads failed
+if [ $fails -eq 1 ]; then
+	echo -e "${RED}"
+    echo -e "We was unable to download 1 or more of the JK2 base files."
+    echo -e "You ${FUSCHIA}MUST${NONE} manually copy the following Jedi Academy PK3 files to /opt/openjk/base"
+    echo -e "assets0.pk3"
+    echo -e "assets1.pk3"
+    echo -e "assets2.pk3"
+    echo -e "assets3.pk3"	
+fi
+
 echo -e "${CYAN}"
 echo -e "${CYAN}Installation is complete${NONE}"
-echo "--------------------------------------------------"
-echo -e "You now ${FUSCHIA}MUST${NONE} manually copy the following official Jedi Academy PK3 files to /opt/openjk/base"
-echo -e "assets0.pk3"
-echo -e "assets1.pk3"
-echo -e "assets2.pk3"
-echo -e "assets3.pk3"
 echo "--------------------------------------------------"
 echo -e "The Engines ${FUSCHIA}mbiided.i386${NONE} and ${FUSCHIA}openjkded.i386${NONE} are available to use in your config. Custom engines must be manually installed to /usr/bin"
 echo "--------------------------------------------------"
@@ -226,8 +252,14 @@ echo -e "Default Login Details are"
 echo -e "Username: ${FUSCHIA}Admin${NONE}"
 echo -e "Password: ${FUSCHIA}Admin${NONE}"
 echo "--------------------------------------------------"
+echo -e "Please ensure you have port forwards setup for all ports you wish to use"
+echo -e "For Instances"
+echo "--------------------------------------------------"
 echo -e "'mbii' can now be used as a shell command"
-echo -e "You can update MBIIEZ anytime by running ./update.sh"
+echo -e "You can update MBIIEZ anytime by running ${FUSCHIA}./update.sh{NONE} or ${FUSCHIA}git pull{NONE}"
+echo "--------------------------------------------------"
+echo -e "Please edit /mbiiez/configs/demo.json with your first instance server settings"
+echo -e "You can launch this instance with the command ${FUSCHIA}mbii -i demo start${NONE}"
 echo "--------------------------------------------------"
 echo "Press ENTER to exit"
 echo "--------------------------------------------------"
