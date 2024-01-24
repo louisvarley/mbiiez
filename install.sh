@@ -71,21 +71,23 @@ apt-get install -y python3
 apt-get install -y nano
 apt-get install -y python3-pip
 apt-get install -y unzip
+apt-get install -y python3-psutil
 apt-get install -y apt-transport-https
+apt-get install -y python3-prettytable
 apt-get install -y dotnet-sdk-5.0
 apt-get install -y dotnet-sdk-3.1
 
-pip3 install watchgod 
-pip3 install tailer
-pip3 install six
-pip3 install psutil
-pip3 install PTable
-pip3 install ConfigParser
-pip3 install pysqlite3
-pip3 install flask
-pip3 install flask_httpauth
-pip3 install discord.py
-pip3 install shutil
+pip3 install watchgod --break-system-packages
+pip3 install tailer --break-system-packages
+pip3 install six --break-system-packages
+pip3 install psutil --break-system-packages
+pip3 install PTable --break-system-packages
+pip3 install ConfigParser --break-system-packages
+pip3 install pysqlite3 --break-system-packages
+pip3 install flask --break-system-packages
+pip3 install flask_httpauth --break-system-packages
+pip3 install discord.py --break-system-packages
+pip3 install shutil --break-system-packages
 
 clear
 
