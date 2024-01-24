@@ -54,7 +54,15 @@ fi
 
 apt-get update 
 apt-get install python3-pip -y
-apt-get install dotnet-sdk-6.0 -y
+
+echo "$(tput setaf 3)Installing .Net 6$(tput sgr0)"
+sudo apt remove 'dotnet*'
+sudo apt remove 'aspnetcore*'
+sudo apt remove 'netstandard*'
+sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+sudo rm /etc/apt/sources.list.d/microsoft-prod.list.save
+sudo apt update
+sudo apt install dotnet6
 
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 	dpkg --add-architecture i386
