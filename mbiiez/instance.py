@@ -102,7 +102,7 @@ class instance:
 
         ''' RTV Service, Eventually move to a plugin ''' 
         if(self.config['server']['enable_rtv']):
-            cmd = "python3 /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
+            cmd = "python2 /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
             self.process_handler.register_service("RTVRTM", cmd, 999, self.log_handler.log_await) 
             
     def events_internal(self):
