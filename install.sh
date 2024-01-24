@@ -54,6 +54,7 @@ fi
 
 apt-get update 
 apt-get install python3-pip -y
+apt-get install dotnet-sdk-6.0 -y
 
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 	dpkg --add-architecture i386
