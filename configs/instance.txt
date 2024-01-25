@@ -22,6 +22,9 @@
 	"auto_map_rotation":{
 		"rotate_minutes": 30
 	},	
+	"updater":{
+		"check_for_updates_every_minutes": [HOW MANY MINUTES BETWEEN UPDATE CHECKS]
+	},		
 	"stats":{},
 	"discord_bot":{
 		"token": "[IF WANTING TO USE A DISCORD BOT, ADD YOUR TOKEN HERE]",
