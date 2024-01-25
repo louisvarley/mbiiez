@@ -1,12 +1,3 @@
-## Changelog 
-
-1. default.json.example and discord.json.example are there for examples
-2. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
-3. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
-4. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
-5. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
-6. Dotnet 6 SDK updated from 3.11
-
 ## Movie Battles II EZ
 
 MBIIEZ is a python wrapper for running instances of Movie Battles II. 
@@ -154,6 +145,11 @@ For this reason the database can be used by external processes to query this inf
 
 Usablity is limited as there is no way beyond a name, to track a player between connections. 
 
+## Useful Included Plugins
+
+There is an updater plugin, and it is active on the default version. This plugin will, based on the config scan for updates to MBII. It is recomended you only run the updater plugin on one instance. Although it can run on all instances
+There is a chance you could have 3 updaters all checking files at the same time. Ideally the updater would be moved to the core, but the core doesnt have it's own processes management like instances does. 
+
 ## Get Involved
 This is still a little rough round the edges, i am NOT a full python dev, if anyone is interested in doing further development on this or pushing pull requests into this thats all fine with me. 
 
@@ -171,5 +167,15 @@ Many things
 - [ ] Web to handle bans
 - [ ] Web to handle plugins
 - [ ] Web to start / stop / restart instances
+
+## Changelog 
+
+1. default.json.example and discord.json.example are there for examples
+2. Launching with mbii command with discord.json not filled out will load RTVRTM service twice
+3. The OpenJK binaries and engine will no longer be downloaded, mbiided.i386 is now the current default engine
+4. RTVRTM have been been fixed and now working due to secondary maps in default.json.example not found on server
+5. Added a Pre-CTF installer before 1.9 for those who don't want the CTF
+6. Dotnet 6 SDK updated from 3.11
+7. Created a plugin which handles MB2 updates without using the official updater, so seemless
 
 
