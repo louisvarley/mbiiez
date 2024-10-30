@@ -30,13 +30,13 @@ class bcolors:
 
     def color_convert(self, text):
     
+        text = text.replace("^7", self.WHITE)
         text = text.replace("^1", self.RED)
         text = text.replace("^2", self.GREEN)
         text = text.replace("^3", self.YELLOW)
         text = text.replace("^4", self.BLUE)
         text = text.replace("^5", self.CYAN)
-        text = text.replace("^6", self.PURPLE)
-        text = text.replace("^7", self.WHITE)
+        text = text.replace("^6", self.PURPLE)  
         text = text.replace("^0", self.BLACK)
         text = text.replace("^9", "")        
         return text

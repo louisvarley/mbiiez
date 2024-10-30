@@ -53,7 +53,7 @@ class plugin:
     def __init__(self, instance):
         self.instance = instance
         self.config = self.instance.config['plugins']['updater']
-        self.openjkPath = self.instance.config['server']['openjk_path']
+        self.openjkPath = os.path.dirname(self.instance.config['server']['server_config_path'])
 
     ''' use register event to have your given method notified when the event occurs '''
     def register(self):
@@ -64,9 +64,9 @@ class plugin:
     
         time.sleep(3)
         updated = False
-    
+
         while(True):
-            time.sleep(self.config['check_for_updates_every_minutes'] * 60)
+            
             if(self.instance.is_empty()):
 
                 # Download the Manifest XML file
@@ -79,12 +79,11 @@ class plugin:
 
                 # Directory where your files are stored (adjust as necessary)
                 local_directory = self.openjkPath
-                
-                print("searching for updates " + local_directory)
-   
+
                 for patch_record in root.findall('.//PatchRecord'):
+                
                     file_name = patch_record.find('FileName').text.lstrip('/')  # Remove leading slash
-                    
+
                     if("mbii.x86.app" in file_name):  
                         continue
                     
@@ -92,18 +91,18 @@ class plugin:
 
                     if os.path.exists(local_file_path):
                     
+                        
                         expected_hash = patch_record.find('FileHash').text
                         local_hash = self.calculate_hash(local_file_path)
                 
- 
                         if local_hash != expected_hash:
                             print(f"Updating file: {file_name}")
 
                             # Define the URL for downloading the file
                             download_url = f'http://update.moviebattles.org/files/{file_name}'
                             self.download_file(download_url, local_file_path)  
-
                             updated = True
+
                                                
                     else:
                          download_url = f'http://update.moviebattles.org/files/{file_name}'
@@ -111,8 +110,11 @@ class plugin:
                          updated = True
 
                     if(updated):
+                        print("update completed...")
                         updated = False
                         self.instance.restart
+                        
+            time.sleep(self.config['check_for_updates_every_minutes'] * 60)
 
 
         return

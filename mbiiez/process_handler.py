@@ -8,6 +8,10 @@ import time
 import subprocess
 import shlex
 
+import asyncio
+import inspect
+
+
 class process_handler:
 
     instance = None
@@ -35,7 +39,7 @@ class process_handler:
                 service['awaiter']();
         
             self.instance.log_handler.log("Starting Service: " + service['name'])
-            print(bcolors.OK + "[Yes] " + bcolors.ENDC + "Launching " + service['name'])   
+            print("[" + bcolors.OK + "Yes" + bcolors.ENDC + "] Launching " + service['name'])   
             self.start(service['func'], service['name'], self.instance.name)
             time.sleep(1)
             
@@ -66,7 +70,13 @@ class process_handler:
                         break;
                      
                     try:
-                         func()
+                        
+                        if inspect.iscoroutinefunction(func):
+                            asyncio.run(func())
+                        else:
+                            func()
+                                                
+                         
                     except Exception as e:     
                         self.instance.exception_handler.log(e)
                          
@@ -177,9 +187,9 @@ class process_handler:
                 if(self.stop_process_pid(p['pid'])):
                     # Extra DB not really needed but best to be safe
                     db().delete("processes", p['id'])
-                    print(bcolors.GREEN + "[Yes]" + bcolors.ENDC +  " Stopped {}".format(str(p['name'])))
+                    print("[" + bcolors.GREEN + "Yes" + bcolors.ENDC +  "] Stopped {}".format(str(p['name'])))
                 else:
-                    print(bcolors.RED + "[No]" + bcolors.ENDC +  " Stopped {}".format(str(p['name']))) 
+                    print("[" + bcolors.RED + "No" + bcolors.ENDC +  "] Stopped {}".format(str(p['name']))) 
             else:
                 db().delete("processes", p['id'])
 

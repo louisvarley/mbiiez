@@ -91,7 +91,9 @@ class instance:
         
         self.start_cmd = cmd
         
-        print(cmd)
+        print(bcolors.CYAN + cmd  + bcolors.ENDC )  
+        print()  
+      
         self.process_handler.register_service("OpenJK", cmd, 1) 
         
         ''' Log Watcher Service ''' 
@@ -103,6 +105,7 @@ class instance:
         ''' RTV Service, Eventually move to a plugin ''' 
         if(self.config['server']['enable_rtv']):
             cmd = "python2 /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
+            print(cmd)
             self.process_handler.register_service("RTVRTM", cmd, 999, self.log_handler.log_await) 
             
     def events_internal(self):
@@ -153,6 +156,10 @@ class instance:
     # Run an RCON command
     def rcon(self, command):
         print(self.console.rcon(str(command), False))
+        
+     # Return an RCON command
+    def rconResponse(self, command):
+        return(self.console.rcon(str(command), False))       
        
     # Run a console command
     def cmd(self, command):
@@ -255,58 +262,86 @@ class instance:
     def players_count(self):
         return len(self.players())
             
+    # Get Details about a specific player        
+    def player(self,id):
+        dump = self.console.rcon(f"dumpuser {id}")
+        print(dump)
+        return dump
+            
     # Get list of players in game - Avoid client for quickness
     def players(self):
         
         players = []        
-        status = self.console.console("getstatus", True)
-        
+        status = self.console.rcon("status notrunc")
+
         if(status == None):
             return {}
-        
-        status = status.split("\n")
+            
+        # Start reading player info after a specific line containing "---" which follows the headers
+        lines = status.split("\n")
+        player_data_start = False
+        for line in lines:
+            if "---" in line:  # Look for the line of dashes indicating the start of player data
+                player_data_start = True
+                continue
 
-        x = 2
-        while(x < int(len(status)-1)):
-            line = str(status[x])
-            line_split = shlex.split(line)
-            player = bcolors().color_convert(line_split[2])
-            ping = line_split[1]
-            
-            if(int(ping) < 100):
-                ping = bcolors.GREEN + ping + bcolors.ENDC           
-            elif(int(ping) < 150):
-                ping = bcolors.YELLOW + ping + bcolors.ENDC           
-            else:
-                ping = bcolors.RED + ping + bcolors.ENDC
-            
-            ping = bcolors().color_convert(ping)
-            
-            players.append({"name":player, "ping": ping})
-            x = x + 1
-   
+            if player_data_start and line.strip():  # Ensure that line is not empty and parsing has started
+                cleaned_line = line.replace("'", "\\'")
+                parts = shlex.split(cleaned_line)
+                if len(parts) < 7:
+                    continue  # Skip lines that don't have enough data
+
+                # Assuming the parts indices match your description
+                player_id = parts[0]
+                score = parts[1]
+                ping = parts[2]
+                name = parts[3]
+                address = parts[5]  # Concatenating IP and port
+                ip = address.split(':')[0]
+                rate = parts[6]
+
+                # Apply coloring based on ping value
+                if int(ping) < 100:
+                    ping_color = f"{bcolors.GREEN}{ping}{bcolors.ENDC}"
+                elif int(ping) < 150:
+                    ping_color = f"{bcolors.YELLOW}{ping}{bcolors.ENDC}"
+                else:
+                    ping_color = f"{bcolors.RED}{ping}{bcolors.ENDC}"
+
+                players.append({
+                    "id": player_id,
+                    "ping": ping_color,
+                    "name": bcolors().color_convert(name),
+                    "ip": ip,
+                })
+
         return players
-        
+            
     # Print the server log
     def log(self):
         print("do to")
         
     # Run an automated test on a number of things printing results
     def test(self):
+        output = []
 
         lookup = helpers().ip_info()
-        print("Server IP {}".format(self.external_ip))
-        print("Server Location {}".format(lookup['region']))
-        print("-------------------------------------------")
-        print("CA Central: " + testing().ping_test("35.182.0.251"))   
-        print("EU East: " + testing().ping_test("35.178.0.253"))
-        print("EU Central: " + testing().ping_test("18.196.0.253"))
-        print("EU West: " + testing().ping_test("34.240.0.253"))
-        print("US WEST: " + testing().ping_test("52.52.63.252"))
-        print("US EAST: " + testing().ping_test("35.153.128.254"))
-        print("-------------------------------------------")
-        print("CPU Usage: {}%".format(str(psutil.cpu_percent())))
-        print("Memory Usage: {}%".format(str(psutil.virtual_memory().percent)))       
+        output.append(f"Server IP {self.external_ip}")
+        output.append(f"Server Location {lookup['region']}")
+        output.append("-------------------------------------------")
+        output.append("CA Central: " + testing().ping_test("35.182.0.251"))
+        output.append("EU East: " + testing().ping_test("35.178.0.253"))
+        output.append("EU Central: " + testing().ping_test("18.196.0.253"))
+        output.append("EU West: " + testing().ping_test("34.240.0.253"))
+        output.append("US WEST: " + testing().ping_test("52.52.63.252"))
+        output.append("US EAST: " + testing().ping_test("35.153.128.254"))
+        output.append("-------------------------------------------")
+        output.append(f"CPU Usage: {psutil.cpu_percent()}%")
+        output.append(f"Memory Usage: {psutil.virtual_memory().percent}%")
+
+        final_output = "\n".join(output)
+        print(final_output)  # Print all at once
+        return final_output 
          
     # Start this instance
     def start(self):
@@ -314,7 +349,6 @@ class instance:
         self.stop()
         time.sleep(1)
         
-        print("Running Command: {}" + self.start_cmd)
 
         # Generate our configs
         self.conf.generate_server_config()
@@ -390,60 +424,74 @@ class instance:
                 
     # Instance Status Information
     def status(self):
+        output = []
 
-        print("------------------------------------") 
-        
-        if(self.server_running()):
-        
+        output.append("------------------------------------")
+
+        if self.server_running():
+
+            output.append(f"{bcolors.CYAN}Instance Name: {bcolors.ENDC}{self.name}")
+            output.append(f"{bcolors.CYAN}Server Name: {bcolors.ENDC}{bcolors().color_convert(self.config['server']['host_name'])}")
+            output.append(f"{bcolors.CYAN}Game: {bcolors.ENDC}{self.get_game()}")
+            output.append(f"{bcolors.CYAN}Engine: {bcolors.ENDC}{self.config['server']['engine']}")
+            output.append(f"{bcolors.CYAN}Port: {bcolors.ENDC}{self.config['server']['port']}")
+            output.append(f"{bcolors.CYAN}Full Address: {bcolors.ENDC}{self.external_ip}:{self.config['server']['port']}")
+            output.append(f"{bcolors.CYAN}Mode: {bcolors.ENDC}{self.mode(None)}")
+            output.append(f"{bcolors.CYAN}Map: {bcolors.ENDC}{self.map(None)}")
+            output.append(f"{bcolors.CYAN}Plugins: {bcolors.ENDC}{','.join(self.plugins_registered)}")
+            output.append(f"{bcolors.CYAN}Uptime: {bcolors.ENDC}{self.uptime()}")
+
             players = self.players()
- 
-            print(bcolors.CYAN + "Instance Name: " + bcolors.ENDC + self.name)   
-            print(bcolors.CYAN + "Server Name: " + bcolors.ENDC + bcolors().color_convert(self.config['server']['host_name']))
-            print(bcolors.CYAN + "Game: " + bcolors.ENDC + self.get_game())              
-            print(bcolors.CYAN + "Engine: " + bcolors.ENDC + self.config['server']['engine'])           
-            print(bcolors.CYAN + "Port: " + bcolors.ENDC + str(self.config['server']['port']))                
-            print(bcolors.CYAN + "Full Address: " + bcolors.ENDC + self.external_ip + ":" + str(self.config['server']['port']))
-            print(bcolors.CYAN + "Mode: " + bcolors.ENDC + self.mode(None))   
-            print(bcolors.CYAN + "Map: " + bcolors.ENDC + self.map(None)) 
-            print(bcolors.CYAN + "Plugins: " + bcolors.ENDC + ",".join(self.plugins_registered))
-            print(bcolors.CYAN + "Uptime: " + bcolors.ENDC + self.uptime())
-            
-            if(len(players) > 0):
-                print(bcolors.CYAN + "Players: " + bcolors.ENDC + bcolors.GREEN + str(len(players)) + "/32" + bcolors.ENDC) 
-            else:
-                print(bcolors.CYAN + "Players: " + bcolors.ENDC + bcolors.RED + str(len(players)) + "/32" + bcolors.ENDC)                   
-            
-                
-            
-        print("------------------------------------")    
-     
-        for service in self.process_handler.services:
-                if(self.process_handler.process_status_name(service['name'])):
-                    print("[{}Yes{}] {} Running".format(bcolors.GREEN, bcolors.ENDC, service['name']))
-                else:
-                    print("[{}No{}] {} Running".format(bcolors.RED, bcolors.ENDC, service['name']))
-            
 
-        if(self.server_running()):        
-            if(len(players) > 0):
+
+            if len(players) > 0:
+                output.append(f"{bcolors.CYAN}Players: {bcolors.ENDC}{bcolors.GREEN}{len(players)}/32{bcolors.ENDC}")
+            else:
+                output.append(f"{bcolors.CYAN}Players: {bcolors.ENDC}{bcolors.RED}{len(players)}/32{bcolors.ENDC}")
+
+        output.append("------------------------------------")
+
+        for service in self.process_handler.services:
+            if self.process_handler.process_status_name(service['name']):
+                output.append(f"[{bcolors.GREEN}Yes{bcolors.ENDC}] {service['name']} Running")
+            else:
+                output.append(f"[{bcolors.RED}No{bcolors.ENDC}] {service['name']} Running")
+
+        if self.server_running():
+            if len(players) > 0:
                 x = prettytable.PrettyTable()
                 x.field_names = list(players[0].keys())
                 for player in players:
                     x.add_row(player.values())
-                print(x)
+                output.append(str(x))
             else:
-                print("-------------------------------------------")
-                print(bcolors.RED + "No one is playing"  + bcolors.ENDC )   
+                output.append("-------------------------------------------")
+                output.append(f"{bcolors.RED}No one is playing{bcolors.ENDC}")
 
-            print("-------------------------------------------")            
+            output.append("-------------------------------------------")
+
+        full_output = "\n".join(output)
+        print(full_output)
+        return full_output          
                 
     # Stop the instance
     def stop(self):
-        self.process_handler.stop_all()
-
-        if(os.path.exists(self.config['server']['log_path'])):
-            os.remove(self.config['server']['log_path'])        
     
+        if(self.server_running()):   
+            players = self.players()
+            confirm = 'n'
+            
+            if len(players) >= 2:
+                confirm = input(bcolors.RED + "There are more than 2 active players. Are you sure you want to stop the instance? (y/n): " + bcolors.ENDC).lower()
+
+            if len(players) < 2 or confirm == 'y':
+                self.process_handler.stop_all()
+
+                if os.path.exists(self.config['server']['log_path']):
+                    os.remove(self.config['server']['log_path'])
+        else:
+            self.process_handler.stop_all()
+       
     # Stop then start the instance
     def restart(self):     
         self.stop()

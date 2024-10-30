@@ -11,8 +11,22 @@ class db:
     def __init__(self):
         """ generates schema if not already created """
         self.generate_schema()
+        self.enable_wal()
         #self.clean_up()
 
+
+
+    def enable_wal(self):
+        
+        try:
+            conn = self.connect()
+            c = conn.cursor()
+            c.execute('PRAGMA journal_mode=WAL;')
+        except Error as e:
+            print(e)
+        finally:
+            if conn:
+                conn.close()
     def dict_factory(self, cursor, row):
         d = {}
         for idx, col in enumerate(cursor.description):
@@ -39,6 +53,9 @@ class db:
             conn.commit()
         except Error as e:
             print(e)
+        finally:
+            if conn:
+                conn.close()
             
     """ Create a table using SQL """
     def create_table(self, create_table_sql):
@@ -49,7 +66,10 @@ class db:
             c.execute(create_table_sql)
         except Error as e:
             print(e)
-            
+        finally:
+            if conn:
+                conn.close()
+                            
     """ Create a table using SQL """
     def create_view(self, name, sql):
      
@@ -60,7 +80,10 @@ class db:
             c.execute("CREATE VIEW IF NOT EXISTS {} AS {}".format(name, sql))
         except Error as e:
             print(e)
-                        
+        finally:
+            if conn:
+                conn.close()
+                                       
 
     """ Delete from a table using ID Column """   
     def delete(self, table, id):
@@ -73,7 +96,10 @@ class db:
             conn.commit()
         except Error as e:
             print(e)        
-
+        finally:
+            if conn:
+                conn.close()
+                
     """ create an entry to given table using a data dictionary """            
     def insert(self, table, d):
         f = ''
@@ -99,6 +125,10 @@ class db:
         cur = conn.cursor()
         cur.execute(sql, v)
         conn.commit()
+        
+        if conn:
+            conn.close()
+                    
         return cur.lastrowid 
         
     """ Table exists without locking """           
@@ -135,6 +165,10 @@ class db:
         q = ''' SELECT * FROM ''' + table + ''' WHERE ''' + w
         cur.execute(q, v)
         rows = cur.fetchall()
+    
+        if conn:
+            conn.close()
+                        
         return rows
         
     def clean_up(self):
@@ -144,6 +178,8 @@ class db:
         cur.execute(sql)
         conn.commit()
         cur.execute("vacuum");
+        if conn:
+            conn.close()        
         
     def temp_get_player_id(self, player):
         conn = self.connect()
@@ -152,6 +188,9 @@ class db:
         q = ''' SELECT * FROM connections where player = "''' + player + '''" and type = "CONNECT" ORDER BY added DESC LIMIT 1; '''
         cur.execute(q)
         rows = cur.fetchall()
+        if conn:
+            conn.close()
+            
         return rows       
         
     def get_latest_player_info_change(self, player_id):
@@ -161,6 +200,10 @@ class db:
         q = ''' SELECT * FROM logs where log LIKE "ClientUserinfoChanged: ''' + str(player_id) + '''" ORDER BY added DESC LIMIT 1; '''
         cur.execute(q)
         result = cur.fetchone()
+        
+        if conn:
+            conn.close()        
+        
         return result           
         
     def generate_schema(self):

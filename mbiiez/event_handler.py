@@ -5,6 +5,10 @@ import os
 import datetime
 import time
 
+import asyncio
+import inspect
+
+
 class event_handler:
 
     instance = None
@@ -26,9 +30,19 @@ class event_handler:
             for event in self.events[event_name]:
                 try: 
                     if(args == None):
-                        event()
+                        
+                        if inspect.iscoroutinefunction(event):
+                            asyncio.run(event())
+                        else:
+                            event()
+                        
                     else:
-                        event(args)
+                    
+                        if inspect.iscoroutinefunction(event):
+                            asyncio.run(event(args))
+                        else:
+                            event(args)
+                         
                 except Exception as e:
                     self.instance.exception_handler.log(e)
 

@@ -2,6 +2,7 @@ import time
 import six
 import re
 import socket 
+import select 
 
 class console:
 
@@ -26,15 +27,22 @@ class console:
     def send(self, query):
         self.socket.connect((self.ip, self.port))
         self.socket.send(query)
-        socket.socket.settimeout(self.socket, 4)    
-        
-        try:
-            data = self.socket.recv(4096)
-            data = data.decode("utf-8", "ignore")
-       
-            return data
-        except socket.timeout:
-            return None
+        self.socket.setblocking(0)  # Set the socket to non-blocking
+
+        total_data = []
+        while True:
+            ready = select.select([self.socket], [], [], 1)  # Adjust the timeout as needed
+            if ready[0]:  # Data is ready to be read
+                data = self.socket.recv(4096)
+                if not data:
+                    break  # No more data to read
+                total_data.append(data.decode("utf-8", "ignore"))
+            else:
+                # No data ready to be read, and timeout occurred
+                break
+
+        return ''.join(total_data)
+
 
     # Send SAY as Server
     def say(self, message):

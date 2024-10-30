@@ -56,7 +56,7 @@ class log_handler:
                 self.instance.log_handler.process(line)
 
         except Exception as e:
-            self.instance.exception_handler.log(e)    
+            #self.instance.exception_handler.log(e)    
             self.log_watcher()
 
     def log_line_count(self):
@@ -130,13 +130,29 @@ class log_handler:
                 
                 # Run player killed event    
                 self.instance.event_handler.run_event("player_killed",{"fragger": fragger, "fragged": fragged, "weapon": weapon})  
-                        
-            if('ClientConnect:' in last_line):
-                player = last_line.split(":")[2][:-4][1:].lstrip().lstrip("(")
-                player_id = last_line.split(":")[3][:-4][1:].lstrip()
-                ip = last_line.split(":")[4][1:]
-                self.instance.event_handler.run_event("player_connected",{"ip": ip, "player_id": player_id, "player": player})
- 
+
+            if 'ClientConnect:' in last_line:
+                # Extract player name
+                player_name_start = last_line.find('(') + 1
+                player_name_end = last_line.find(')', player_name_start)
+                player = last_line[player_name_start:player_name_end]
+
+                # Extract player ID
+                player_id_start = last_line.find('ID: ') + len('ID: ')
+                player_id_end = last_line.find(' ', player_id_start)
+                player_id = last_line[player_id_start:player_id_end]
+
+                # Extract IP address
+                ip_start = last_line.find('IP: ') + len('IP: ')
+                ip_end = last_line.find(')', ip_start)
+                ip_with_port = last_line[ip_start:ip_end]
+
+                # Remove the port from the IP address
+                ip = ip_with_port.split(':')[0]
+
+                self.instance.event_handler.run_event("player_connected", {"ip": ip, "player_id": player_id, "player": player})               
+                self.instance.event_handler.run_event("player_ip", {"ip": ip, "player_id": player_id})
+
             if('ClientDisconnect:' in last_line):
                 player = ""
                 player_id = last_line.split(":")[2][1:]

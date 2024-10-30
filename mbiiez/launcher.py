@@ -80,8 +80,8 @@ class launcher:
         # Wait for the log file to become available
         self.log_handler.log_await()
         
-        cmd = "python /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
-
+        cmd = "python2 /opt/openjk/rtvrtm.py -c {}".format(self.config['server']['rtvrtm_config_path']) 
+        print(cmd)
         subprocess.check_call(shlex.split(cmd),stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 
         return

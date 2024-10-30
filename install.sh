@@ -50,28 +50,21 @@ then
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 	sudo dpkg -i packages-microsoft-prod.deb
 	rm packages-microsoft-prod.deb
+	sudo snap install dotnet-sdk --channel 6.0/stable --classic
+	
 fi
 
 apt-get update 
 apt-get install python3-pip -y
 
-echo "$(tput setaf 3)Installing .Net 6$(tput sgr0)"
-sudo apt remove 'dotnet*'
-sudo apt remove 'aspnetcore*'
-sudo apt remove 'netstandard*'
-sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-sudo rm /etc/apt/sources.list.d/microsoft-prod.list.save
-sudo apt update
-sudo apt install dotnet6
 
-if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-	dpkg --add-architecture i386
-	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
-	apt-get install -y zlib1g:i386 
-	apt-get install -y curl:i386 
-fi
+dpkg --add-architecture i386
+apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
+apt-get install -y zlib1g:i386 
+apt-get install -y curl:i386 
 
 apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
+apt-get install lib32stdc++6
 
 apt-get install -y python-setuptools python-dev 
 apt-get install -y net-tools
@@ -80,23 +73,37 @@ apt-get install -y python3
 apt-get install -y nano
 apt-get install -y python3-pip
 apt-get install -y unzip
-apt-get install -y python3-psutil
 apt-get install -y apt-transport-https
-apt-get install -y python3-prettytable
 apt-get install -y dotnet-sdk-5.0
 apt-get install -y dotnet-sdk-3.1
 
-pip3 install watchgod --break-system-packages
+apt-get install -y dotnet6
+
+apt-get install -y python3-psutil
+apt-get install -y python3-ptable
+apt-get install -y python3-prettytable
+apt-get install -y python3-watchgod
+apt-get install -y python3-tailer
+apt-get install -y python3-six
+apt-get install -y python3-ConfigParser
+apt-get install -y python3-pysqlite3
+apt-get install -y python3-flask
+apt-get install -y python3-flask_httpauth
+apt-get install -y python3-discord.py
+apt-get install -y python3-shutil
+
+pip3 install watchgod 
 pip3 install tailer --break-system-packages
-pip3 install six --break-system-packages
-pip3 install psutil --break-system-packages
-pip3 install PTable --break-system-packages
-pip3 install ConfigParser --break-system-packages
-pip3 install pysqlite3 --break-system-packages
-pip3 install flask --break-system-packages
+pip3 install six
+pip3 install psutil
+pip3 install PTable
+pip3 install ConfigParser
+pip3 install pysqlite3
+pip3 install flask
 pip3 install flask_httpauth --break-system-packages
-pip3 install discord.py --break-system-packages
-pip3 install shutil --break-system-packages
+pip3 install discord.py  --break-system-packages
+pip3 install shutil
+
 
 clear
 
